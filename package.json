@@ -13,7 +13,8 @@
 		"moment": "^2.29.1",
 		"rus-anonym-utils": "^1.0.12",
 		"simple-scheduler-task": "^3.0.12",
-		"vk-io": "^4.0.3"
+		"vk-io": "^4.0.3",
+		"vk-io-question": "^2.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "^14.14.2"

@@ -156,7 +156,15 @@ util@^0.10.3:
   dependencies:
     inherits "2.0.3"
 
-vk-io@^4.0.3:
+vk-io-question@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vk-io-question/-/vk-io-question-2.0.1.tgz#0fe5ad24509f3414917aa65ecafc320714edf8b8"
+  integrity sha512-357vBBLXxSzmT1x+fykOI7IHpNvmM67WdIdiE3MrUr5fJugsb4cwoGAJvc5OrLG9juu2pZY+z8x6gcpKklCKrQ==
+  dependencies:
+    middleware-io "^2.5.0"
+    vk-io "^4.0.0-rc.30"
+
+vk-io@^4.0.0-rc.30, vk-io@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/vk-io/-/vk-io-4.0.3.tgz#16cff47de00350342d344d32af2e24ff1be47f2b"
   integrity sha512-JvocZvqcpueMitagkhHDC28aZnHA24BY3GPibvKNrzhW3thqcS6RDe4YjOz7FGTL9o/xcPdgXzmBujKdT6tdTg==
