@@ -1,4 +1,4 @@
-import { ModernMessageContext } from "./types";
-export async function processMessage(message: ModernMessageContext) {
+import { ModernUserMessageContext } from "./types";
+export async function processUserMessage(message: ModernUserMessageContext) {
 	return message;
 }

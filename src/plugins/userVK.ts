@@ -1,6 +1,6 @@
 import { config, userCommands } from "./core";
-import { ModernMessageContext } from "./types";
-import { processMessage } from "./utils";
+import { ModernUserMessageContext } from "./types";
+import { processUserMessage } from "./utils";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
 import utils from "rus-anonym-utils";
 
@@ -10,8 +10,8 @@ const userVK = new VK({
 	apiVersion: "5.130",
 });
 
-userVK.updates.use(async (message: ModernMessageContext) => {
-	message = await processMessage(message);
+userVK.updates.use(async (message: ModernUserMessageContext) => {
+	message = await processUserMessage(message);
 	if (!message) {
 		return;
 	}
