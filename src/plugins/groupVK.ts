@@ -2,6 +2,7 @@ import { config, groupCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
 import { processUserMessage } from "./utils";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
+import { QuestionManager, IQuestionMessageContext } from "vk-io-question";
 import utils from "rus-anonym-utils";
 
 const groupVK = new VK({
@@ -11,6 +12,8 @@ const groupVK = new VK({
 	apiVersion: "5.130",
 });
 
+const questionManager = new QuestionManager();
+groupVK.updates.use(questionManager.middleware);
 groupVK.updates.use(async (message: ModernUserMessageContext) => {
 	message = await processUserMessage(message);
 	if (!message) {
