@@ -4,13 +4,14 @@ import { processUserMessage } from "./utils";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
 import utils from "rus-anonym-utils";
 
-const userVK = new VK({
-	token: config.userToken,
+const groupVK = new VK({
+	token: config.groupToken,
+	pollingGroupId: config.groupID,
 	apiMode: "parallel",
 	apiVersion: "5.130",
 });
 
-userVK.updates.use(async (message: ModernUserMessageContext) => {
+groupVK.updates.use(async (message: ModernUserMessageContext) => {
 	message = await processUserMessage(message);
 	if (!message) {
 		return;
@@ -51,4 +52,4 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	}
 });
 
-export { userVK };
+export { groupVK };
