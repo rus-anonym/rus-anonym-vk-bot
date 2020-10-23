@@ -10,6 +10,8 @@
 		"build": "tsc"
 	},
 	"dependencies": {
+		"@types/mime-types": "^2.1.0",
+		"mime-types": "^2.1.27",
 		"moment": "^2.29.1",
 		"rus-anonym-utils": "^1.0.12",
 		"simple-scheduler-task": "^3.0.12",
