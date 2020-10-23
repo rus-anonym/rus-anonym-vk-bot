@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
+	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
 		"test": "yarn build && cd out && node test.js",
 		"start": "yarn build && cd out && node main.js",
