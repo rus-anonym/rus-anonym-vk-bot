@@ -1,0 +1,11 @@
+{
+	"name": "user_vk_bot",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"test": "yarn build && cd out && node test.js",
+		"start": "yarn build && cd out && node main.js",
+		"build": "tsc"
+	}
+}
