@@ -39,4 +39,5 @@ export interface configInterface {
 		messages: Array<number>;
 		exception: Array<number>;
 	};
+	censoringWord: Array<string>;
 }

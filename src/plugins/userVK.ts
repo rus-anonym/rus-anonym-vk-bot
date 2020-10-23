@@ -32,6 +32,14 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	if ((await filterTypes(message)) === true) {
 		return;
 	}
+	if (message.text) {
+		for (let i in config.censoringWord) {
+			message.text.replace(
+				new RegExp(config.censoringWord[i], `gi`),
+				`*censored*`,
+			);
+		}
+	}
 	console.log(message);
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
