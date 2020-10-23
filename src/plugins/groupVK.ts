@@ -1,4 +1,4 @@
-import { config, userCommands } from "./core";
+import { config, groupCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
 import { processUserMessage } from "./utils";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
@@ -32,7 +32,7 @@ groupVK.updates.use(async (message: ModernUserMessageContext) => {
 		}
 	};
 
-	let command = userCommands.find((x) => x.regexp.test(message.text || ""));
+	let command = groupCommands.find((x) => x.regexp.test(message.text || ""));
 	if (!command) {
 		return;
 	}

@@ -42,4 +42,4 @@ async function loadCommands() {
 		`Successfull loading group commands (${groupCommands.length})`,
 	);
 }
-export { loadCommands, config, userCommands };
+export { loadCommands, config, userCommands, groupCommands };
