@@ -32,6 +32,13 @@ export interface configInterface {
 			token: string;
 			id: number;
 		};
+		logs: {
+			conversations: {
+				rest: number;
+				messages: number;
+				conversation: number;
+			};
+		};
 	};
 	stels: {
 		enable: boolean;

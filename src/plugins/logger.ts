@@ -1,5 +1,7 @@
 import { groupVK } from "./groupVK";
 import mime from "mime-types";
+import { getRandomId } from "vk-io";
+import { config } from "./core";
 
 export const groupLogger = {
 	uploadAttachmentsToVK: async (attachments: Array<any>, peer_id: number) => {
@@ -77,5 +79,42 @@ export const groupLogger = {
 		} else {
 			return attachmentsList.join();
 		}
+	},
+	log: async (text: string) => {
+		return await groupVK.api.messages.send({
+			chat_id: config.vk.logs.conversations.rest,
+			message: text,
+			random_id: getRandomId(),
+		});
+	},
+	logInMessagesLogs: async (text: string) => {
+		return await groupVK.api.messages.send({
+			chat_id: config.vk.logs.conversations.messages,
+			message: text,
+			random_id: getRandomId(),
+		});
+	},
+	logInConversationsLogs: async (text: string) => {
+		return await groupVK.api.messages.send({
+			chat_id: config.vk.logs.conversations.conversation,
+			message: text,
+			random_id: getRandomId(),
+		});
+	},
+	sendInMessagesLogs: async (messageData: string) => {
+		return await groupVK.api.messages.send(
+			Object.assign(messageData, {
+				peer_id: 2000000000 + config.vk.logs.conversations.messages,
+				random_id: getRandomId(),
+			}),
+		);
+	},
+	sendInConversationsLogs: async (messageData: string) => {
+		return await groupVK.api.messages.send(
+			Object.assign(messageData, {
+				peer_id: 2000000000 + config.vk.logs.conversations.conversation,
+				random_id: getRandomId(),
+			}),
+		);
 	},
 };
