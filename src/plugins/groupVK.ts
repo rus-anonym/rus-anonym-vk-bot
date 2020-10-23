@@ -14,8 +14,12 @@ const groupVK = new VK({
 const questionManager = new QuestionManager();
 groupVK.updates.use(questionManager.middleware);
 groupVK.updates.use(async (message: ModernUserMessageContext) => {
-	if (!message) {
+	let command = groupCommands.find((x) => x.regexp.test(message.text || ""));
+	if (!command) {
 		return;
+	}
+	if (message.text) {
+		message.args = message.text.match(command.regexp);
 	}
 	message.sendMessage = async (
 		text: string | IMessageContextSendOptions,
@@ -33,13 +37,6 @@ groupVK.updates.use(async (message: ModernUserMessageContext) => {
 		}
 	};
 
-	let command = groupCommands.find((x) => x.regexp.test(message.text || ""));
-	if (!command) {
-		return;
-	}
-	if (message.text) {
-		message.args = message.text.match(command.regexp);
-	}
 	try {
 		await command.process(message);
 		return;

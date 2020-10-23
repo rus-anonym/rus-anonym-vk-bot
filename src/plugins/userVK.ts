@@ -10,7 +10,8 @@ const userVK = new VK({
 });
 
 userVK.updates.use(async (message: ModernUserMessageContext) => {
-	if (!message) {
+	let command = userCommands.find((x) => x.regexp.test(message.text || ""));
+	if (!command) {
 		return;
 	}
 	message.sendMessage = async (
@@ -28,11 +29,6 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			return error;
 		}
 	};
-
-	let command = userCommands.find((x) => x.regexp.test(message.text || ""));
-	if (!command) {
-		return;
-	}
 	if (message.text) {
 		message.args = message.text.match(command.regexp);
 	}
