@@ -33,4 +33,10 @@ export interface configInterface {
 			id: number;
 		};
 	};
+	stels: {
+		enable: boolean;
+		mode: "bomb" | "timer";
+		messages: Array<number>;
+		exception: Array<number>;
+	};
 }

@@ -9,40 +9,64 @@ const userVK = new VK({
 	apiVersion: "5.130",
 });
 
-userVK.updates.use(async (message: ModernUserMessageContext) => {
-	let command = userCommands.find((x) => x.regexp.test(message.text || ""));
-	if (!command) {
-		return;
-	}
-	message.sendMessage = async (
-		text: string | IMessageContextSendOptions,
-		params?: IMessageContextSendOptions | undefined,
-	): Promise<MessageContext<Record<string, any>>> => {
-		try {
-			let paramsForSend = Object.assign({ disable_mentions: true }, params);
-			return await message.send(
-				`@id${message.senderId}, ${text}`,
-				paramsForSend,
-			);
-		} catch (error) {
-			console.log(error);
-			return error;
+async function filterTypes(message: ModernUserMessageContext) {
+	let arrayWithBlockedTypes: Array<string> = [`messages_read`];
+	let arrayWithBlockedSubTypes: Array<string> = [
+		`friend_online`,
+		`friend_offline`,
+	];
+	for (let blockedType of arrayWithBlockedTypes) {
+		if (message.type === blockedType) {
+			return true;
 		}
-	};
-	if (message.text) {
-		message.args = message.text.match(command.regexp);
 	}
-	try {
-		await command.process(message);
-		return;
-	} catch (err) {
-		await message.sendMessage(`ошиб очка.`);
-		await message.send({
-			sticker_id: await utils.array.random([18464, 16588, 18466, 18484, 14088]),
-		});
-		console.log(err);
+	for (let blockedSubType of arrayWithBlockedSubTypes) {
+		if (message.subTypes.find((x) => x === blockedSubType)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+userVK.updates.use(async (message: ModernUserMessageContext) => {
+	if ((await filterTypes(message)) === true) {
 		return;
 	}
+	console.log(message);
+
+	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
+	// if (!command) {
+	// 	return;
+	// }
+	// message.sendMessage = async (
+	// 	text: string | IMessageContextSendOptions,
+	// 	params?: IMessageContextSendOptions | undefined,
+	// ): Promise<MessageContext<Record<string, any>>> => {
+	// 	try {
+	// 		let paramsForSend = Object.assign({ disable_mentions: true }, params);
+	// 		return await message.send(
+	// 			`@id${message.senderId}, ${text}`,
+	// 			paramsForSend,
+	// 		);
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		return error;
+	// 	}
+	// };
+	// if (message.text) {
+	// 	message.args = message.text.match(command.regexp);
+	// }
+	// try {
+	// 	await command.process(message);
+	// 	return;
+	// } catch (err) {
+	// 	await message.sendMessage(`ошиб очка.`);
+	// 	await message.send({
+	// 		sticker_id: await utils.array.random([18464, 16588, 18466, 18484, 14088]),
+	// 	});
+	// 	console.log(err);
+	// 	return;
+	// }
 });
 
 export { userVK };
