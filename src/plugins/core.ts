@@ -1,4 +1,4 @@
-import { commandsList } from "./types";
+import { commandsList, configInterface } from "./types";
 import utils from "rus-anonym-utils";
 import fs from "fs";
 import moment from "moment";
@@ -9,12 +9,7 @@ const userCommands: Array<commandsList> = [];
 
 const groupCommands: Array<commandsList> = [];
 
-const config: {
-	userToken: string;
-	userID: number;
-	groupToken: string;
-	groupID: number;
-} = require(`../DB/config.json`);
+const config: configInterface = require(`../DB/config.json`);
 
 async function loadCommands() {
 	await utils.logger.console(`Loading user commands...`);

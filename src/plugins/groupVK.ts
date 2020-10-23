@@ -5,8 +5,8 @@ import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
 import utils from "rus-anonym-utils";
 
 const groupVK = new VK({
-	token: config.groupToken,
-	pollingGroupId: config.groupID,
+	token: config.vk.group.token,
+	pollingGroupId: config.vk.group.id,
 	apiMode: "parallel",
 	apiVersion: "5.130",
 });

@@ -5,7 +5,7 @@ import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
 import utils from "rus-anonym-utils";
 
 const userVK = new VK({
-	token: config.userToken,
+	token: config.vk.user.token,
 	apiMode: "parallel",
 	apiVersion: "5.130",
 });

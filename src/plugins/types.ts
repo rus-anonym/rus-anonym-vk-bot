@@ -21,3 +21,16 @@ export interface commandsList {
 	regexp: RegExp;
 	process: Function;
 }
+
+export interface configInterface {
+	vk: {
+		user: {
+			token: string;
+			id: number;
+		};
+		group: {
+			token: string;
+			id: number;
+		};
+	};
+}
