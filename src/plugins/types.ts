@@ -16,3 +16,8 @@ export interface ModernGroupMessageContext
 		params?: IMessageContextSendOptions | undefined,
 	): Promise<MessageContext<Record<string, any>>>;
 }
+
+export interface commandsList {
+	regexp: RegExp;
+	process: Function;
+}

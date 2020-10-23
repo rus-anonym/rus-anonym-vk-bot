@@ -1,14 +1,13 @@
+import { commandsList } from "./types";
 import utils from "rus-anonym-utils";
 import fs from "fs";
-import scheduler from "simple-scheduler-task";
 import moment from "moment";
 
 moment.locale(`ru`);
 
-const userCommands: Array<{
-	regexp: RegExp;
-	process: Function;
-}> = [];
+const userCommands: Array<commandsList> = [];
+
+const groupCommands: Array<commandsList> = [];
 
 const config: {
 	userToken: string;
@@ -29,6 +28,18 @@ async function loadCommands() {
 	}
 	await utils.logger.console(
 		`Successfull loading user commands (${userCommands.length})`,
+	);
+	await utils.logger.console(`Loading group commands...`);
+	let arrayWithGroupCommands = fs.readdirSync("./commands/group");
+	for (let groupCommand in arrayWithGroupCommands) {
+		let tempScript = require(`../commands/group/${groupCommand}`);
+		groupCommands.push({
+			regexp: tempScript.regexp,
+			process: tempScript.process,
+		});
+	}
+	await utils.logger.console(
+		`Successfull loading group commands (${groupCommands.length})`,
 	);
 }
 export { loadCommands, config, userCommands };
