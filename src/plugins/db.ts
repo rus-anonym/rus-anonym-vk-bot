@@ -1,4 +1,5 @@
 import fs from "fs";
+import { config } from "./core";
 export const DB = {
 	messages: {
 		exist: async function (messageID: number) {
@@ -15,6 +16,14 @@ export const DB = {
 		},
 		delete: async function (messageID: number) {
 			return fs.unlinkSync(`../DB/messages/${messageID}.json`);
+		},
+	},
+	config: {
+		save: async function () {
+			return fs.writeFileSync(
+				`../DB/config.json`,
+				JSON.stringify(config, null, `\t`),
+			);
 		},
 	},
 };
