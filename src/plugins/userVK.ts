@@ -20,10 +20,10 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		params?: IMessageContextSendOptions | undefined,
 	): Promise<MessageContext<Record<string, any>>> => {
 		try {
-			let params_for_send = Object.assign({ disable_mentions: true }, params);
+			let paramsForSend = Object.assign({ disable_mentions: true }, params);
 			return await message.send(
 				`@id${message.senderId}, ${text}`,
-				params_for_send,
+				paramsForSend,
 			);
 		} catch (error) {
 			console.log(error);
