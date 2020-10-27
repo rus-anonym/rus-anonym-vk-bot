@@ -10,7 +10,6 @@
 		"build": "tsc"
 	},
 	"dependencies": {
-		"@types/mime-types": "^2.1.0",
 		"mime-types": "^2.1.27",
 		"moment": "^2.29.1",
 		"rus-anonym-utils": "^1.0.12",
@@ -19,6 +18,7 @@
 		"vk-io-question": "^2.0.1"
 	},
 	"devDependencies": {
-		"@types/node": "^14.14.2"
+		"@types/node": "^14.14.2",
+		"@types/mime-types": "^2.1.0"
 	}
 }
