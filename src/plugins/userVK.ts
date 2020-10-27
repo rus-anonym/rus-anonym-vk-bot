@@ -2,6 +2,7 @@ import { config, userCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
 import utils from "rus-anonym-utils";
+import { DB } from "./db";
 
 const userVK = new VK({
 	token: config.vk.user.token,
@@ -43,8 +44,16 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	if (message.isOutbox === true) {
 		return;
 	}
+	let messageData = (
+		await userVK.api.messages.getById({
+			message_ids: message.id,
+		})
+	).items[0];
 
-	
+	await DB.messages.save(message.id, {
+		message: message,
+		messageFullData: messageData,
+	});
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
 	// if (!command) {

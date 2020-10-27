@@ -1,5 +1,6 @@
 import { MessageContext, IMessageContextSendOptions } from "vk-io";
 import { IQuestionMessageContext } from "vk-io-question";
+import { MessagesMessage } from "vk-io/lib/api/schemas/objects";
 
 export interface ModernUserMessageContext extends MessageContext {
 	sendMessage(
@@ -47,4 +48,9 @@ export interface configInterface {
 		exception: Array<number>;
 	};
 	censoringWord: Array<string>;
+}
+
+export interface messageDataBase {
+	message: ModernUserMessageContext;
+	messageFullData: MessagesMessage;
 }
