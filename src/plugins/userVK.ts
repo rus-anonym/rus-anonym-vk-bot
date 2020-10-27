@@ -57,7 +57,10 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			messageFullData: messageData,
 		});
 	} catch (error) {
-		await groupLogger.logInErrorLogs(`Error on save message #${message.id}`);
+		console.log(error);
+		// await groupLogger.logInErrorLogs(
+		// 	`Error on save message #${message.id}\nError: ${error.name}\n\nError Data: ${error.message}`,
+		// );
 	}
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
