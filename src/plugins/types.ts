@@ -35,9 +35,10 @@ export interface configInterface {
 		};
 		logs: {
 			conversations: {
+				errors: number;
 				rest: number;
 				messages: number;
-				conversation: number;
+				conversations: number;
 			};
 		};
 	};

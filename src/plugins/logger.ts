@@ -80,7 +80,14 @@ export const groupLogger = {
 			return attachmentsList.join();
 		}
 	},
-	log: async (text: string) => {
+	logInErrorLogs: async (text: string) => {
+		return await groupVK.api.messages.send({
+			chat_id: config.vk.logs.conversations.errors,
+			message: text,
+			random_id: getRandomId(),
+		});
+	},
+	logInRestLogs: async (text: string) => {
 		return await groupVK.api.messages.send({
 			chat_id: config.vk.logs.conversations.rest,
 			message: text,
@@ -96,12 +103,20 @@ export const groupLogger = {
 	},
 	logInConversationsLogs: async (text: string) => {
 		return await groupVK.api.messages.send({
-			chat_id: config.vk.logs.conversations.conversation,
+			chat_id: config.vk.logs.conversations.conversations,
 			message: text,
 			random_id: getRandomId(),
 		});
 	},
-	sendInMessagesLogs: async (messageData: string) => {
+	sendInErrorLogs: async (messageData: any) => {
+		return await groupVK.api.messages.send(
+			Object.assign(messageData, {
+				peer_id: 2000000000 + config.vk.logs.conversations.errors,
+				random_id: getRandomId(),
+			}),
+		);
+	},
+	sendInRestLogs: async (messageData: any) => {
 		return await groupVK.api.messages.send(
 			Object.assign(messageData, {
 				peer_id: 2000000000 + config.vk.logs.conversations.messages,
@@ -109,10 +124,18 @@ export const groupLogger = {
 			}),
 		);
 	},
-	sendInConversationsLogs: async (messageData: string) => {
+	sendInMessagesLogs: async (messageData: any) => {
 		return await groupVK.api.messages.send(
 			Object.assign(messageData, {
-				peer_id: 2000000000 + config.vk.logs.conversations.conversation,
+				peer_id: 2000000000 + config.vk.logs.conversations.rest,
+				random_id: getRandomId(),
+			}),
+		);
+	},
+	sendInConversationsLogs: async (messageData: any) => {
+		return await groupVK.api.messages.send(
+			Object.assign(messageData, {
+				peer_id: 2000000000 + config.vk.logs.conversations.conversations,
 				random_id: getRandomId(),
 			}),
 		);

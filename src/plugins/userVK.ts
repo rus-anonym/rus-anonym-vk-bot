@@ -1,3 +1,4 @@
+import { groupLogger } from "./logger";
 import { config, userCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
 import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
@@ -50,10 +51,14 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		})
 	).items[0];
 
-	await DB.messages.save(message.id, {
-		message: message,
-		messageFullData: messageData,
-	});
+	try {
+		await DB.messages.save(message.id, {
+			message: message,
+			messageFullData: messageData,
+		});
+	} catch (error) {
+		await groupLogger.logInErrorLogs(`Error on save message #${message.id}`);
+	}
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
 	// if (!command) {
