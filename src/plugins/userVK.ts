@@ -10,7 +10,7 @@ const userVK = new VK({
 });
 
 async function filterTypes(message: ModernUserMessageContext) {
-	let arrayWithBlockedTypes: Array<string> = [`messages_read`];
+	let arrayWithBlockedTypes: Array<string> = [`messages_read`, `typing`];
 	let arrayWithBlockedSubTypes: Array<string> = [
 		`friend_online`,
 		`friend_offline`,
@@ -40,7 +40,11 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			);
 		}
 	}
-	console.log(message);
+	if (message.isOutbox === true) {
+		return;
+	}
+
+	
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
 	// if (!command) {
