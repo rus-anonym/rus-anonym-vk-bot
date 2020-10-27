@@ -31,9 +31,13 @@ async function filterTypes(message: ModernUserMessageContext) {
 }
 
 userVK.updates.use(async (message: ModernUserMessageContext) => {
-	if ((await filterTypes(message)) === true) {
+	if (
+		(await filterTypes(message)) === true ||
+		message.senderId === -config.vk.group.id
+	) {
 		return;
 	}
+
 	if (message.text) {
 		for (let i in config.censoringWord) {
 			message.text.replace(
@@ -42,9 +46,11 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			);
 		}
 	}
+
 	if (message.isOutbox === true) {
 		return;
 	}
+
 	let messageData = (
 		await userVK.api.messages.getById({
 			message_ids: message.id,
@@ -57,10 +63,9 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			messageFullData: messageData,
 		});
 	} catch (error) {
-		console.log(error);
-		// await groupLogger.logInErrorLogs(
-		// 	`Error on save message #${message.id}\nError: ${error.name}\n\nError Data: ${error.message}`,
-		// );
+		await groupLogger.logInErrorLogs(
+			`Error on save message #${message.id}\nError: ${error.name}\n\nError Data: ${error.message}`,
+		);
 	}
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));
