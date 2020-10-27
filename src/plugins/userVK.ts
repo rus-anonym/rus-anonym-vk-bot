@@ -30,6 +30,13 @@ async function filterTypes(message: ModernUserMessageContext) {
 	return false;
 }
 
+async function filterWords(text: string) {
+	for (let i in config.censoringWord) {
+		text.replace(new RegExp(config.censoringWord[i], `gi`), `*censored*`);
+	}
+	return text;
+}
+
 userVK.updates.use(async (message: ModernUserMessageContext) => {
 	if (
 		(await filterTypes(message)) === true ||
@@ -39,16 +46,19 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	}
 
 	if (message.text) {
-		for (let i in config.censoringWord) {
-			message.text.replace(
-				new RegExp(config.censoringWord[i], `gi`),
-				`*censored*`,
-			);
-		}
+		message.text = await filterWords(message.text);
 	}
 
 	if (message.isOutbox === true) {
 		return;
+	}
+
+	if (message.flags === 131200) {
+		let checkSaveMessage = await DB.messages.exist(message.id);
+		if (checkSaveMessage) {
+			let oldMessage = await DB.messages.get(message.id);
+			console.log(oldMessage);
+		}
 	}
 
 	let messageData = (
