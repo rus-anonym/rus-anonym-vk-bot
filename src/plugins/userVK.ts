@@ -1,12 +1,7 @@
 import { groupLogger } from "./logger";
 import { config, userCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
-import {
-	VK,
-	MessageContext,
-	IMessageContextSendOptions,
-	getRandomId,
-} from "vk-io";
+import { VK } from "vk-io";
 import utils from "rus-anonym-utils";
 import { DB } from "./db";
 
@@ -63,10 +58,29 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		if (checkSaveMessage) {
 			let oldMessage = await DB.messages.get(message.id);
 			if (oldMessage) {
-				oldMessage.message.attachments[0];
+				if (oldMessage.message.peerType === "user") {
+					let messageData = {
+						message: `Удалено сообщение пользователя @id${
+							oldMessage.message.senderId
+						} #${oldMessage.message.id} от ${await utils.time.getDateTimeByMS(
+							oldMessage.message.createdAt * 1000,
+						)}\nТекст сообщения: ${oldMessage.message.text}`,
+						attachment: await groupLogger.uploadAttachmentsToVK(
+							oldMessage.messageFullData.attachments || [],
+							2000000002,
+						),
+					};
+					if (oldMessage.messageFullData.geo) {
+						messageData = Object.assign(messageData, {
+							lat: oldMessage.messageFullData.geo.coordinates.latitude,
+							long: oldMessage.messageFullData.geo.coordinates.longitude,
+						});
+					}
+					return await groupLogger.sendInMessagesLogs(messageData);
+				}
 			}
 		}
-	}	
+	}
 
 	if (message.id) {
 		let messageData = (
