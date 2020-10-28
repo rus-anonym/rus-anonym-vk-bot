@@ -2,9 +2,13 @@ import { groupVK } from "./groupVK";
 import mime from "mime-types";
 import { getRandomId } from "vk-io";
 import { config } from "./core";
+import { MessagesMessageAttachment } from "vk-io/lib/api/schemas/objects";
 
 export const groupLogger = {
-	uploadAttachmentsToVK: async (attachments: Array<any>, peer_id: number) => {
+	uploadAttachmentsToVK: async (
+		attachments: Array<MessagesMessageAttachment>,
+		peer_id: number,
+	) => {
 		let attachmentsList = [];
 		function compare(a: any, b: any) {
 			if (a.width > b.width) return 1;
@@ -16,9 +20,11 @@ export const groupLogger = {
 				attachments[i].photo.sizes.sort(compare);
 				let photoData = await groupVK.upload.messagePhoto({
 					peer_id: peer_id,
-					source:
-						attachments[i].photo.sizes[attachments[i].photo.sizes.length - 1]
-							.url,
+					source: {
+						value:
+							attachments[i].photo.sizes[attachments[i].photo.sizes.length - 1]
+								.url,
+					},
 				});
 				attachmentsList.push(
 					`photo${photoData.ownerId}_${photoData.id}_${photoData.accessKey}`,
