@@ -65,13 +65,12 @@ export interface configInterface {
 export interface messageDataBase {
 	message: {
 		id: number;
-		conversationMessageId: number;
 		peerId: number;
 		peerType: string;
 		senderId: number;
 		createdAt: number;
-		updatedAt: number;
-		text: string;
+		updatedAt: number | undefined;
+		text: string | undefined;
 		forwards: MessageForwardsCollection;
 		attachments: Array<Attachment | ExternalAttachment>;
 		isOutbox: boolean;
