@@ -1,6 +1,6 @@
 import { MessagesMessage } from "vk-io/lib/api/schemas/objects";
 import { MessageContext } from "vk-io";
-import { messageDataBase } from "./types";
+import { configInterface, messageDataBase } from "./types";
 import fs from "fs";
 import { config } from "./core";
 
@@ -56,11 +56,14 @@ export const DB = {
 		},
 	},
 	config: {
-		save: async function () {
+		save: function () {
 			return fs.writeFileSync(
 				`./DB/config.json`,
 				JSON.stringify(config, null, `\t`),
 			);
+		},
+		load: function (): configInterface {
+			return JSON.parse(fs.readFileSync(`./DB/config.json`).toString());
 		},
 	},
 };

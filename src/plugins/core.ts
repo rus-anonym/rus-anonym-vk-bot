@@ -2,6 +2,7 @@ import { commandsList, configInterface } from "./types";
 import utils from "rus-anonym-utils";
 import fs from "fs";
 import moment from "moment";
+import { DB } from "./db";
 
 moment.locale(`ru`);
 
@@ -9,7 +10,7 @@ const userCommands: Array<commandsList> = [];
 
 const groupCommands: Array<commandsList> = [];
 
-const config: configInterface = require(`../DB/config.json`);
+const config: configInterface = DB.config.load();
 
 async function loadCommands() {
 	await utils.logger.console(`Loading user commands...`);
