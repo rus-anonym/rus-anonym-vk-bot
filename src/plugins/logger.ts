@@ -58,10 +58,12 @@ export const groupLogger = {
 			} else if (attachments[i].type === `sticker`) {
 				let stickerData = await groupVK.upload.messagePhoto({
 					peer_id: peer_id,
-					source:
-						attachments[i].sticker.images_with_background[
-							attachments[i].sticker.images_with_background.length - 1
-						].url,
+					source: {
+						value:
+							attachments[i].sticker.images_with_background[
+								attachments[i].sticker.images_with_background.length - 1
+							].url,
+					},
 				});
 				attachmentsList.push(
 					`photo${stickerData.ownerId}_${stickerData.id}_${stickerData.accessKey}`,
@@ -69,7 +71,7 @@ export const groupLogger = {
 			} else if (attachments[i].type === `audio_message`) {
 				let audio_message_data = await groupVK.upload.audioMessage({
 					peer_id: peer_id,
-					source: attachments[i].audio_message.link_ogg,
+					source: { value: attachments[i].audio_message.link_ogg },
 				});
 				attachmentsList.push(
 					`audio_message${audio_message_data.ownerId}_${audio_message_data.id}_${audio_message_data.accessKey}`,
