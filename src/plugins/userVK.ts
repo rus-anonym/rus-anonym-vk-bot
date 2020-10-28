@@ -1,7 +1,12 @@
 import { groupLogger } from "./logger";
 import { config, userCommands } from "./core";
 import { ModernUserMessageContext } from "./types";
-import { VK, MessageContext, IMessageContextSendOptions } from "vk-io";
+import {
+	VK,
+	MessageContext,
+	IMessageContextSendOptions,
+	getRandomId,
+} from "vk-io";
 import utils from "rus-anonym-utils";
 import { DB } from "./db";
 
@@ -57,25 +62,29 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		let checkSaveMessage = await DB.messages.exist(message.id);
 		if (checkSaveMessage) {
 			let oldMessage = await DB.messages.get(message.id);
-			console.log(oldMessage);
+			if (oldMessage) {
+				oldMessage.message.attachments[0];
+			}
 		}
 	}
 
-	let messageData = (
-		await userVK.api.messages.getById({
-			message_ids: message.id,
-		})
-	).items[0];
+	if (message.id) {
+		let messageData = (
+			await userVK.api.messages.getById({
+				message_ids: message.id,
+			})
+		).items[0];
 
-	try {
-		await DB.messages.save(message.id, {
-			message: message,
-			messageFullData: messageData,
-		});
-	} catch (error) {
-		await groupLogger.logInErrorLogs(
-			`Error on save message #${message.id}\nError: ${error.name}\n\nError Data: ${error.message}`,
-		);
+		try {
+			await DB.messages.save(message.id, {
+				message: message,
+				messageFullData: messageData,
+			});
+		} catch (error) {
+			await groupLogger.logInErrorLogs(
+				`Error on save message #${message.id}\nError: ${error.name}\n\nError Data: ${error.message}`,
+			);
+		}
 	}
 
 	// let command = userCommands.find((x) => x.regexp.test(message.text || ""));

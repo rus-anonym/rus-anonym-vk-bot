@@ -1,6 +1,17 @@
-import { MessageContext, IMessageContextSendOptions } from "vk-io";
+import {
+	MessageContext,
+	IMessageContextSendOptions,
+	MessageForwardsCollection,
+	Attachment,
+	ExternalAttachment,
+	MessageContextSubType,
+	MessageContextType,
+} from "vk-io";
 import { IQuestionMessageContext } from "vk-io-question";
-import { MessagesMessage } from "vk-io/lib/api/schemas/objects";
+import {
+	MessagesMessage,
+	MessagesMessageAttachment,
+} from "vk-io/lib/api/schemas/objects";
 
 export interface ModernUserMessageContext extends MessageContext {
 	sendMessage(
@@ -52,6 +63,20 @@ export interface configInterface {
 }
 
 export interface messageDataBase {
-	message: ModernUserMessageContext;
+	message: {
+		id: number;
+		conversationMessageId: number;
+		peerId: number;
+		peerType: string;
+		senderId: number;
+		createdAt: number;
+		updatedAt: number;
+		text: string;
+		forwards: MessageForwardsCollection;
+		attachments: Array<Attachment | ExternalAttachment>;
+		isOutbox: boolean;
+		type: MessageContextType;
+		subTypes: Array<MessageContextSubType>;
+	};
 	messageFullData: MessagesMessage;
 }
