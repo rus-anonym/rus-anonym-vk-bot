@@ -32,11 +32,11 @@ const internal = {
 export const DB = {
 	messages: {
 		exist: async function (messageID: number) {
-			return fs.existsSync(`./DB/messages/${messageID}.json`);
+			return fs.existsSync(`./DB/temp/messages/${messageID}.json`);
 		},
 		get: async function (messageID: number): Promise<messageDataBase> {
 			return JSON.parse(
-				fs.readFileSync(`./DB/messages/${messageID}.json`).toString(),
+				fs.readFileSync(`./DB/temp/messages/${messageID}.json`).toString(),
 			);
 		},
 		save: async function (
@@ -47,12 +47,12 @@ export const DB = {
 			},
 		) {
 			return fs.writeFileSync(
-				`./DB/messages/${messageID}.json`,
+				`./DB/temp/messages/${messageID}.json`,
 				JSON.stringify(await internal.parseMessageToDB(message)),
 			);
 		},
 		delete: async function (messageID: number) {
-			return fs.unlinkSync(`./DB/messages/${messageID}.json`);
+			return fs.unlinkSync(`./DB/temp/messages/${messageID}.json`);
 		},
 	},
 	config: {

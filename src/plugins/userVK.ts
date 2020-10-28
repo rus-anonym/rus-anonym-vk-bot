@@ -66,7 +66,7 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 				oldMessage.message.attachments[0];
 			}
 		}
-	}
+	}	
 
 	if (message.id) {
 		let messageData = (
