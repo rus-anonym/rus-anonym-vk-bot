@@ -77,6 +77,28 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 						});
 					}
 					return await groupLogger.sendInMessagesLogs(messageData);
+				} else if (oldMessage.message.peerType === `chat`) {
+					let attachments_string = await groupLogger.uploadAttachmentsToVK(
+						oldMessage.messageFullData.attachments || [],
+						2000000001,
+					);
+					let message_data = {
+						message: `Удалено сообщение пользователя @id${
+							oldMessage.message.senderId
+						} #${oldMessage.message.id} в беседе #${
+							oldMessage.message.peerId - 2000000000
+						} от ${await utils.time.getDateTimeByMS(
+							oldMessage.message.createdAt * 1000,
+						)}\nТекст сообщения: ${oldMessage.message.text}`,
+						attachment: attachments_string,
+					};
+					if (oldMessage.messageFullData.geo) {
+						message_data = Object.assign(message_data, {
+							lat: oldMessage.messageFullData.geo.coordinates.latitude,
+							long: oldMessage.messageFullData.geo.coordinates.longitude,
+						});
+					}
+					return await groupLogger.sendInConversationsLogs(message_data);
 				}
 			}
 		}
