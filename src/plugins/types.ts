@@ -79,3 +79,9 @@ export interface messageDataBase {
 	};
 	messageFullData: MessagesMessage;
 }
+
+export interface bombMessageDataBase {
+	id: number;
+	ttl: number;
+	expiryDate: Date;
+}
