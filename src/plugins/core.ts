@@ -1,4 +1,4 @@
-import { commandsList, configInterface } from "./types";
+import { bombMessageDataBase, commandsList, configInterface } from "./types";
 import utils from "rus-anonym-utils";
 import fs from "fs";
 import moment from "moment";
@@ -11,6 +11,7 @@ const userCommands: Array<commandsList> = [];
 const groupCommands: Array<commandsList> = [];
 
 const config: configInterface = DB.config.load();
+const bombMessages: Array<bombMessageDataBase> = DB.bombMessages.load();
 
 async function loadCommands() {
 	await utils.logger.console(`Loading user commands...`);
@@ -38,4 +39,4 @@ async function loadCommands() {
 		`Successfull loading group commands (${groupCommands.length})`,
 	);
 }
-export { loadCommands, config, userCommands, groupCommands };
+export { loadCommands, config, bombMessages, userCommands, groupCommands };
