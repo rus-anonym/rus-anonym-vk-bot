@@ -230,8 +230,7 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		}
 	}
 
-	if (message.flags === 131200) {
-	}
+	await internal.processByDialogFlags(message);
 
 	if (message.updatedAt !== 0) {
 		let checkSaveMessage = await DB.messages.exist(message.id);
