@@ -114,7 +114,7 @@ const internal = {
 					long: oldMessage.messageFullData.geo.coordinates.longitude,
 				});
 			}
-			let tempMessageText = `Удалено сообщение пользователя @id${
+			let tempMessageText = `Удалилось самоудаляющееся сообщения пользователя @id${
 				oldMessage.message.senderId
 			} #${oldMessage.message.id} ${
 				tempPeerTypeBool
@@ -145,7 +145,7 @@ const internal = {
 					(x) => x.peer_id === message.peerId,
 				);
 				let sortedBombMessagesByDate = sortedBombMessages.filter(
-					(x) => x.expiryDate < new Date(),
+					(x) => x.expiryDate < new Date(Number(new Date()) + 750),
 				);
 				for (let bombMessage of sortedBombMessagesByDate) {
 					await internal.logBombMessagesDeleted(bombMessage.id);
@@ -154,7 +154,6 @@ const internal = {
 						1,
 					);
 				}
-				console.log(bombMessages);
 			case 131200:
 				let checkSaveMessage = await DB.messages.exist(message.id);
 				if (checkSaveMessage) {
