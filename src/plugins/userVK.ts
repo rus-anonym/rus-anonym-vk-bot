@@ -103,9 +103,71 @@ const internal = {
 			? await groupLogger.sendInConversationsLogs(messageData)
 			: await groupLogger.sendInMessagesLogs(messageData);
 	},
+	logBombMessagesDeleted: async (messageID: number) => {
+		let oldMessage = await DB.messages.get(messageID);
+		if (oldMessage) {
+			let messageData = {};
+			let tempPeerTypeBool = oldMessage.message.peerType === `chat`;
+			if (oldMessage.messageFullData.geo) {
+				messageData = Object.assign(messageData, {
+					lat: oldMessage.messageFullData.geo.coordinates.latitude,
+					long: oldMessage.messageFullData.geo.coordinates.longitude,
+				});
+			}
+			let tempMessageText = `Удалено сообщение пользователя @id${
+				oldMessage.message.senderId
+			} #${oldMessage.message.id} ${
+				tempPeerTypeBool
+					? `в беседе #${oldMessage.message.peerId - 2000000000}`
+					: ``
+			} от ${await utils.time.getDateTimeByMS(
+				oldMessage.message.createdAt * 1000,
+			)}\nТекст сообщения: ${oldMessage.message.text}`;
+			let tempAttachmentsData = await groupLogger.uploadAttachmentsToVK(
+				oldMessage.messageFullData.attachments || [],
+				tempPeerTypeBool ? 2000000001 : 2000000002,
+			);
+			messageData = Object.assign(messageData, {
+				attachment: tempAttachmentsData,
+				message: tempMessageText,
+			});
+			return tempPeerTypeBool
+				? await groupLogger.sendInConversationsLogs(messageData)
+				: await groupLogger.sendInMessagesLogs(messageData);
+		} else {
+			return;
+		}
+	},
+	processByDialogFlags: async (message: ModernUserMessageContext) => {
+		switch (message.flags) {
+			case 17408:
+				let sortedBombMessages = bombMessages.filter(
+					(x) => x.peer_id === message.peerId,
+				);
+				let sortedBombMessagesByDate = sortedBombMessages.filter(
+					(x) => x.expiryDate < new Date(),
+				);
+				for (let bombMessage of sortedBombMessagesByDate) {
+					await internal.logBombMessagesDeleted(bombMessage.id);
+					bombMessages.splice(
+						bombMessages.findIndex((x) => x.id === bombMessage.id),
+						1,
+					);
+				}
+			case 131200:
+				let checkSaveMessage = await DB.messages.exist(message.id);
+				if (checkSaveMessage) {
+					let oldMessage = await DB.messages.get(message.id);
+					if (oldMessage) {
+						await internal.logMessageDeletion(oldMessage);
+					}
+				}
+		}
+	},
 };
 
 userVK.updates.use(async (message: ModernUserMessageContext) => {
+	console.log(message);
 	if (
 		(await internal.filterTypes(message)) === true ||
 		message.senderId === -config.vk.group.id
@@ -169,13 +231,6 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	}
 
 	if (message.flags === 131200) {
-		let checkSaveMessage = await DB.messages.exist(message.id);
-		if (checkSaveMessage) {
-			let oldMessage = await DB.messages.get(message.id);
-			if (oldMessage) {
-				await internal.logMessageDeletion(oldMessage);
-			}
-		}
 	}
 
 	if (message.updatedAt !== 0) {
@@ -195,7 +250,7 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 			})
 		).items[0];
 
-		if (messageData.expire_ttl) {
+		if (messageData && messageData.expire_ttl) {
 			bombMessages.push({
 				id: message.id,
 				peer_id: message.peerId,
