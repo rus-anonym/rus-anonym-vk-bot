@@ -1,6 +1,6 @@
 import { MessagesMessage } from "vk-io/lib/api/schemas/objects";
 import { MessageContext } from "vk-io";
-import { configInterface, messageDataBase } from "./types";
+import { bombMessageDataBase, configInterface, messageDataBase } from "./types";
 import fs from "fs";
 import { config } from "./core";
 
@@ -53,6 +53,17 @@ export const DB = {
 		},
 		delete: async function (messageID: number) {
 			return fs.unlinkSync(`./DB/temp/messages/${messageID}.json`);
+		},
+	},
+	bombMessages: {
+		save: function () {
+			return fs.writeFileSync(
+				`./DB/bombMessages.json`,
+				JSON.stringify(config, null, `\t`),
+			);
+		},
+		load: function (): Array<bombMessageDataBase> {
+			return JSON.parse(fs.readFileSync(`./DB/bombMessages.json`).toString());
 		},
 	},
 	config: {
