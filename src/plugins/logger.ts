@@ -9,7 +9,7 @@ export const groupLogger = {
 		attachments: Array<MessagesMessageAttachment>,
 		peer_id: number,
 	) => {
-		let attachmentsList = [];
+		let attachmentsList: Array<string> = [];
 		function compare(a: any, b: any) {
 			if (a.width > b.width) return 1;
 			if (a.width < b.width) return -1;
