@@ -16,7 +16,7 @@ const internal = {
 				peerType: message.message.peerType === "chat" ? "chat" : "user",
 				senderId: message.message.senderId,
 				createdAt: message.message.createdAt,
-				updatedAt: message.message.updatedAt,
+				updatedAt: message.message.updatedAt || 0,
 				text: message.message.text,
 				forwards: message.message.forwards,
 				attachments: message.message.attachments,

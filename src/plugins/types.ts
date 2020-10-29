@@ -69,7 +69,7 @@ export interface messageDataBase {
 		peerType: "user" | "chat";
 		senderId: number;
 		createdAt: number;
-		updatedAt: number | undefined;
+		updatedAt: number | 0;
 		text: string | undefined;
 		forwards: MessageForwardsCollection;
 		attachments: Array<Attachment | ExternalAttachment>;

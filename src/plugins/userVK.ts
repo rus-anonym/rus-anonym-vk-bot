@@ -36,10 +36,7 @@ const internal = {
 		}
 		return false;
 	},
-	logMessageDeletion: async (
-		message: ModernUserMessageContext,
-		oldMessage: messageDataBase,
-	) => {
+	logMessageDeletion: async (oldMessage: messageDataBase) => {
 		let messageData = {};
 		let tempPeerTypeBool = oldMessage.message.peerType === `chat`;
 		if (oldMessage.messageFullData.geo) {
@@ -65,7 +62,43 @@ const internal = {
 			attachment: tempAttachmentsData,
 			message: tempMessageText,
 		});
-		console.log(messageData);
+		return tempPeerTypeBool
+			? await groupLogger.sendInConversationsLogs(messageData)
+			: await groupLogger.sendInMessagesLogs(messageData);
+	},
+	logMessageEditing: async (
+		message: ModernUserMessageContext,
+		oldMessage: messageDataBase,
+	) => {
+		let editMessageText: string;
+		let messageData = {};
+		let tempPeerTypeBool = oldMessage.message.peerType === `chat`;
+		let tempAttachmentsData: string = await groupLogger.uploadAttachmentsToVK(
+			oldMessage.messageFullData.attachments || [],
+			tempPeerTypeBool ? 2000000001 : 2000000002,
+		);
+		messageData = Object.assign(messageData, {
+			attachment: tempAttachmentsData,
+		});
+		if (oldMessage.messageFullData.geo) {
+			messageData = Object.assign(messageData, {
+				lat: oldMessage.messageFullData.geo.coordinates.latitude,
+				long: oldMessage.messageFullData.geo.coordinates.longitude,
+			});
+		}
+		if (message.text !== oldMessage.message.text) {
+			editMessageText = `Отредактировано сообщение пользователя @id${
+				oldMessage.message.senderId
+			} #${oldMessage.message.id} от ${await utils.time.getDateTimeByMS(
+				oldMessage.message.updatedAt === 0
+					? oldMessage.message.createdAt
+					: oldMessage.message.updatedAt,
+			)}
+Предыдущий текст сообщения: ${oldMessage.message.text}`;
+			messageData = Object.assign(messageData, {
+				message: editMessageText,
+			});
+		}
 		return tempPeerTypeBool
 			? await groupLogger.sendInConversationsLogs(messageData)
 			: await groupLogger.sendInMessagesLogs(messageData);
@@ -93,7 +126,17 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		if (checkSaveMessage) {
 			let oldMessage = await DB.messages.get(message.id);
 			if (oldMessage) {
-				await internal.logMessageDeletion(message, oldMessage);
+				await internal.logMessageDeletion(oldMessage);
+			}
+		}
+	}
+
+	if (message.updatedAt !== 0) {
+		let checkSaveMessage = await DB.messages.exist(message.id);
+		if (checkSaveMessage) {
+			let oldMessage = await DB.messages.get(message.id);
+			if (oldMessage) {
+				await internal.logMessageEditing(message, oldMessage);
 			}
 		}
 	}
