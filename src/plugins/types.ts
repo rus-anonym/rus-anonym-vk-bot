@@ -82,6 +82,7 @@ export interface messageDataBase {
 
 export interface bombMessageDataBase {
 	id: number;
+	peer_id: number;
 	ttl: number;
 	expiryDate: Date;
 }

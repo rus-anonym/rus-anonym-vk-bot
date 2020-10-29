@@ -1,5 +1,5 @@
 import { groupLogger } from "./logger";
-import { config, userCommands } from "./core";
+import { bombMessages, config, userCommands } from "./core";
 import { ModernUserMessageContext, messageDataBase } from "./types";
 import { VK, IMessageContextSendOptions, MessageContext } from "vk-io";
 import utils from "rus-anonym-utils";
@@ -194,6 +194,17 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 				message_ids: message.id,
 			})
 		).items[0];
+
+		if (messageData.expire_ttl) {
+			bombMessages.push({
+				id: message.id,
+				peer_id: message.peerId,
+				ttl: messageData.expire_ttl,
+				expiryDate: new Date(
+					Number(new Date()) + messageData.expire_ttl * 1000,
+				),
+			});
+		}
 
 		try {
 			await DB.messages.save(message.id, {
