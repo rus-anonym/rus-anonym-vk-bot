@@ -61,10 +61,11 @@ const internal = {
 			oldMessage.messageFullData.attachments || [],
 			tempPeerTypeBool ? 2000000001 : 2000000002,
 		);
-		messageData = Object.assign(message, {
+		messageData = Object.assign(messageData, {
 			attachment: tempAttachmentsData,
 			message: tempMessageText,
 		});
+		console.log(messageData);
 		return tempPeerTypeBool
 			? await groupLogger.sendInConversationsLogs(messageData)
 			: await groupLogger.sendInMessagesLogs(messageData);
