@@ -154,6 +154,7 @@ const internal = {
 						1,
 					);
 				}
+				console.log(bombMessages);
 			case 131200:
 				let checkSaveMessage = await DB.messages.exist(message.id);
 				if (checkSaveMessage) {
@@ -167,7 +168,6 @@ const internal = {
 };
 
 userVK.updates.use(async (message: ModernUserMessageContext) => {
-	console.log(message);
 	if (
 		(await internal.filterTypes(message)) === true ||
 		message.senderId === -config.vk.group.id
@@ -250,14 +250,23 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 		).items[0];
 
 		if (messageData && messageData.expire_ttl) {
-			bombMessages.push({
-				id: message.id,
-				peer_id: message.peerId,
-				ttl: messageData.expire_ttl,
-				expiryDate: new Date(
-					Number(new Date()) + messageData.expire_ttl * 1000,
-				),
-			});
+			if (
+				!bombMessages.find(
+					(x) =>
+						x.id === message.id &&
+						x.peer_id === message.peerId &&
+						x.ttl === messageData.expire_ttl,
+				)
+			) {
+				bombMessages.push({
+					id: message.id,
+					peer_id: message.peerId,
+					ttl: messageData.expire_ttl,
+					expiryDate: new Date(
+						Number(new Date()) + messageData.expire_ttl * 1000,
+					),
+				});
+			}
 		}
 
 		try {
