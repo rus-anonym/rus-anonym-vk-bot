@@ -13,7 +13,7 @@ const internal = {
 			message: {
 				id: message.message.id,
 				peerId: message.message.peerId,
-				peerType: message.message.peerType,
+				peerType: message.message.peerType === "chat" ? "chat" : "user",
 				senderId: message.message.senderId,
 				createdAt: message.message.createdAt,
 				updatedAt: message.message.updatedAt,

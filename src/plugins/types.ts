@@ -66,7 +66,7 @@ export interface messageDataBase {
 	message: {
 		id: number;
 		peerId: number;
-		peerType: string;
+		peerType: "user" | "chat";
 		senderId: number;
 		createdAt: number;
 		updatedAt: number | undefined;
