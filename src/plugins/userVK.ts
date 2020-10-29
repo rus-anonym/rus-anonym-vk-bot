@@ -118,29 +118,38 @@ userVK.updates.use(async (message: ModernUserMessageContext) => {
 	}
 
 	if (message.isOutbox === true) {
-		let command = userCommands.find((x) => x.regexp.test(message.text || ""));
-		if (!command) {
-			return;
-		}
-		message.sendMessage = async (
-			text: string | IMessageContextSendOptions,
-			params?: IMessageContextSendOptions | undefined,
-		): Promise<MessageContext<Record<string, any>>> => {
-			try {
-				let paramsForSend = Object.assign({ disable_mentions: true }, params);
-				return await message.send(
-					`@id${message.senderId}, ${text}`,
-					paramsForSend,
-				);
-			} catch (error) {
-				console.log(error);
-				return error;
-			}
-		};
-		if (message.text) {
-			message.args = message.text.match(command.regexp);
-		}
 		try {
+			let command = userCommands.find((x) => x.regexp.test(message.text || ""));
+			if (!command) {
+				return;
+			} else {
+				try {
+					await userVK.api.messages.delete({
+						message_ids: message.id,
+						delete_for_all: 1,
+					});
+				} catch (autoDeleteError) {
+					// TODO add handle error
+				}
+			}
+			message.sendMessage = async (
+				text: string | IMessageContextSendOptions,
+				params?: IMessageContextSendOptions | undefined,
+			): Promise<MessageContext<Record<string, any>>> => {
+				try {
+					let paramsForSend = Object.assign({ disable_mentions: true }, params);
+					return await message.send(
+						`@id${message.senderId}, ${text}`,
+						paramsForSend,
+					);
+				} catch (error) {
+					console.log(error);
+					return error;
+				}
+			};
+			if (message.text) {
+				message.args = message.text.match(command.regexp);
+			}
 			await command.process(message);
 			return;
 		} catch (err) {
