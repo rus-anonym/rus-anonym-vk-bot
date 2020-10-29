@@ -11,42 +11,43 @@ const userVK = new VK({
 	apiVersion: "5.130",
 });
 
-async function filterTypes(message: ModernUserMessageContext) {
-	let arrayWithBlockedTypes: Array<string> = [`messages_read`, `typing`];
-	let arrayWithBlockedSubTypes: Array<string> = [
-		`friend_online`,
-		`friend_offline`,
-	];
-	for (let blockedType of arrayWithBlockedTypes) {
-		if (message.type === blockedType) {
-			return true;
+const internal = {
+	filterWords: async (text: string) => {
+		for (let i in config.censoringWord) {
+			text.replace(new RegExp(config.censoringWord[i], `gi`), `*censored*`);
 		}
-	}
-	for (let blockedSubType of arrayWithBlockedSubTypes) {
-		if (message.subTypes.find((x) => x === blockedSubType)) {
-			return true;
+		return text;
+	},
+	filterTypes: async (message: ModernUserMessageContext) => {
+		let arrayWithBlockedTypes: Array<string> = [`messages_read`, `typing`];
+		let arrayWithBlockedSubTypes: Array<string> = [
+			`friend_online`,
+			`friend_offline`,
+		];
+		for (let blockedType of arrayWithBlockedTypes) {
+			if (message.type === blockedType) {
+				return true;
+			}
 		}
-	}
-	return false;
-}
-
-async function filterWords(text: string) {
-	for (let i in config.censoringWord) {
-		text.replace(new RegExp(config.censoringWord[i], `gi`), `*censored*`);
-	}
-	return text;
-}
+		for (let blockedSubType of arrayWithBlockedSubTypes) {
+			if (message.subTypes.find((x) => x === blockedSubType)) {
+				return true;
+			}
+		}
+		return false;
+	},
+};
 
 userVK.updates.use(async (message: ModernUserMessageContext) => {
 	if (
-		(await filterTypes(message)) === true ||
+		(await internal.filterTypes(message)) === true ||
 		message.senderId === -config.vk.group.id
 	) {
 		return;
 	}
 
 	if (message.text) {
-		message.text = await filterWords(message.text);
+		message.text = await internal.filterWords(message.text);
 	}
 
 	if (message.isOutbox === true) {
