@@ -15,7 +15,7 @@ const config: configInterface = DB.config.load();
 async function loadCommands() {
 	await utils.logger.console(`Loading user commands...`);
 	let arrayWithUserCommands = fs.readdirSync("./commands/user");
-	for (let userCommand in arrayWithUserCommands) {
+	for (let userCommand of arrayWithUserCommands) {
 		let tempScript = require(`../commands/user/${userCommand}`);
 		userCommands.push({
 			regexp: tempScript.regexp,
@@ -27,7 +27,7 @@ async function loadCommands() {
 	);
 	await utils.logger.console(`Loading group commands...`);
 	let arrayWithGroupCommands = fs.readdirSync("./commands/group");
-	for (let groupCommand in arrayWithGroupCommands) {
+	for (let groupCommand of arrayWithGroupCommands) {
 		let tempScript = require(`../commands/group/${groupCommand}`);
 		groupCommands.push({
 			regexp: tempScript.regexp,
