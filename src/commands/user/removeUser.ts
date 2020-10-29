@@ -46,13 +46,13 @@ export = {
 			});
 		} catch (error) {
 			return await groupLogger.logInRestLogs(
-				`Fail invite user @id${user} to chat #${
+				`Fail remove user @id${user} to chat #${
 					message.chatId
 				}\nError: ${error.toString()}`,
 			);
 		}
 		return await groupLogger.logInRestLogs(
-			`Succesfully invite user @id${user} to chat #${message.chatId}`,
+			`Succesfully remove user @id${user} to chat #${message.chatId}`,
 		);
 	},
 };
