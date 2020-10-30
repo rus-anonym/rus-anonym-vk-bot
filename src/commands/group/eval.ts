@@ -1,7 +1,11 @@
 import { ModernUserMessageContext } from "./../../plugins/types";
+import { config } from "../../plugins/core";
 export = {
-	regexp: /^(?:xx)\s([^]+)$/i,
+	regexp: /^(?:zz)\s([^]+)$/i,
 	process: async function (message: ModernUserMessageContext) {
+		if (message.senderId !== config.vk.user.id) {
+			return;
+		}
 		try {
 			const result = eval(message.args[1]);
 
