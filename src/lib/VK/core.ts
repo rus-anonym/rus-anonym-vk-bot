@@ -18,13 +18,16 @@ const group: IVKInstance = {
 	sessions: config.vk.group.additional.map((tempGroupToken) => {
 		return new VK({ token: tempGroupToken });
 	}),
-	main: new VK({ token: config.vk.group.main }),
+	main: new VK({
+		pollingGroupId: config.vk.group.id,
+		token: config.vk.group.main,
+	}),
 	getVK() {
 		return this.sessions[Math.floor(Math.random() * this.sessions.length)];
 	},
 };
 
-async function startPolling() {
+async function startPolling(): Promise<void> {
 	await user.main.updates.startPolling();
 	await group.main.updates.startPolling();
 }
