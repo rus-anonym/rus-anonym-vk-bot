@@ -1,5 +1,5 @@
 import config from "../../DB/config.json";
-import utils from "rus-anonym-utils";
+import * as utils from "rus-anonym-utils";
 import mongoose from "mongoose";
 
 export default {

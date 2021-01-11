@@ -1,6 +1,7 @@
 import { VK } from "vk-io";
 import IVKInstance from "../../types/interfaces/vk";
 import DataBase from "../DB/core";
+import * as utils from "rus-anonym-utils";
 
 const user: IVKInstance = {
 	id: DataBase.config.vk.user.id,
@@ -30,6 +31,7 @@ const group: IVKInstance = {
 async function startPolling(): Promise<void> {
 	await user.main.updates.startPolling();
 	await group.main.updates.startPolling();
+	utils.logger.info("Polling started");
 }
 
 export { user, group, startPolling };
