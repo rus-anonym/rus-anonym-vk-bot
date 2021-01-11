@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "outDir": "./out/",
+    "target": "ESNext",
+    "outDir": "./dist/",
     "strict": true,
     "alwaysStrict": true,
     "rootDir": "./src/",
