@@ -5,8 +5,7 @@
 	"license": "MIT",
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
-		"test": "yarn build && cd out && node test.js",
-		"start": "yarn build && cd out && node main.js",
+		"start": "yarn build && cd dist && node main.js",
 		"build": "tsc"
 	},
 	"dependencies": {
