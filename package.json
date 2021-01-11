@@ -8,18 +8,5 @@
 		"test": "yarn build && cd out && node test.js",
 		"start": "yarn build && cd out && node main.js",
 		"build": "tsc"
-	},
-	"dependencies": {
-		"mime-types": "^2.1.27",
-		"moment": "^2.29.1",
-		"rus-anonym-utils": "^1.0.12",
-		"safe-eval": "^0.4.1",
-		"simple-scheduler-task": "^3.0.12",
-		"vk-io": "^4.0.3",
-		"vk-io-question": "^2.0.1"
-	},
-	"devDependencies": {
-		"@types/mime-types": "^2.1.0",
-		"@types/node": "^14.14.2"
 	}
 }
