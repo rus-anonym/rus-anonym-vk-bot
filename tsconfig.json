@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "outDir": "./dist/",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "./out/",
     "strict": true,
     "alwaysStrict": true,
     "rootDir": "./src/",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true
+  },
+  "include": [
+    "./src/*",
+    "./src/commands/TS",
+    "./src/commands/JS"
+  ]
 }
