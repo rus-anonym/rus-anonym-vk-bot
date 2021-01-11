@@ -8,5 +8,11 @@
 		"test": "yarn build && cd out && node test.js",
 		"start": "yarn build && cd out && node main.js",
 		"build": "tsc"
+	},
+	"dependencies": {
+		"@types/mongoose": "^5.10.3",
+		"mongoose": "^5.11.11",
+		"ts-mongoose": "^0.0.24",
+		"vk-io": "^4.1.2"
 	}
 }
