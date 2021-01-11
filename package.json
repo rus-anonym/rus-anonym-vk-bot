@@ -6,6 +6,7 @@
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
 		"start": "yarn build && cd dist && node main.js",
+		"lint": "eslint ./src --ext .ts",
 		"build": "tsc"
 	},
 	"dependencies": {
