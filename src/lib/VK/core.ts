@@ -9,7 +9,7 @@ const user: IVKInstance = {
 	}),
 	main: new VK({ token: config.vk.user.main }),
 	getVK() {
-		return this.sessions[Math.floor(Math.random() * this.sessions.length)].vk;
+		return this.sessions[Math.floor(Math.random() * this.sessions.length)];
 	},
 };
 
@@ -20,8 +20,13 @@ const group: IVKInstance = {
 	}),
 	main: new VK({ token: config.vk.group.main }),
 	getVK() {
-		return this.sessions[Math.floor(Math.random() * this.sessions.length)].vk;
+		return this.sessions[Math.floor(Math.random() * this.sessions.length)];
 	},
 };
 
-export { user, group };
+async function startPolling() {
+	await user.main.updates.startPolling();
+	await group.main.updates.startPolling();
+}
+
+export { user, group, startPolling };
