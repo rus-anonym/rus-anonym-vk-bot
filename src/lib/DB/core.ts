@@ -2,6 +2,8 @@ import config from "../../DB/config.json";
 import * as utils from "rus-anonym-utils";
 import mongoose from "mongoose";
 
+mongoose.Schema.Types.String.checkRequired((v) => v != null);
+
 export default {
 	connect: async function connectDataBase(): Promise<boolean> {
 		try {
