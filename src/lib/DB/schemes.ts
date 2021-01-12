@@ -40,4 +40,4 @@ const message = createSchema({
 	),
 });
 
-export { user, chat, message };
+export default { user, chat, message };
