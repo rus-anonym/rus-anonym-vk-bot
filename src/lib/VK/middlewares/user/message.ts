@@ -5,7 +5,7 @@ user.main.updates.on("message", async function (message) {
 	console.log(message);
 	const savedMessage = new Models.message({
 		id: message.id,
-		events: [message],
+		events: [message.toJSON()],
 		messageData: [
 			(
 				await user
@@ -14,5 +14,6 @@ user.main.updates.on("message", async function (message) {
 			).items[0],
 		],
 	});
+	console.log(savedMessage);
 	await savedMessage.save();
 });
