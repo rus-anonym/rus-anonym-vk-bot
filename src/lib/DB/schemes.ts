@@ -1,4 +1,3 @@
-import { string } from "rus-anonym-utils";
 import { createSchema, Type } from "ts-mongoose";
 
 const entityTypes = ["user", "chat", "group"] as const;
