@@ -81,29 +81,31 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 				message.subTypes.join(),
 		);
 	}
-	const userData: UserDocument = await DataBase.models.user.findOne({
-		id: message.senderId,
-	});
-	if (!userData) {
-		const userVKData = await InternalUtils.getUserData(message.senderId);
-		const newUserData = new DataBase.models.user({
-			id: message.senderId,
-			messages: [message.id],
-			vk: {
-				name: userVKData.first_name,
-				surname: userVKData.last_name,
-			},
-		});
-		await newUserData.save();
-	} else {
-		userData.messages.push(message.id);
-		await userData.save();
-	}
-	if (message.isChat && message.chatId) {
-		const chatData: ChatDocument = await DataBase.models.chat.findOne({
+	if (!message.isGroup) {
+		const userData: UserDocument = await DataBase.models.user.findOne({
 			id: message.senderId,
 		});
 		if (!userData) {
+			const userVKData = await InternalUtils.getUserData(message.senderId);
+			const newUserData = new DataBase.models.user({
+				id: message.senderId,
+				messages: [message.id],
+				vk: {
+					name: userVKData.first_name,
+					surname: userVKData.last_name,
+				},
+			});
+			await newUserData.save();
+		} else {
+			userData.messages.push(message.id);
+			await userData.save();
+		}
+	}
+	if (message.isChat && message.chatId) {
+		const chatData: ChatDocument = await DataBase.models.chat.findOne({
+			id: message.chatId,
+		});
+		if (!chatData) {
 			const chatVKData = await user.getVK().api.call("messages.getChat", {
 				chat_id: message.chatId,
 				fields:
@@ -121,7 +123,7 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 				},
 			);
 			const newChatData = new DataBase.models.chat({
-				id: message.senderId,
+				id: message.chatId,
 				messages: [message.id],
 				creator: chatVKData.admin_id,
 				data: {
