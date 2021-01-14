@@ -48,7 +48,7 @@ function loadCommands(): void {
 	loadUserCommands("./commands/user");
 	loadGroupCommands("./commands/group");
 	utils.logger.info(
-		`Succesfull load commands\nGroup: ${groupCommands.length}\nUser: ${userCommands.length}`,
+		`Succesfull load commands: (Group: ${groupCommands.length} | User: ${userCommands.length})`,
 	);
 }
 
