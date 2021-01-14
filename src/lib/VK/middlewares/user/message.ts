@@ -81,14 +81,16 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 		);
 	}
 	if (!message.isGroup) {
+		const fixedSenderId =
+			message.isOutbox === true ? DataBase.config.vk.user.id : message.senderId;
 		const userData = await DataBase.models.user.findOne({
-			id: message.senderId,
+			id: fixedSenderId,
 		});
 		if (!userData) {
-			const userVKData = await InternalUtils.getUserData(message.senderId);
+			const userVKData = await InternalUtils.getUserData(fixedSenderId);
 			const personalMessages = message.isChat === true ? [] : [message.id];
 			const newUserData = new DataBase.models.user({
-				id: message.senderId,
+				id: fixedSenderId,
 				messages: [message.id],
 				vk: {
 					name: userVKData.first_name,

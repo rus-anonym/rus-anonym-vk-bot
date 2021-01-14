@@ -12,7 +12,7 @@ const command: ICommand = {
 			});
 			fromThisChatMessages = chatData.messages.length;
 		} else {
-			const userData: UserDocument = await DataBase.models.user.find({
+			const userData: UserDocument = await DataBase.models.user.findOne({
 				id: message.peerId,
 			});
 			fromThisChatMessages = userData.personalMessages.length;
