@@ -2,9 +2,27 @@ import { createSchema, Type } from "ts-mongoose";
 
 const entityTypes = ["user", "chat", "group"] as const;
 
-const user = createSchema({});
+const user = createSchema({
+	id: Type.number({ required: true, unique: true }),
+	messages: Type.array({ required: true }).of(Type.number({ required: true })),
+	vk: {
+		name: Type.string({ required: true }),
+		surname: Type.string({ required: true }),
+	},
+	data: {},
+});
 
-const chat = createSchema({});
+const chat = createSchema({
+	id: Type.number({ required: true }),
+	messages: Type.array({ required: true }).of(Type.number({ required: true })),
+	creator: Type.number({ required: true }),
+	data: {
+		members: Type.array({ required: true }).of(Type.number({ required: true })),
+		users: Type.number({ required: true }),
+		bots: Type.number({ required: true }),
+		title: Type.string({ required: true }),
+	},
+});
 
 const message = createSchema({
 	id: Type.number({ required: true, unique: true }),
