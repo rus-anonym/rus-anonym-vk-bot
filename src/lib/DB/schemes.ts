@@ -9,7 +9,6 @@ const user = createSchema({
 		name: Type.string({ required: true }),
 		surname: Type.string({ required: true }),
 	},
-	data: {},
 });
 
 const chat = createSchema({

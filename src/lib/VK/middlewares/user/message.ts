@@ -1,5 +1,9 @@
 import { MessageContext } from "vk-io";
-import { MessageDocument } from "./../../../DB/types";
+import {
+	MessageDocument,
+	UserDocument,
+	ChatDocument,
+} from "./../../../DB/types";
 import { user } from "../../core";
 import Models from "../../../DB/models";
 import utils from "rus-anonym-utils";
@@ -76,6 +80,64 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 			"Unhandled event on type message with subtypes: " +
 				message.subTypes.join(),
 		);
+	}
+	const userData: UserDocument = await DataBase.models.user.findOne({
+		id: message.senderId,
+	});
+	if (!userData) {
+		const userVKData = await InternalUtils.getUserData(message.senderId);
+		const newUserData = new DataBase.models.user({
+			id: message.senderId,
+			messages: [message.id],
+			vk: {
+				name: userVKData.first_name,
+				surname: userVKData.last_name,
+			},
+		});
+		await newUserData.save();
+	} else {
+		userData.messages.push(message.id);
+		await userData.save();
+	}
+	if (message.isChat && message.chatId) {
+		const chatData: ChatDocument = await DataBase.models.chat.findOne({
+			id: message.senderId,
+		});
+		if (!userData) {
+			const chatVKData = await user.getVK().api.call("messages.getChat", {
+				chat_id: message.chatId,
+				fields:
+					"nickname, screen_name, sex, bdate, city, country, timezone, photo_50, photo_100, photo_200_orig, has_mobile, contacts, education, online, counters, relation, last_seen, status, can_write_private_message, can_see_all_posts, can_post, universities",
+			});
+			const parsedData: Array<{
+				id: number;
+				type: "profile" | "group";
+			}> = chatVKData.users.map(
+				(x: { id: number; type: "profile" | "group" }) => {
+					return {
+						id: x.id,
+						type: x.type,
+					};
+				},
+			);
+			const newChatData = new DataBase.models.chat({
+				id: message.senderId,
+				messages: [message.id],
+				creator: chatVKData.admin_id,
+				data: {
+					members: parsedData.map((x) => {
+						return x.id;
+					}),
+					users: parsedData.filter((x) => x.type === "profile").length,
+					bots: parsedData.filter((x) => x.type === "group").length,
+					title: chatVKData.title,
+				},
+			});
+			await newChatData.save();
+		} else {
+			chatData.messages.push(message.id);
+			await chatData.save();
+		}
 	}
 	return;
 }

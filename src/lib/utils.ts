@@ -1,7 +1,5 @@
-import {
-	MessagesConversation,
-	UsersUserFull,
-} from "vk-io/lib/api/schemas/objects";
+import { Objects } from "vk-io";
+import { UsersUserFull } from "vk-io/lib/api/schemas/objects";
 import { user } from "./VK/core";
 
 export async function getUserData(user_id: number): Promise<UsersUserFull> {
@@ -105,7 +103,7 @@ export async function getUserData(user_id: number): Promise<UsersUserFull> {
 
 export async function getChatData(
 	chat_id: number,
-): Promise<MessagesConversation> {
+): Promise<Objects.MessagesConversation> {
 	return (
 		await user.getVK().api.messages.getConversationsById({
 			peer_ids: 2e9 + chat_id,
