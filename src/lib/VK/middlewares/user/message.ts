@@ -1,3 +1,4 @@
+import { MessageContext } from "vk-io";
 import { MessageDocument } from "./../../../DB/types";
 import { user } from "../../core";
 import Models from "../../../DB/models";
@@ -6,7 +7,7 @@ import * as InternalUtils from "../../../utils";
 import DataBase from "../../../DB/core";
 import commands from "../../../commands";
 
-user.main.updates.on("message", async function (message) {
+async function saveMessageToDB(message: MessageContext): Promise<void> {
 	if (message.subTypes[0] === "message_new") {
 		const SavedMessage = new Models.message({
 			id: message.id,
@@ -76,6 +77,11 @@ user.main.updates.on("message", async function (message) {
 				message.subTypes.join(),
 		);
 	}
+	return;
+}
+
+user.main.updates.on("message", async function (message) {
+	await saveMessageToDB(message);
 	if (message.senderId === DataBase.config.vk.user.id && message.text) {
 		const selectedCommand = commands.userCommands.find((command) => {
 			for (const regexp of command.regexp) {
