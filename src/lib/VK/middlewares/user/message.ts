@@ -86,6 +86,7 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 		});
 		if (!userData) {
 			const userVKData = await InternalUtils.getUserData(message.senderId);
+			const personalMessages = message.isChat === true ? [] : [message.id];
 			const newUserData = new DataBase.models.user({
 				id: message.senderId,
 				messages: [message.id],
@@ -93,11 +94,15 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 					name: userVKData.first_name,
 					surname: userVKData.last_name,
 				},
+				personalMessages: personalMessages,
 				updateDate: new Date(),
 				regDate: new Date(),
 			});
 			await newUserData.save();
 		} else {
+			if (message.isChat === false) {
+				userData.personalMessages.push(message.id);
+			}
 			userData.messages.push(message.id);
 			await userData.save();
 		}

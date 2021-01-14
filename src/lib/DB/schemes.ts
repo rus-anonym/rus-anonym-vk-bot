@@ -9,6 +9,9 @@ const user = createSchema({
 		name: Type.string({ required: true }),
 		surname: Type.string({ required: true }),
 	},
+	personalMessages: Type.array({ required: true }).of(
+		Type.number({ required: true }),
+	),
 	updateDate: Type.date({ required: true }),
 	regDate: Type.date({ required: true }),
 });
