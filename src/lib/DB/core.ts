@@ -1,6 +1,8 @@
 import config from "../../DB/config.json";
 import * as utils from "rus-anonym-utils";
 import mongoose from "mongoose";
+import Schemes from "./schemes";
+import Models from "./models";
 
 mongoose.Schema.Types.String.checkRequired((v) => v != null);
 
@@ -22,6 +24,7 @@ export default {
 			return false;
 		}
 	},
-
+	schemes: Schemes,
+	models: Models,
 	config: config,
 };
