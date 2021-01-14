@@ -9,6 +9,8 @@ const user = createSchema({
 		name: Type.string({ required: true }),
 		surname: Type.string({ required: true }),
 	},
+	updateDate: Type.date({ required: true }),
+	regDate: Type.date({ required: true }),
 });
 
 const chat = createSchema({
@@ -21,6 +23,8 @@ const chat = createSchema({
 		bots: Type.number({ required: true }),
 		title: Type.string({ required: true }),
 	},
+	updateDate: Type.date({ required: true }),
+	regDate: Type.date({ required: true }),
 });
 
 const message = createSchema({

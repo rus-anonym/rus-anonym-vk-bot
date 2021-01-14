@@ -92,6 +92,8 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 					name: userVKData.first_name,
 					surname: userVKData.last_name,
 				},
+				updateDate: new Date(),
+				regDate: new Date(),
 			});
 			await newUserData.save();
 		} else {
@@ -132,6 +134,8 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 					bots: parsedData.filter((x) => x.type === "group").length,
 					title: chatVKData.title,
 				},
+				updateDate: new Date(),
+				regDate: new Date(),
 			});
 			await newChatData.save();
 		} else {
