@@ -14,7 +14,8 @@
     "allowJs": true
   },
   "include": [
-    "./src/*",
-    "./src/commands/*",
+    "./src/",
+    "./src/commands/group",
+    "./src/commands/user",
   ]
 }
