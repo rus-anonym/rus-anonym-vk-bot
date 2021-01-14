@@ -1,11 +1,8 @@
-import ICommand from "../../types/interfaces/commands";
+import ICommand from "../../../types/interfaces/commands";
 
 const command: ICommand = {
-	regexp: [/(?:^zz)(\s(.*))?$/i, /(?:^eval)(\s(.*))?$/i],
+	regexp: [/(?:^!zz)(\s(.*))?$/i, /(?:^!eval)(\s(.*))?$/i],
 	process: async function (message, vk) {
-		if (message.senderId !== 266982306) {
-			return;
-		}
 		if (!message.args[1]) {
 			return message.send(`нет аргумента`);
 		}
