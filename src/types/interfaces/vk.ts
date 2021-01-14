@@ -1,4 +1,4 @@
-import { VK } from "vk-io";
+import { VK } from 'vk-io';
 
 export default interface IVKInstance {
 	id: number;

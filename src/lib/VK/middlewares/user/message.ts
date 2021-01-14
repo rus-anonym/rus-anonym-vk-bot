@@ -1,12 +1,7 @@
 import { MessageContext } from "vk-io";
-import {
-	MessageDocument,
-	UserDocument,
-	ChatDocument,
-} from "./../../../DB/types";
 import { user } from "../../core";
 import Models from "../../../DB/models";
-import utils from "rus-anonym-utils";
+import * as utils from "rus-anonym-utils";
 import * as InternalUtils from "../../../utils";
 import DataBase from "../../../DB/core";
 import commands from "../../../commands";
@@ -18,7 +13,10 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 			conversationMessageId: message.conversationMessageId,
 			peerId: message.peerId,
 			peerType: message.peerType,
-			senderId: message.senderId,
+			senderId:
+				message.isOutbox === true
+					? DataBase.config.vk.user.id
+					: message.senderId,
 			senderType: message.senderType,
 			created: new Date(message.createdAt * 1000),
 			updated: new Date(message.createdAt * 1000),
@@ -47,7 +45,7 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 			utils.logger.error("Error on save new message #id=" + message.id);
 		}
 	} else if (message.subTypes[0] === "message_edit") {
-		const oldMessageData: MessageDocument = await Models.message.findOne({
+		const oldMessageData = await Models.message.findOne({
 			id: message.id,
 		});
 		if (oldMessageData) {
@@ -82,7 +80,7 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 		);
 	}
 	if (!message.isGroup) {
-		const userData: UserDocument = await DataBase.models.user.findOne({
+		const userData = await DataBase.models.user.findOne({
 			id: message.senderId,
 		});
 		if (!userData) {
@@ -102,7 +100,7 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 		}
 	}
 	if (message.isChat && message.chatId) {
-		const chatData: ChatDocument = await DataBase.models.chat.findOne({
+		const chatData = await DataBase.models.chat.findOne({
 			id: message.chatId,
 		});
 		if (!chatData) {
@@ -144,9 +142,9 @@ async function saveMessageToDB(message: MessageContext): Promise<void> {
 	return;
 }
 
-user.main.updates.on("message", async function (message) {
+user.main.updates.on("message", async function (message: MessageContext) {
 	await saveMessageToDB(message);
-	if (message.senderId === DataBase.config.vk.user.id && message.text) {
+	if (message.isOutbox && message.text) {
 		const selectedCommand = commands.userCommands.find((command) => {
 			for (const regexp of command.regexp) {
 				if (regexp.test(message.text || "") === true) {
