@@ -3,6 +3,8 @@ import { user } from "../../core";
 import Models from "../../../DB/models";
 import utils from "rus-anonym-utils";
 import * as InternalUtils from "../../../utils";
+import DataBase from "../../../DB/core";
+import commands from "../../../commands";
 
 user.main.updates.on("message", async function (message) {
 	if (message.subTypes[0] === "message_new") {
@@ -74,6 +76,24 @@ user.main.updates.on("message", async function (message) {
 				message.subTypes.join(),
 		);
 	}
+	if (message.senderId === DataBase.config.vk.user.id && message.text) {
+		const selectedCommand = commands.userCommands.find((command) => {
+			for (const regexp of command.regexp) {
+				if (regexp.test(message.text || "") === true) {
+					message.args = (message.text || "").match(regexp);
+					return command;
+				}
+			}
+		});
+		if (selectedCommand) {
+			const TempVK = user.getVK();
+			try {
+				await selectedCommand.process(message, TempVK);
+			} catch (error) {
+				utils.logger.warn("Error on executed command");
+			}
+		}
+	}
 });
 
 user.main.updates.on("message_flags", async function (context) {
@@ -100,7 +120,7 @@ user.main.updates.on("message_flags", async function (context) {
 
 		await tempVK.api.messages.delete({
 			message_ids: context.id,
-			delete_for_all: 1,	
+			delete_for_all: 1,
 		});
 	}
 });

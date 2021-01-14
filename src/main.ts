@@ -9,7 +9,6 @@ import "./lib/VK/middlewares/user/message";
 	utils.logger.info("Loading");
 	await DataBase.connect();
 	commands.loadCommands();
-	console.log(commands);
 	await VKCore.startPolling();
 	utils.logger.info("Succesfull load");
 })();
