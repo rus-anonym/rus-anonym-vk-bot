@@ -1,4 +1,4 @@
-import utils from "rus-anonym-utils";
+import * as utils from "rus-anonym-utils";
 import DataBase from "./DB/core";
 import { getRandomId } from "vk-io";
 import { group } from "./VK/core";

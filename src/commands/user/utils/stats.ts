@@ -6,7 +6,7 @@ const command: ICommand = {
 	regexp: [/(?:^\.stats)$/i],
 	process: async function (message) {
 		const chatData: ChatDocument = await DataBase.models.chat.findOne({
-			peerId: message.peerId,
+			id: message.chatId,
 		});
 		return await message.send(
 			`Messages in DB: ${await DataBase.models.message.countDocuments()}

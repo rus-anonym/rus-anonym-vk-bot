@@ -5,6 +5,7 @@ import * as utils from "rus-anonym-utils";
 import * as InternalUtils from "../../../utils";
 import DataBase from "../../../DB/core";
 import commands from "../../../commands";
+import { logError } from "../../../logger";
 
 async function saveMessageToDB(message: MessageContext): Promise<void> {
 	if (message.subTypes[0] === "message_new") {
@@ -163,6 +164,7 @@ user.main.updates.on("message", async function (message: MessageContext) {
 				await selectedCommand.process(message, TempVK);
 			} catch (error) {
 				utils.logger.warn("Error on executed command");
+				await logError(error);
 			}
 		}
 	}
