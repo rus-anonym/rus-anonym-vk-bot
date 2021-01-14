@@ -1,5 +1,5 @@
 import { UsersUserFull } from "vk-io/lib/api/schemas/objects";
-import { user } from "./core";
+import { user } from "./VK/core";
 
 export async function getUserData(user_id: number): Promise<UsersUserFull> {
 	return (
@@ -98,4 +98,13 @@ export async function getUserData(user_id: number): Promise<UsersUserFull> {
 			],
 		})
 	)[0];
+}
+
+export function generateRandomString(length: number): string {
+	let output = "";
+	const words = "defbca1234567890";
+	while (output.length < length) {
+		output += words[Math.floor(Math.random() * words.length)];
+	}
+	return output;
 }
