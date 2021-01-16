@@ -21,6 +21,7 @@ const group: IVKInstance = {
 	}),
 	main: new VK({
 		pollingGroupId: DataBase.config.vk.group.id,
+		apiMode: "parallel",
 		token: DataBase.config.vk.group.main,
 	}),
 	getVK() {

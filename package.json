@@ -10,6 +10,7 @@
 		"build": "tsc"
 	},
 	"dependencies": {
+		"axios": "^0.21.1",
 		"mongoose": "^5.11.11",
 		"rus-anonym-utils": "^2.0.33",
 		"ts-mongoose": "^0.0.24",
