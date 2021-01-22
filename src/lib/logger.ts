@@ -10,7 +10,9 @@ export async function logError(error: Error): Promise<void> {
 			peer_id: 2e9 + DataBase.config.vk.group.conversations.errors,
 			source: {
 				value: Buffer.from(`Error on ${utils.time.currentDateTime()}
-Error: ${error.toString()}`),
+Error: ${error.toString()}
+
+Stack: ${error.stack}`),
 				filename: "Error.txt",
 			},
 		})
