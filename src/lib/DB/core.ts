@@ -1,3 +1,7 @@
 import config from "../../DB/config.json";
 
-export { config };
+class DB {
+	public config = config;
+}
+
+export default new DB();
