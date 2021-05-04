@@ -1,21 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "outDir": "./dist/",
-    "strict": true,
-    "alwaysStrict": true,
-    "rootDir": "./src/",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true
-  },
-  "include": [
-    "./src/",
-    "./src/commands/group",
-    "./src/commands/user",
-  ]
+	"compilerOptions": {
+		"lib": ["ESNext"],
+		"target": "ES2019",
+		"module": "ESNext",
+		"outDir": "./dist/",
+		"moduleResolution": "Node",
+		"declaration": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["./src"]
 }
