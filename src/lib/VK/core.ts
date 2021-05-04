@@ -4,9 +4,19 @@ import utils from "rus-anonym-utils";
 import DB from "../DB/core";
 
 abstract class Worker {
+	/**
+	 * Основной инстанс вк ио который юзается для поллинга
+	 */
 	abstract main: VK;
+
+	/**
+	 * Дополнительные инстансы вк ио
+	 */
 	abstract additional: VK[];
 
+	/**
+	 * Получение рандомного дополнительного инстанса
+	 */
 	public getVK(): VK {
 		return utils.array.random(this.additional);
 	}
