@@ -2,6 +2,7 @@ import { VK } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import DB from "../DB/core";
+import userMiddlewares from "./middlewares/user";
 
 abstract class Worker {
 	/**
@@ -13,6 +14,8 @@ abstract class Worker {
 	 * Дополнительные инстансы вк ио
 	 */
 	abstract additional: VK[];
+
+	abstract configure(): this;
 
 	/**
 	 * Получение рандомного дополнительного инстанса
@@ -28,6 +31,11 @@ class UserVK extends Worker {
 	public additional = DB.config.vk.user.tokens.splice(1).map((token) => {
 		return new VK({ token });
 	});
+
+	public configure() {
+		this.main.updates.on("message", userMiddlewares.messageHandler);
+		return this;
+	}
 }
 
 class GroupVK extends Worker {
@@ -36,11 +44,20 @@ class GroupVK extends Worker {
 	public additional = DB.config.vk.group.tokens.splice(1).map((token) => {
 		return new VK({ token });
 	});
+
+	public configure() {
+		return this;
+	}
 }
 
 class CoreVK {
 	public user = new UserVK();
 	public group = new GroupVK();
+
+	constructor() {
+		this.user.configure();
+		this.group.configure();
+	}
 }
 
 export default new CoreVK();
