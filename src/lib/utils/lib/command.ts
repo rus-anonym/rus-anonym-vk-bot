@@ -1,13 +1,17 @@
 import { MessageContext, VK } from "vk-io";
 import InternalUtils from "../core";
 
+export interface ModernMessageContext extends MessageContext {
+	args: RegExpExecArray;
+}
+
 export class Command {
 	public regexp: RegExp;
-	public process: (message: MessageContext, vk: VK) => Promise<unknown>;
+	public process: (message: ModernMessageContext, vk: VK) => Promise<unknown>;
 
 	constructor(
 		regexp: RegExp,
-		process: (message: MessageContext, vk: VK) => Promise<unknown>,
+		process: (message: ModernMessageContext, vk: VK) => Promise<unknown>,
 	) {
 		this.regexp = regexp;
 		this.process = process;
