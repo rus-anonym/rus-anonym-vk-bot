@@ -180,7 +180,7 @@ class DB {
 					creator: chatVKData.admin_id,
 					data: {
 						members: parsedData.map((x) => {
-							return x.id;
+							return x.type === "profile" ? x.id : -x.id;
 						}),
 						users: parsedData.filter((x) => x.type === "profile").length,
 						bots: parsedData.filter((x) => x.type === "group").length,
