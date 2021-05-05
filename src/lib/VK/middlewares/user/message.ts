@@ -2,6 +2,7 @@ import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 import DB from "../../../DB/core";
+import VK from "../../../VK/core";
 
 async function handler(message: MessageContext) {
 	DB.saveMessage(message).catch(() => {
@@ -13,6 +14,20 @@ https://vk.com/im?sel=${
 			"error",
 		);
 	});
+	if (message.isOutbox && message.text) {
+		const selectedCommand = InternalUtils.commands.find((command) =>
+			command.check(message.text as string),
+		);
+
+		if (selectedCommand) {
+			const TempVK = VK.user.getVK();
+			message.args = selectedCommand.regexp.exec(message.text);
+			await selectedCommand.process(message, TempVK).catch((error) => {
+				InternalUtils.logger.send("Error on execute command", "error");
+				console.log(error);
+			});
+		}
+	}
 }
 
 export default handler;

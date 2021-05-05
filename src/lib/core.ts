@@ -5,6 +5,8 @@ import VK from "./VK/core";
 import DB from "./DB/core";
 import InternalUtils from "./utils/core";
 
+import "./commands/loader";
+
 DB.connection.once("open", function MongoDBConnected() {
 	InternalUtils.logger.send(
 		`Script start at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
