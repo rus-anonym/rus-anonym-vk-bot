@@ -8,6 +8,11 @@ class DB {
 
 	public connection = mongoose.createConnection(
 		`mongodb+srv://${config.db.mongo.login}:${config.db.mongo.password}@${config.db.mongo.address}/${config.db.mongo.db}`,
+		{
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+		},
 	);
 
 	public models = {
