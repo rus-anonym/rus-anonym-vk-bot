@@ -129,23 +129,17 @@ class DB {
 		}
 
 		if (!message.isGroup) {
-			const fixedSenderId =
-				message.isOutbox === true ? this.config.vk.user.id : message.senderId;
+			const fixedSenderId = message.isOutbox
+				? this.config.vk.user.id
+				: message.senderId;
 			const userData = await this.models.user.findOne({
 				id: fixedSenderId,
 			});
 			if (!userData) {
-				const [userVKData] = await VK.user
-					.getVK()
-					.api.users.get({ user_ids: fixedSenderId.toString() });
 				const personalMessages = message.isChat === true ? [] : [message.id];
 				const newUserData = new this.models.user({
 					id: fixedSenderId,
 					messages: [message.id],
-					vk: {
-						name: userVKData.first_name,
-						surname: userVKData.last_name,
-					},
 					personalMessages: personalMessages,
 					updateDate: new Date(),
 					regDate: new Date(),
@@ -154,8 +148,10 @@ class DB {
 			} else {
 				if (message.isChat === false) {
 					userData.personalMessages.push(message.id);
+				} else {
+					userData.messages.push(message.id);
 				}
-				userData.messages.push(message.id);
+				userData.updateDate = new Date();
 				await userData.save();
 			}
 		}
@@ -165,40 +161,16 @@ class DB {
 				id: message.chatId,
 			});
 			if (!chatData) {
-				const chatVKData = await VK.user.getVK().api.call("messages.getChat", {
-					chat_id: message.chatId,
-					fields:
-						"nickname, screen_name, sex, bdate, city, country, timezone, photo_50, photo_100, photo_200_orig, has_mobile, contacts, education, online, counters, relation, last_seen, status, can_write_private_message, can_see_all_posts, can_post, universities",
-				});
-				const parsedData: Array<{
-					id: number;
-					type: "profile" | "group";
-				}> = chatVKData.users.map(
-					(x: { id: number; type: "profile" | "group" }) => {
-						return {
-							id: x.id,
-							type: x.type,
-						};
-					},
-				);
 				const newChatData = new this.models.chat({
 					id: message.chatId,
 					messages: [message.id],
-					creator: chatVKData.admin_id,
-					data: {
-						members: parsedData.map((x) => {
-							return x.type === "profile" ? x.id : -x.id;
-						}),
-						users: parsedData.filter((x) => x.type === "profile").length,
-						bots: parsedData.filter((x) => x.type === "group").length,
-						title: chatVKData.title,
-					},
 					updateDate: new Date(),
 					regDate: new Date(),
 				});
 				await newChatData.save();
 			} else {
 				chatData.messages.push(message.id);
+				chatData.updateDate = new Date();
 				await chatData.save();
 			}
 		}
