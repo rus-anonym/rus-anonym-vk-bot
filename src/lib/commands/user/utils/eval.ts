@@ -1,4 +1,4 @@
-import { Command } from "./../../utils/lib/command";
+import { Command } from "../../../utils/lib/command";
 
 new Command(/(?:^!zz)(\s(.*))?$/i, async function (message) {
 	await message.loadMessagePayload();

@@ -4,7 +4,7 @@ import InternalUtils from "../../../utils/core";
 import DB from "../../../DB/core";
 import VK from "../../../VK/core";
 
-async function handler(message: ModernMessageContext): Promise<void> {
+async function userMessageHandler(message: ModernMessageContext): Promise<void> {
 	DB.saveMessage(message).catch((err) => {
 		console.log(err);
 		InternalUtils.logger.send(
@@ -32,4 +32,4 @@ https://vk.com/im?sel=${
 	}
 }
 
-export default handler;
+export default userMessageHandler;

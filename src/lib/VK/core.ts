@@ -51,13 +51,8 @@ class GroupVK extends Worker {
 }
 
 class CoreVK {
-	public user = new UserVK();
-	public group = new GroupVK();
-
-	constructor() {
-		this.user.configure();
-		this.group.configure();
-	}
+	public user = new UserVK().configure();
+	public group = new GroupVK().configure();
 }
 
 export default new CoreVK();
