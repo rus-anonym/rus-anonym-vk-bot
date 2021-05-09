@@ -24,9 +24,15 @@ new Command(/(?:!stickers)$/i, async function (message) {
 		.join(", ");
 
 	return message.reply(
-		`У @id${userID} найдено ${userStickers.items.length} стикеров на сумму ${
-			userStickers.total_price * 7
-		}₽\n${stickersText.length < 4000 ? stickersText : ""}`,
+		`У @id${userID} найдено ${
+			userStickers.items.length
+		} ${utils.string.declOfNum(userStickers.items.length, [
+			"стикерпак",
+			"стикерпака",
+			"стикерпаков",
+		])} на сумму ${userStickers.total_price * 7}₽\n${
+			stickersText.length < 4000 ? stickersText : ""
+		}`,
 		{
 			disable_mentions: true,
 		},
