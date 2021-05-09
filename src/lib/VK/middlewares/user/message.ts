@@ -4,7 +4,9 @@ import InternalUtils from "../../../utils/core";
 import DB from "../../../DB/core";
 import VK from "../../../VK/core";
 
-async function userMessageHandler(message: ModernMessageContext): Promise<void> {
+async function userMessageHandler(
+	message: ModernMessageContext,
+): Promise<void> {
 	DB.saveMessage(message).catch((err) => {
 		console.log(err);
 		InternalUtils.logger.send(
@@ -25,7 +27,8 @@ https://vk.com/im?sel=${
 			message.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;
-			await selectedCommand.process(message, TempVK).catch(() => {
+			await selectedCommand.process(message, TempVK).catch((err) => {
+				console.log(err);
 				InternalUtils.logger.send("Error on execute command", "error");
 			});
 		}
