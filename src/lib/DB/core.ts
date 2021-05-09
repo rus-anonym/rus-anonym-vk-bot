@@ -6,6 +6,9 @@ import InternalUtils from "../utils/core";
 import VK from "../VK/core";
 import config from "../../DB/config.json";
 import schemes from "./schemes";
+
+mongoose.Schema.Types.String.checkRequired((text) => text !== null);
+
 class DB {
 	public config = config;
 
@@ -47,7 +50,7 @@ class DB {
 
 	public async saveMessage(message: MessageContext) {
 		switch (message.subTypes[0]) {
-			case "message_new":
+			case "message_new": {
 				await new this.models.message({
 					id: message.id,
 					conversationMessageId: message.conversationMessageId,
@@ -83,7 +86,8 @@ class DB {
 					],
 				}).save();
 				break;
-			case "message_edit":
+			}
+			case "message_edit": {
 				const oldMessageData = await this.models.message.findOne({
 					id: message.id,
 				});
@@ -111,14 +115,17 @@ class DB {
 					}
 					await oldMessageData.save();
 				}
+
 				break;
-			default:
+			}
+			default: {
 				await InternalUtils.logger.send(
 					`Unhandled event on type message with subtypes:
 				${message.subTypes.join()}`,
 					"error",
 				);
 				break;
+			}
 		}
 
 		if (!message.isGroup) {
