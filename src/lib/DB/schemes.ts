@@ -33,6 +33,26 @@ const chat = createSchema(
 	},
 );
 
+const event = createSchema(
+	{
+		updatedAt: Type.number({ required: true }),
+		text: Type.string({ required: true }),
+		attachments: Type.array({ required: true }).of(
+			Type.string({ required: true }),
+		),
+		type: Type.string({ required: true }),
+		subTypes: Type.array({ required: true }).of(
+			Type.string({ required: true }),
+		),
+		hasReply: Type.boolean({ required: true }),
+		hasForwards: Type.boolean({ required: true }),
+	},
+	{
+		versionKey: false,
+		_id: false,
+	},
+);
+
 const message = createSchema(
 	{
 		id: Type.number({ required: true, unique: true }),
@@ -44,19 +64,7 @@ const message = createSchema(
 		created: Type.date({ required: true }),
 		updated: Type.date({ required: true }),
 		isOutbox: Type.boolean({ required: true }),
-		events: Type.array({ required: true }).of({
-			updatedAt: Type.number({ required: true }),
-			text: Type.string({ required: true }),
-			attachments: Type.array({ required: true }).of(
-				Type.string({ required: true }),
-			),
-			type: Type.string({ required: true }),
-			subTypes: Type.array({ required: true }).of(
-				Type.string({ required: true }),
-			),
-			hasReply: Type.boolean({ required: true }),
-			hasForwards: Type.boolean({ required: true }),
-		}),
+		events: Type.array({ required: true }).of(event),
 		data: Type.array({ required: true }).of(Type.mixed({ required: true })),
 	},
 	{
