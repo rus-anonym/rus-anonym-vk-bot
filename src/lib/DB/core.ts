@@ -2,7 +2,6 @@ import { typedModel } from "ts-mongoose";
 import { MessageContext } from "vk-io";
 import mongoose from "mongoose";
 
-import InternalUtils from "../utils/core";
 import VK from "../VK/core";
 import config from "../../DB/config.json";
 import schemes from "./schemes";
@@ -48,7 +47,7 @@ class DB {
 		),
 	};
 
-	public async saveMessage(message: MessageContext) {
+	public async saveMessage(message: MessageContext): Promise<void> {
 		switch (message.subTypes[0]) {
 			case "message_new": {
 				await new this.models.message({
@@ -119,11 +118,6 @@ class DB {
 				break;
 			}
 			default: {
-				await InternalUtils.logger.send(
-					`Unhandled event on type message with subtypes:
-				${message.subTypes.join()}`,
-					"error",
-				);
 				break;
 			}
 		}

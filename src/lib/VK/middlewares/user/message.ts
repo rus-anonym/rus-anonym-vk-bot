@@ -28,8 +28,10 @@ https://vk.com/im?sel=${
 				message.text,
 			) as RegExpExecArray;
 			await selectedCommand.process(message, TempVK).catch((err) => {
-				console.log(err);
-				InternalUtils.logger.send("Error on execute command", "error");
+				InternalUtils.logger.send(
+					`Error on execute command\nError: ${err.toString()}`,
+					"error",
+				);
 			});
 		}
 	}

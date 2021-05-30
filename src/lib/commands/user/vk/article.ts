@@ -6,8 +6,8 @@ new Command(/(?:!article)(?:\s(.*))$/i, async function (message) {
 	try {
 		const article = await utils.vk.article.getByURL(message.args[1].trim());
 
-		return await message.reply(
-			`Данные по статье #${article.id}
+		return await message.editMessage({
+			message: `Данные по статье #${article.id}
 Владелец: @${article.owner_id < 1 ? "club" : "id"}${article.owner_id}
 Название: ${article.title} 
 
@@ -17,8 +17,8 @@ ${article.shares_formatted}
 ${article.views_formatted}
 
 Опубликовано: ${moment(article.published).format("DD.MM.YYYY в hh:mm:SS")}`,
-			{ disable_mentions: true },
-		);
+			disable_mentions: true,
+		});
 	} catch (error) {
 		return message.reply("Неверная ссылка");
 	}

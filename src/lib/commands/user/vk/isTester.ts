@@ -21,14 +21,16 @@ new Command(/(?:!tester)$/i, async function (message) {
 			)
 		).data;
 
-		return message.reply(
-			`Пользователь @id${userData.response.reporter.id}
+		return message.editMessage({
+			message: `Пользователь @id${userData.response.reporter.id}
 Статус: ${userData.response.reporter.status_text}
 
 Позиция в топе: ${userData.response.reporter.top_position}
-Количество отчётов: ${userData.response.reporter.reports_count}`,
-			{ disable_mentions: true },
-		);
+Количество отчётов: ${userData.response.reporter.reports_count}
+
+https://vk.com/bugs?act=reporter&id=${userData.response.reporter.id}`,
+			disable_mentions: true,
+		});
 	} catch (error) {
 		return message.reply("апи здохло");
 	}
