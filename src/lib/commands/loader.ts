@@ -1,4 +1,5 @@
 import "./user/utils/eval";
+import "./user/utils/about";
 
 import "./user/vk/status";
 import "./user/vk/article";
