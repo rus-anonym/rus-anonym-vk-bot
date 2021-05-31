@@ -68,10 +68,25 @@ class GroupVK extends Worker {
 				case "story": {
 					const story = attachment.story;
 					if (story.type === "photo") {
+						story.photo.sizes.sort(
+							(
+								a: { width: number; height: number },
+								b: { width: number; height: number },
+							) => {
+								if (a.width > b.width || a.height > b.height) {
+									return -1;
+								} else if (a.width < b.width || a.height < b.height) {
+									return 1;
+								} else {
+									return 0;
+								}
+							},
+						);
+
 						const uploadedStory = await this.getVK().upload.messagePhoto({
 							peer_id: 2e9 + chat,
 							source: {
-								value: story.photo.sizes[story.photo.sizes.length - 1].url,
+								value: story.photo.sizes[0].url,
 							},
 						});
 
@@ -111,7 +126,21 @@ class GroupVK extends Worker {
 				}
 				case "photo": {
 					const photo = attachment.photo;
-					const maxResolutionPhoto = photo.sizes[photo.sizes.length - 1];
+					photo.sizes.sort(
+						(
+							a: { width: number; height: number },
+							b: { width: number; height: number },
+						) => {
+							if (a.width > b.width || a.height > b.height) {
+								return -1;
+							} else if (a.width < b.width || a.height < b.height) {
+								return 1;
+							} else {
+								return 0;
+							}
+						},
+					);
+					const maxResolutionPhoto = photo.sizes[0];
 
 					const uploadedStory = await this.getVK().upload.messagePhoto({
 						peer_id: 2e9 + chat,
