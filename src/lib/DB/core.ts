@@ -103,55 +103,62 @@ class DB {
 						hasReply: message.hasReplyMessage,
 						hasForwards: message.hasForwards,
 					});
-					oldMessageData.data.push(
-						(
-							await VK.user
-								.getVK()
-								.api.messages.getById({ message_ids: message.id })
-						).items[0],
-					);
+					const newMessageData = (
+						await VK.user
+							.getVK()
+							.api.messages.getById({ message_ids: message.id })
+					).items[0];
+					oldMessageData.data.push(newMessageData);
 					if (message.updatedAt) {
 						oldMessageData.updated = new Date(message.updatedAt * 1000);
 					}
 					await oldMessageData.save();
 
-					const logsChatId =
-						oldMessageData.peerType === "chat"
-							? config.vk.logs.conversations.conversations
-							: config.vk.logs.conversations.messages;
+					const isTranscriptAudioMessage =
+						newMessageData.attachments &&
+						newMessageData.attachments[0].audio_message &&
+						newMessageData.attachments[0].audio_message.transcript_state ===
+							"done";
 
-					const uploadedAttachments = await VK.group.uploadAttachments(
-						oldMessageData.data[oldMessageData.data.length - 2].attachments,
-						logsChatId,
-					);
+					if (message.isInbox && !isTranscriptAudioMessage) {
+						const logsChatId =
+							oldMessageData.peerType === "chat"
+								? config.vk.logs.conversations.conversations
+								: config.vk.logs.conversations.messages;
 
-					let attachmentsText = "";
+						const uploadedAttachments = await VK.group.uploadAttachments(
+							oldMessageData.data[oldMessageData.data.length - 2].attachments,
+							logsChatId,
+						);
 
-					for (let i = 0; i < uploadedAttachments.length; i++) {
-						attachmentsText += `\n${Number(i) + 1}. ${
-							uploadedAttachments[i].type
-						}`;
-					}
+						let attachmentsText = "";
 
-					VK.group.getVK().api.messages.send({
-						message: `Отредактировано сообщение #${message.id}
-						https://vk.com/im?sel=${
-							message.isChat ? `c${message.chatId}` : message.peerId
-						}&msgid=${message.id} от ${moment(oldMessageData.updated).format(
-							"HH:mm:ss, DD.MM.YYYY",
-						)}
-						
-						Предыдущие данные: 
-						Текст: ${
-							oldMessageData.data[oldMessageData.data.length - 2].text ||
-							"Отсутствует"
+						for (let i = 0; i < uploadedAttachments.length; i++) {
+							attachmentsText += `\n${Number(i) + 1}. ${
+								uploadedAttachments[i].type
+							}`;
 						}
+
+						VK.group.getVK().api.messages.send({
+							message: `Отредактировано сообщение #${message.id}
+https://vk.com/im?sel=${
+								message.isChat ? `c${message.chatId}` : message.peerId
+							}&msgid=${message.id} от ${moment(oldMessageData.updated).format(
+								"HH:mm:ss, DD.MM.YYYY",
+							)}
+						
+Предыдущие данные: 
+Текст: ${
+								oldMessageData.data[oldMessageData.data.length - 2].text ||
+								"Отсутствует"
+							}
 						
 						Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
-						chat_id: logsChatId,
-						random_id: getRandomId(),
-						attachment: uploadedAttachments.map((x) => x.link),
-					});
+							chat_id: logsChatId,
+							random_id: getRandomId(),
+							attachment: uploadedAttachments.map((x) => x.link),
+						});
+					}
 				}
 
 				break;
