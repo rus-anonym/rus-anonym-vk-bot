@@ -116,6 +116,7 @@ class DB {
 
 					const isTranscriptAudioMessage =
 						newMessageData.attachments &&
+						newMessageData.attachments[0] &&
 						newMessageData.attachments[0].audio_message &&
 						newMessageData.attachments[0].audio_message.transcript_state ===
 							"done";
