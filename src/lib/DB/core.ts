@@ -1,10 +1,11 @@
 import { typedModel } from "ts-mongoose";
-import { MessageContext } from "vk-io";
+import { getRandomId, MessageContext } from "vk-io";
 import mongoose from "mongoose";
 
 import VK from "../VK/core";
 import config from "../../DB/config.json";
 import schemes from "./schemes";
+import moment from "moment";
 
 mongoose.Schema.Types.String.checkRequired((text) => text !== null);
 
@@ -113,6 +114,44 @@ class DB {
 						oldMessageData.updated = new Date(message.updatedAt * 1000);
 					}
 					await oldMessageData.save();
+
+					const logsChatId =
+						oldMessageData.peerType === "chat"
+							? config.vk.logs.conversations.conversations
+							: config.vk.logs.conversations.messages;
+
+					const uploadedAttachments = await VK.group.uploadAttachments(
+						oldMessageData.data[oldMessageData.data.length - 2].attachments,
+						logsChatId,
+					);
+
+					let attachmentsText = "";
+
+					for (let i = 0; i < uploadedAttachments.length; i++) {
+						attachmentsText += `\n${Number(i) + 1}. ${
+							uploadedAttachments[i].type
+						}`;
+					}
+
+					VK.group.getVK().api.messages.send({
+						message: `Отредактировано сообщение #${message.id}
+						https://vk.com/im?sel=${
+							message.isChat ? `c${message.chatId}` : message.peerId
+						}&msgid=${message.id} от ${moment(oldMessageData.updated).format(
+							"HH:mm:ss, DD.MM.YYYY",
+						)}
+						
+						Предыдущие данные: 
+						Текст: ${
+							oldMessageData.data[oldMessageData.data.length - 2].text ||
+							"Отсутствует"
+						}
+						
+						Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
+						chat_id: logsChatId,
+						random_id: getRandomId(),
+						attachment: uploadedAttachments.map((x) => x.link),
+					});
 				}
 
 				break;
