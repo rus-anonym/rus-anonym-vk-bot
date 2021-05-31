@@ -8,3 +8,4 @@ import "./user/vk/isTester";
 import "./user/vk/deleteMessages";
 import "./user/vk/kick";
 import "./user/vk/invite";
+import "./user/vk/reserveScreenName";
