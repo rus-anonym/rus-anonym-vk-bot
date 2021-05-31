@@ -17,6 +17,7 @@ https://vk.com/im?sel=${
 			"error",
 		);
 	});
+
 	if (message.isOutbox && message.text) {
 		const selectedCommand = InternalUtils.commands.find((command) =>
 			command.check(message.text as string),

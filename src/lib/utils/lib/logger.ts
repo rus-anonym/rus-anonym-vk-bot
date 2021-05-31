@@ -7,7 +7,7 @@ import VK from "../../VK/core";
 
 type Log = "message" | "conversation" | "rest" | "error";
 export default class Logger {
-	public async send(message: string, type: Log = "rest") {
+	public async send(message: string, type: Log = "rest"): Promise<void> {
 		let selectedChat;
 		let prefix;
 
@@ -41,10 +41,12 @@ ${prefix} - ${message}`;
 
 		message += `🔴🔴🔴🔴🔴🔴🔴🔴`;
 
-		return VK.group.getVK().api.messages.send({
+		await VK.group.getVK().api.messages.send({
 			chat_id: selectedChat,
 			random_id: getRandomId(),
 			message: message,
 		});
+
+		return;
 	}
 }
