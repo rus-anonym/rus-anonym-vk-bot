@@ -51,6 +51,7 @@ class GroupVK extends Worker {
 	});
 
 	public async uploadAttachments(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		attachments: any[],
 		chat: number,
 	): Promise<
@@ -142,7 +143,7 @@ class GroupVK extends Worker {
 					);
 					const maxResolutionPhoto = photo.sizes[0];
 
-					const uploadedStory = await this.getVK().upload.messagePhoto({
+					const uploadedPhoto = await this.getVK().upload.messagePhoto({
 						peer_id: 2e9 + chat,
 						source: {
 							value: maxResolutionPhoto.url,
@@ -151,8 +152,26 @@ class GroupVK extends Worker {
 
 					response.push({
 						type: `Фотография (${maxResolutionPhoto.width} x ${maxResolutionPhoto.height})`,
-						link: uploadedStory.toString(),
+						link: uploadedPhoto.toString(),
 					});
+					break;
+				}
+				case "video": {
+					const video = attachment.video;
+
+					const uploadedVideo = await this.getVK().upload.messageDocument({
+						peer_id: 2e9 + chat,
+						source: {
+							value: video.files.src,
+							filename: video.title,
+						},
+					});
+
+					response.push({
+						type: "Видео",
+						link: uploadedVideo.toString(),
+					});
+
 					break;
 				}
 				case "audio": {

@@ -8,12 +8,11 @@ async function userMessageHandler(
 	message: ModernMessageContext,
 ): Promise<void> {
 	DB.saveMessage(message).catch((err) => {
-		console.log(err);
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
 https://vk.com/im?sel=${
 				message.isChat ? `c${message.chatId}` : message.peerId
-			}&msgid=${message.id}`,
+			}&msgid=${message.id}\n\n${err.toString()}`,
 			"error",
 		);
 	});

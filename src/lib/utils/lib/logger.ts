@@ -1,5 +1,4 @@
 import { getRandomId } from "vk-io";
-import os from "node-os-utils";
 import moment from "moment";
 
 import DB from "../../DB/core";
