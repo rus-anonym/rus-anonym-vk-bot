@@ -32,7 +32,14 @@ new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
 	const userStickers = await utils.vk.user.getUserStickerPacks(
 		DB.config.vk.user.vkme,
 		userID,
+		true,
 	);
+
+	console.log(userStickers);
+
+	const freeStickerPacksCount = userStickers.items.filter(
+		(x) => x.price === 0,
+	).length;
 
 	const stickersText = userStickers.items
 		.map((stickerPack) => stickerPack.name)
@@ -46,10 +53,10 @@ new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
 			"стикерпак",
 			"стикерпака",
 			"стикерпаков",
-		])} на сумму ${utils.number.separator(
-			userStickers.total_price * 7,
-			".",
-		)}₽\n${stickersText.length < 4000 ? stickersText : ""}`,
+		])} на сумму ${utils.number.separator(userStickers.total_price * 7, ".")}₽
+Платных: ${userStickers.items.length - freeStickerPacksCount}
+Бесплатных: ${freeStickerPacksCount}
+\n\n${stickersText.length < 3900 ? stickersText : ""}`,
 		disable_mentions: true,
 	});
 });
