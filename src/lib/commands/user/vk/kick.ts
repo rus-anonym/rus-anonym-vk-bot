@@ -1,3 +1,4 @@
+import moment from "moment";
 import { resolveResource } from "vk-io";
 import { Command } from "../../../utils/lib/command";
 
@@ -37,10 +38,14 @@ new Command(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 			chat_id: message.chatId as number,
 			user_id: userID,
 		});
-		await message.deleteMessage({ delete_for_all: true });
+		await message.editMessage({
+			message: `https://vk.com/id${userID} исключён из беседы в ${moment().format(
+				"HH:mm:ss",
+			)}`,
+		});
 	} catch (error) {
 		return message.editMessage({
-			message: "Не могу исключить",
+			message: `Не могу исключить пользователя https://vk.com/id${userID} из беседы\n${error.message}`,
 		});
 	}
 });

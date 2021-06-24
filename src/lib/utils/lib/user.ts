@@ -80,9 +80,10 @@ export default class User {
 			logsChatId,
 		);
 		let attachmentsText = "";
-		for (let i = 0; i < uploadedAttachments.length; i++) {
-			attachmentsText += `\n${Number(i) + 1}. ${uploadedAttachments[i].type}`;
-		}
+		uploadedAttachments.map((attachment, index) => {
+			attachmentsText += `\n${index + 1}. ${attachment.type}`;
+		});
+
 		VK.group.getVK().api.messages.send({
 			message: `Отредактировано сообщение #${message.id}
 						https://vk.com/im?sel=${
