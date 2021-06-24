@@ -46,9 +46,10 @@ new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
 			"стикерпак",
 			"стикерпака",
 			"стикерпаков",
-		])} на сумму ${userStickers.total_price * 7}₽\n${
-			stickersText.length < 4000 ? stickersText : ""
-		}`,
+		])} на сумму ${utils.number.separator(
+			userStickers.total_price * 7,
+			".",
+		)}₽\n${stickersText.length < 4000 ? stickersText : ""}`,
 		disable_mentions: true,
 	});
 });
