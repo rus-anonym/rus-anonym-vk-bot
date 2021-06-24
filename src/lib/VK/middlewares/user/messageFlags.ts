@@ -1,4 +1,4 @@
-import { ContextDefaultState, getRandomId, MessageFlagsContext } from "vk-io";
+import { ContextDefaultState, MessageFlagsContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 

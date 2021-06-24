@@ -116,12 +116,13 @@ class DB {
 					}
 					await oldMessageData.save();
 
-					const isTranscriptAudioMessage =
-						newMessageData.attachments &&
-						newMessageData.attachments[0] &&
-						newMessageData.attachments[0].audio_message &&
-						newMessageData.attachments[0].audio_message.transcript_state ===
-							"done";
+					const isTranscriptAudioMessage: boolean =
+						(newMessageData.attachments &&
+							newMessageData.attachments[0] &&
+							newMessageData.attachments[0].audio_message &&
+							newMessageData.attachments[0].audio_message.transcript_state ===
+								"done") ||
+						false;
 
 					if (message.isInbox && !isTranscriptAudioMessage) {
 						InternalUtils.user.processEditedMessage(message, oldMessageData);
