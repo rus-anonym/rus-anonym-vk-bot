@@ -15,7 +15,7 @@
 		"moment": "^2.29.1",
 		"mongoose": "^5.12.7",
 		"node-os-utils": "^1.3.5",
-		"rus-anonym-utils": "^2.3.6",
+		"rus-anonym-utils": "^2.3.7",
 		"simple-scheduler-task": "^3.2.2",
 		"ts-mongoose": "^0.0.24",
 		"typescript-eslint": "^0.0.1-alpha.0",
