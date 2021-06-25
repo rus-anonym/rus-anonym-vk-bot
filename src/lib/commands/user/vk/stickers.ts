@@ -4,7 +4,10 @@ import { resolveResource } from "vk-io";
 import DB from "../../../DB/core";
 import { Command } from "../../../utils/lib/command";
 
-new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
+new Command(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
+	message,
+	vk,
+) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {
@@ -25,21 +28,14 @@ new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
 		}
 	} else {
 		return await message.editMessage({
-			message: "Не смог распознать ссылку",
+			message: "Не обнаружена ссылка",
 		});
 	}
 
 	const userStickers = await utils.vk.user.getUserStickerPacks(
 		DB.config.vk.user.vkme,
 		userID,
-		true,
 	);
-
-	console.log(userStickers);
-
-	const freeStickerPacksCount = userStickers.items.filter(
-		(x) => x.price === 0,
-	).length;
 
 	const stickersText = userStickers.items
 		.map((stickerPack) => stickerPack.name)
@@ -54,8 +50,8 @@ new Command(/(?:!stickers)(?:\s(.*))?$/i, async function (message, vk) {
 			"стикерпака",
 			"стикерпаков",
 		])} на сумму ${utils.number.separator(userStickers.total_price * 7, ".")}₽
-Платных: ${userStickers.items.length - freeStickerPacksCount}
-Бесплатных: ${freeStickerPacksCount}
+Платных: ${userStickers.paid}
+Бесплатных: ${userStickers.free}
 \n\n${stickersText.length < 3900 ? stickersText : ""}`,
 		disable_mentions: true,
 	});

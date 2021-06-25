@@ -5,7 +5,7 @@ import moment from "moment";
 import { Command } from "../../../utils/lib/command";
 import InternalUtils from "../../../utils/core";
 
-new Command(/(?:!clear)(?:\s(\d+))$/i, async function (context, vk) {
+new Command(/^(?:!clear)(?:\s(\d+))$/i, async function (context, vk) {
 	const iterator = createCollectIterator({
 		api: vk.api,
 		method: "messages.getHistory",

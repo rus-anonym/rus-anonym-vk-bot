@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { Command } from "../../../utils/lib/command";
 
-new Command(/(?:!tester)$/i, async function (message) {
+new Command(/^(?:!tester)$/i, async function (message) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {
