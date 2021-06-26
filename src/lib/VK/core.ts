@@ -44,10 +44,10 @@ class UserVK extends Worker {
 			"friend_activity",
 			userMiddlewares.friendActivityHandler,
 		);
+		this.main.updates.on("messages_read", () => null);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
-				`
-Необработанное событие:
+				`Необработанное событие:
 Type: ${event.type}
 SubTypes: ${JSON.stringify(event.subTypes)}`,
 				"rest",
