@@ -23,6 +23,8 @@ new Command(/(?:^!инфо|!info)(?:\s(.*))?$/i, async function (message, vk) {
 				message: "Не смог распознать ссылку",
 			});
 		}
+	} else if (!message.isChat) {
+		userID = message.peerId;
 	} else {
 		return await message.editMessage({
 			message: "Не смог распознать ссылку",

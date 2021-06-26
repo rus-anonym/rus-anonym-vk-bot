@@ -26,9 +26,11 @@ new Command(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 				message: "Не смог распознать ссылку",
 			});
 		}
+	} else if (!message.isChat) {
+		userID = message.peerId;
 	} else {
 		return await message.editMessage({
-			message: "Не обнаружена ссылка",
+			message: "Не смог распознать ссылку",
 		});
 	}
 
