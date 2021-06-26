@@ -1,6 +1,7 @@
 import { VK } from "vk-io";
 import utils from "rus-anonym-utils";
 
+import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 import userMiddlewares from "./middlewares/user";
 
@@ -43,9 +44,29 @@ class UserVK extends Worker {
 			"friend_activity",
 			userMiddlewares.friendActivityHandler,
 		);
-		// this.main.updates.use((event) => {
-		// 	console.log(event);
-		// });
+		this.main.updates.use(async (event) => {
+			InternalUtils.logger.send(
+				`
+Необработанное событие:
+Type: ${event.type}
+SubTypes: ${JSON.stringify(event.subTypes)}`,
+				"rest",
+				{
+					attachment: (
+						await vk.group.getVK().upload.messageDocument({
+							source: {
+								value: Buffer.from(
+									JSON.stringify(event.toJSON(), null, "\t"),
+									"utf-8",
+								),
+								filename: "event.txt",
+							},
+							peer_id: 2e9 + DB.config.vk.group.logs.conversations.rest,
+						})
+					).toString(),
+				},
+			);
+		});
 		return this;
 	}
 }
@@ -67,4 +88,6 @@ class CoreVK {
 	public group = new GroupVK().configure();
 }
 
-export default new CoreVK();
+const vk = new CoreVK();
+
+export default vk;
