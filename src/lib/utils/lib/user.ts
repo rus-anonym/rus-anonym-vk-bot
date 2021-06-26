@@ -109,9 +109,7 @@ export default class UtilsUser {
 					peerId: message.peerId,
 					peerType: message.peerType,
 					senderId:
-						message.isOutbox === true
-							? DB.config.vk.user.id
-							: message.senderId,
+						message.isOutbox === true ? DB.config.vk.user.id : message.senderId,
 					senderType: message.senderType,
 					created: new Date(message.createdAt * 1000),
 					updated: new Date(message.createdAt * 1000),
