@@ -6,7 +6,7 @@ import VK from "../../../VK/core";
 async function userMessageHandler(
 	message: ModernMessageContext,
 ): Promise<void> {
-	InternalUtils.DB.saveMessage(message).catch((err) => {
+	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
 https://vk.com/im?sel=${

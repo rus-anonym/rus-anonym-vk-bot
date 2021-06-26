@@ -1,13 +1,11 @@
 import { Command } from "./lib/command";
-import Logger from "./lib/logger";
-import User from "./lib/user";
-import DB from "./lib/db";
+import UtilsLogger from "./lib/logger";
+import UtilsUser from "./lib/user";
 
 class Utils {
-	public logger = new Logger();
+	public logger = new UtilsLogger();
 	public commands: Command[] = [];
-	public user = new User();
-	public DB = new DB();
+	public user = new UtilsUser();
 }
 
 export default new Utils();

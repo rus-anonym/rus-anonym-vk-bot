@@ -5,7 +5,7 @@ import DB from "../../DB/core";
 import VK from "../../VK/core";
 
 type Log = "message" | "conversation" | "rest" | "error";
-export default class Logger {
+export default class UtilsLogger {
 	public async send(message: string, type: Log = "rest"): Promise<void> {
 		let selectedChat;
 		let prefix;
