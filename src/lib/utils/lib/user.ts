@@ -227,13 +227,14 @@ export default class UtilsUser {
 		if (!userData) {
 			const [VK_USER_DATA] = await VK.group
 				.getVK()
-				.api.users.get({ user_id: id, fields: ["status", "last_seen"] });
+				.api.users.get({ user_id: id, fields: ["status", "last_seen", "sex"] });
 			const newUserData = new DB.models.user({
 				id,
 				info: {
 					name: VK_USER_DATA.first_name,
 					surname: VK_USER_DATA.last_name,
 					status: VK_USER_DATA.status,
+					gender: VK_USER_DATA.sex || 0,
 					last_seen:
 						VK_USER_DATA.last_seen && VK_USER_DATA.last_seen.time
 							? {

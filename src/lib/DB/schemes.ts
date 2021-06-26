@@ -9,6 +9,7 @@ const user = createSchema(
 			name: Type.string({ required: true }),
 			surname: Type.string({ required: true }),
 			status: Type.string({ required: true }),
+			gender: Type.number({ required: true }),
 			last_seen: Type.object().of({
 				date: Type.date({ required: true }),
 				platform: Type.number({ required: true }),
