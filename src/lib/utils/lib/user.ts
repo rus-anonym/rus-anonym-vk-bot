@@ -37,8 +37,8 @@ export default class UtilsUser {
 
 		const logsChatId =
 			deletedMessageData.peerType === "chat"
-				? DB.config.vk.logs.conversations.conversations
-				: DB.config.vk.logs.conversations.messages;
+				? DB.config.vk.group.logs.conversations.conversations
+				: DB.config.vk.group.logs.conversations.messages;
 
 		const uploadedAttachments = await this.uploadAttachments(
 			deletedMessageData.data[deletedMessageData.data.length - 1].attachments,
@@ -73,8 +73,8 @@ export default class UtilsUser {
 	): Promise<void> {
 		const logsChatId =
 			oldMessage.peerType === "chat"
-				? DB.config.vk.logs.conversations.conversations
-				: DB.config.vk.logs.conversations.messages;
+				? DB.config.vk.group.logs.conversations.conversations
+				: DB.config.vk.group.logs.conversations.messages;
 		const uploadedAttachments = await this.uploadAttachments(
 			oldMessage.data[oldMessage.data.length - 2].attachments,
 			logsChatId,

@@ -4,7 +4,7 @@ import moment from "moment";
 import DB from "../../DB/core";
 import VK from "../../VK/core";
 
-type Log = "message" | "conversation" | "rest" | "error";
+type Log = "message" | "conversation" | "rest" | "error" | "friend_activity";
 export default class UtilsLogger {
 	public async send(message: string, type: Log = "rest"): Promise<void> {
 		let selectedChat;
@@ -12,23 +12,27 @@ export default class UtilsLogger {
 
 		switch (type) {
 			case "message":
-				selectedChat = DB.config.vk.logs.conversations.messages;
+				selectedChat = DB.config.vk.group.logs.conversations.messages;
 				prefix = "🆗";
 				break;
 			case "conversation":
-				selectedChat = DB.config.vk.logs.conversations.conversations;
+				selectedChat = DB.config.vk.group.logs.conversations.conversations;
 				prefix = "🆗";
 				break;
 			case "rest":
-				selectedChat = DB.config.vk.logs.conversations.rest;
+				selectedChat = DB.config.vk.group.logs.conversations.rest;
+				prefix = "⚠";
+				break;
+			case "friend_activity":
+				selectedChat = DB.config.vk.group.logs.conversations.friends_activity;
 				prefix = "⚠";
 				break;
 			case "error":
-				selectedChat = DB.config.vk.logs.conversations.errors;
+				selectedChat = DB.config.vk.group.logs.conversations.errors;
 				prefix = "⛔";
 				break;
 			default:
-				selectedChat = DB.config.vk.logs.conversations.errors;
+				selectedChat = DB.config.vk.group.logs.conversations.errors;
 				prefix = "⛔";
 				break;
 		}
@@ -44,6 +48,7 @@ ${prefix} - ${message}`;
 			chat_id: selectedChat,
 			random_id: getRandomId(),
 			message: message,
+			disable_mentions: true,
 		});
 
 		return;

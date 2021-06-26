@@ -27,7 +27,7 @@ ${userData.info.gender === 1 ? "Была" : "Был"} ${
 					moment(userData.info.last_seen.date),
 					moment(),
 				)}`,
-				"rest",
+				"friend_activity",
 			);
 			userData.info.last_seen.date = new Date(event.eventAt * 1000);
 			userData.info.last_seen.isOnline = event.isOnline;
