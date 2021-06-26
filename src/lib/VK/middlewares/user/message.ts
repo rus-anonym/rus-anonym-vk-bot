@@ -1,13 +1,12 @@
 import { ModernMessageContext } from "./../../../utils/lib/command";
 
 import InternalUtils from "../../../utils/core";
-import DB from "../../../DB/core";
 import VK from "../../../VK/core";
 
 async function userMessageHandler(
 	message: ModernMessageContext,
 ): Promise<void> {
-	DB.saveMessage(message).catch((err) => {
+	InternalUtils.DB.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
 https://vk.com/im?sel=${
