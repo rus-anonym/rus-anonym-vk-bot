@@ -1,3 +1,4 @@
+import utils from "rus-anonym-utils";
 import moment from "moment";
 import { FriendActivityContext } from "vk-io";
 
@@ -19,18 +20,26 @@ ${
 	event.isOffline
 		? `Время входа: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`
 		: `Время выхода: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`
-}`,
+}
+${userData.info.gender === 1 ? "Была" : "Был"} ${
+					event.isOnline ? "оффлайн" : "онлайн"
+				} ${utils.time.precizeDiff(
+					moment(userData.info.last_seen.date),
+					moment(),
+				)}`,
 				"rest",
 			);
 			userData.info.last_seen.date = new Date(event.eventAt * 1000);
 			userData.info.last_seen.isOnline = event.isOnline;
-		} else {
-			userData.info.last_seen = {
-				date: new Date(event.eventAt * 1000),
-				isOnline: event.isOnline,
-			};
 		}
+	} else {
+		userData.info.last_seen = {
+			date: new Date(event.eventAt * 1000),
+			isOnline: event.isOnline,
+		};
 	}
+	userData.markModified(`info.last_seen`);
+	await userData.save();
 }
 
 export default userFriendActivityHandler;
