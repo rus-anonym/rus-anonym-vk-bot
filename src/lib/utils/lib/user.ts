@@ -188,28 +188,14 @@ export default class UtilsUser {
 			const fixedSenderId = message.isOutbox
 				? DB.config.vk.user.id
 				: message.senderId;
-			const userData = await DB.models.user.findOne({
-				id: fixedSenderId,
-			});
-			if (!userData) {
-				const personalMessages = message.isChat === true ? [] : [message.id];
-				const newUserData = new DB.models.user({
-					id: fixedSenderId,
-					messages: [message.id],
-					personalMessages: personalMessages,
-					updateDate: new Date(),
-					regDate: new Date(),
-				});
-				await newUserData.save();
+			const userData = await this.getUserData(fixedSenderId);
+			if (message.isChat === false) {
+				userData.personalMessages.push(message.id);
 			} else {
-				if (message.isChat === false) {
-					userData.personalMessages.push(message.id);
-				} else {
-					userData.messages.push(message.id);
-				}
-				userData.updateDate = new Date();
-				await userData.save();
+				userData.messages.push(message.id);
 			}
+			userData.updateDate = new Date();
+			await userData.save();
 		}
 
 		if (message.isChat && message.chatId) {
@@ -248,13 +234,14 @@ export default class UtilsUser {
 					name: VK_USER_DATA.first_name,
 					surname: VK_USER_DATA.last_name,
 					status: VK_USER_DATA.status,
-					last_seen: VK_USER_DATA.last_seen
-						? {
-								date: new Date(VK_USER_DATA.last_seen.time * 1000),
-								platform: VK_USER_DATA.last_seen.platform,
-								isOnline: false,
-						  }
-						: null,
+					last_seen:
+						VK_USER_DATA.last_seen && VK_USER_DATA.last_seen.time
+							? {
+									date: new Date(VK_USER_DATA.last_seen.time * 1000),
+									platform: VK_USER_DATA.last_seen.platform,
+									isOnline: false,
+							  }
+							: null,
 				},
 				messages: [],
 				personalMessages: [],
