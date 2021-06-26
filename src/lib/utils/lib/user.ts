@@ -51,11 +51,15 @@ export default class UtilsUser {
 			attachmentsText += `\n${Number(i) + 1}. ${uploadedAttachments[i].type}`;
 		}
 
+		const userData = await this.getUserData(deletedMessageData.senderId);
+
 		VK.group.getVK().api.messages.send({
 			message: `Удалено сообщение #id${event.id} от ${moment(
 				deletedMessageData.created,
 			).format("HH:mm:ss, DD.MM.YYYY")}
-Отправитель: @id${deletedMessageData.senderId}
+Отправитель: @id${deletedMessageData.senderId} (${userData.info.name} ${
+				userData.info.surname
+			})
 #from_id${deletedMessageData.senderId}
 
 Текст сообщения: ${deletedMessageText || "Отсутствует"}
@@ -84,6 +88,8 @@ export default class UtilsUser {
 			attachmentsText += `\n${index + 1}. ${attachment.type}`;
 		});
 
+		const userData = await this.getUserData(oldMessage.senderId);
+
 		VK.group.getVK().api.messages.send({
 			message: `Отредактировано сообщение #${message.id}
 						https://vk.com/im?sel=${
@@ -91,6 +97,7 @@ export default class UtilsUser {
 						}&msgid=${message.id} от ${moment(oldMessage.updated).format(
 				"HH:mm:ss, DD.MM.YYYY",
 			)}
+Отправитель: @id${userData.id} (${userData.info.name} ${userData.info.surname})
 						Предыдущие данные:
 						Текст: ${oldMessage.data[oldMessage.data.length - 2].text || "Отсутствует"}
 												Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
