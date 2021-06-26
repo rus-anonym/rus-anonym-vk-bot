@@ -14,7 +14,9 @@ async function userFriendActivityHandler(
 		} else {
 			InternalUtils.logger.send(
 				`@id${userData.id} (${userData.info.name} ${userData.info.surname}) ${
-					event.isOnline ? "зашёл в ВК" : "вышел из ВК"
+					event.isOnline
+						? `${userData.info.gender === 1 ? "зашла" : "зашёл"} в ВК`
+						: `${userData.info.gender === 1 ? "вышла" : "вышел"} в ВК`
 				} в ${moment(event.eventAt * 1000).format("HH:mm:ss")}`,
 				"rest",
 			);
