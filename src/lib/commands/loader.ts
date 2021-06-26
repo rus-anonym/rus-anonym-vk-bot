@@ -10,3 +10,4 @@ import "./user/vk/deleteMessages";
 import "./user/vk/kick";
 import "./user/vk/invite";
 import "./user/vk/reserveScreenName";
+import "./user/vk/info";
