@@ -5,7 +5,13 @@ import DB from "../../DB/core";
 import VK from "../../VK/core";
 import { MessagesSendParams } from "vk-io/lib/api/schemas/params";
 
-type Log = "message" | "conversation" | "rest" | "error" | "friend_activity";
+type Log =
+	| "message"
+	| "conversation"
+	| "rest"
+	| "error"
+	| "friend_activity"
+	| "info";
 export default class UtilsLogger {
 	public async send(
 		message: string,
@@ -27,6 +33,10 @@ export default class UtilsLogger {
 			case "rest":
 				selectedChat = DB.config.vk.group.logs.conversations.rest;
 				prefix = "⚠";
+				break;
+			case "info":
+				selectedChat = DB.config.vk.group.logs.conversations.info;
+				prefix = "ℹ";
 				break;
 			case "friend_activity":
 				selectedChat = DB.config.vk.group.logs.conversations.friends_activity;

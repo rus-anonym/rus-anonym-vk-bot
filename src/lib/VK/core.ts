@@ -51,7 +51,7 @@ class UserVK extends Worker {
 				`Необработанное событие:
 Type: ${event.type}
 SubTypes: ${JSON.stringify(event.subTypes)}`,
-				"rest",
+				"error",
 				{
 					attachment: (
 						await vk.group.getVK().upload.messageDocument({
@@ -62,7 +62,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 								),
 								filename: "event.txt",
 							},
-							peer_id: 2e9 + DB.config.vk.group.logs.conversations.rest,
+							peer_id: 2e9 + DB.config.vk.group.logs.conversations.errors,
 						})
 					).toString(),
 				},
