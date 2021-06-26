@@ -12,7 +12,6 @@ const user = createSchema(
 			gender: Type.number({ required: true }),
 			last_seen: Type.object().of({
 				date: Type.date({ required: true }),
-				platform: Type.number({ required: true }),
 				isOnline: Type.boolean({ required: true }),
 			}),
 		}),

@@ -239,7 +239,6 @@ export default class UtilsUser {
 						VK_USER_DATA.last_seen && VK_USER_DATA.last_seen.time
 							? {
 									date: new Date(VK_USER_DATA.last_seen.time * 1000),
-									platform: VK_USER_DATA.last_seen.platform,
 									isOnline: false,
 							  }
 							: null,
