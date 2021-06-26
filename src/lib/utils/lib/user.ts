@@ -5,12 +5,20 @@ import {
 	getRandomId,
 	MessageContext,
 	MessageFlagsContext,
+	createCollectIterator,
 } from "vk-io";
 import { ExtractDoc } from "ts-mongoose";
 
 import VK from "../../VK/core";
 import InternalUtils from "../core";
 import DB from "../../DB/core";
+import { FriendsUserXtrLists } from "vk-io/lib/api/schemas/objects";
+
+interface BirthdayUser {
+	name: string;
+	surname: string;
+	id: number;
+}
 
 export default class UtilsUser {
 	public async processDeletedMessage(
@@ -294,6 +302,36 @@ export default class UtilsUser {
 			return newUserData;
 		}
 		return userData;
+	}
+
+	public async getFriendsBirthday(date: Date): Promise<BirthdayUser[]> {
+		const birthdays: BirthdayUser[] = [];
+		const validDate = moment(date).format("D.M");
+
+		const iterator = createCollectIterator<FriendsUserXtrLists>({
+			api: VK.user.getVK().api,
+			method: "friends.get",
+			params: {
+				fields: [`bdate`],
+			},
+			countPerRequest: 5000,
+		});
+
+		for await (const chunk of iterator) {
+			for (const user of chunk.items) {
+				if (user.bdate) {
+					if (moment(user.bdate, "D.M.YYYY").format("D.M") === validDate) {
+						birthdays.push({
+							id: user.id,
+							name: user.first_name,
+							surname: user.last_name,
+						});
+					}
+				}
+			}
+		}
+
+		return birthdays;
 	}
 
 	private async uploadAttachments(
