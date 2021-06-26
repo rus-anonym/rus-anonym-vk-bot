@@ -5,6 +5,16 @@ const entityTypes = ["user", "chat", "group"];
 const user = createSchema(
 	{
 		id: Type.number({ required: true, unique: true }),
+		info: Type.object({ required: true }).of({
+			name: Type.string({ required: true }),
+			surname: Type.string({ required: true }),
+			status: Type.string({ required: true }),
+			last_seen: Type.object().of({
+				date: Type.date({ required: true }),
+				platform: Type.date({ required: true }),
+				isOnline: Type.boolean({ required: true }),
+			}),
+		}),
 		messages: Type.array({ required: true }).of(
 			Type.number({ required: true }),
 		),
