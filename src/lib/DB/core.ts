@@ -1,30 +1,53 @@
-import config from "../../DB/config.json";
-import * as utils from "rus-anonym-utils";
+import { typedModel } from "ts-mongoose";
 import mongoose from "mongoose";
-import Schemes from "./schemes";
-import Models from "./models";
 
-mongoose.Schema.Types.String.checkRequired((v) => v != null);
+import config from "../../DB/config.json";
+import schemes from "./schemes";
 
-export default {
-	connect: async function connectDataBase(): Promise<boolean> {
-		try {
-			await mongoose.connect(
-				`mongodb+srv://${config.mongoose.user}:${config.mongoose.password}@${config.mongoose.address}/${config.mongoose.database}?retryWrites=true&w=majority`,
-				{
-					useCreateIndex: true,
-					useNewUrlParser: true,
-					useUnifiedTopology: true,
-				},
-			);
-			utils.logger.info("Successful connect to database");
-			return true;
-		} catch (error) {
-			utils.logger.info("Connect to database");
-			return false;
-		}
-	},
-	schemes: Schemes,
-	models: Models,
-	config: config,
-};
+mongoose.Schema.Types.String.checkRequired((text) => text !== null);
+
+class DB {
+	public config = config;
+
+	public connection = mongoose.createConnection(
+		`mongodb+srv://${config.db.mongo.login}:${config.db.mongo.password}@${config.db.mongo.address}/${config.db.mongo.db}`,
+		{
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+		},
+	);
+
+	public models = {
+		message: typedModel(
+			"message",
+			schemes.message,
+			"messages",
+			undefined,
+			undefined,
+			this.connection,
+		),
+		user: typedModel(
+			"user",
+			schemes.user,
+			"users",
+			undefined,
+			undefined,
+			this.connection,
+		),
+		chat: typedModel(
+			"chat",
+			schemes.chat,
+			"chats",
+			undefined,
+			undefined,
+			this.connection,
+		),
+	};
+
+	public schemes = schemes;
+}
+
+const DataBase = new DB();
+
+export default DataBase;

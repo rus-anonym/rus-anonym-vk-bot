@@ -3,3 +3,5 @@
 /dist
 /test.js
 /src/commands/*/private
+yarn-error.log
+yarn.lock
