@@ -4,7 +4,7 @@ import { Command } from "../../../utils/lib/command";
 import axios from "axios";
 import cheerio from "cheerio";
 
-new Command(/(?:^!tele2)$/i, async function (message) {
+new Command(/(?:^!tele2|!теле2)$/i, async function (message) {
 	const tele2Monday = await (
 		await axios.get("https://mskponedelniki.tele2.ru/")
 	).data;
@@ -21,7 +21,7 @@ new Command(/(?:^!tele2)$/i, async function (message) {
 		.each((_index, element) => {
 			const gift = $(element);
 			mondayGifts.push(gift.text().trim());
-		}); 
+		});
 
 	let text = ``;
 
