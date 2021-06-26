@@ -45,6 +45,7 @@ class UserVK extends Worker {
 			userMiddlewares.friendActivityHandler,
 		);
 		this.main.updates.on("messages_read", () => null);
+		this.main.updates.on("typing", () => null);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
 				`Необработанное событие:
