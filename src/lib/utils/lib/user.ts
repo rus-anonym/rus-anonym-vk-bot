@@ -232,6 +232,41 @@ export default class UtilsUser {
 		}
 	}
 
+	public async getUserData(
+		id: number,
+	): Promise<ExtractDoc<typeof DB.schemes.user>> {
+		const userData = await DB.models.user.findOne({
+			id,
+		});
+		if (!userData) {
+			const [VK_USER_DATA] = await VK.group
+				.getVK()
+				.api.users.get({ user_id: id, fields: ["status", "last_seen"] });
+			const newUserData = new DB.models.user({
+				id,
+				info: {
+					name: VK_USER_DATA.first_name,
+					surname: VK_USER_DATA.last_name,
+					status: VK_USER_DATA.status,
+					last_seen: VK_USER_DATA.last_seen
+						? {
+								date: new Date(VK_USER_DATA.last_seen.time * 1000),
+								platform: VK_USER_DATA.last_seen.platform,
+								isOnline: false,
+						  }
+						: null,
+				},
+				messages: [],
+				personalMessages: [],
+				updateDate: new Date(),
+				regDate: new Date(),
+			});
+			await newUserData.save();
+			return newUserData;
+		}
+		return userData;
+	}
+
 	private async uploadAttachments(
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		attachments: any[],

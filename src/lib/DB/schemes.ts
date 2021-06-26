@@ -11,7 +11,7 @@ const user = createSchema(
 			status: Type.string({ required: true }),
 			last_seen: Type.object().of({
 				date: Type.date({ required: true }),
-				platform: Type.date({ required: true }),
+				platform: Type.number({ required: true }),
 				isOnline: Type.boolean({ required: true }),
 			}),
 		}),
