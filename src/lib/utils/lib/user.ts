@@ -51,24 +51,41 @@ export default class UtilsUser {
 			attachmentsText += `\n${Number(i) + 1}. ${uploadedAttachments[i].type}`;
 		}
 
-		const userData = await this.getUserData(deletedMessageData.senderId);
+		if (deletedMessageData.senderId > 1) {
+			const userData = await this.getUserData(deletedMessageData.senderId);
 
-		VK.group.getVK().api.messages.send({
-			message: `Удалено сообщение #id${event.id} от ${moment(
-				deletedMessageData.created,
-			).format("HH:mm:ss, DD.MM.YYYY")}
+			VK.group.getVK().api.messages.send({
+				message: `Удалено сообщение #id${event.id} от ${moment(
+					deletedMessageData.created,
+				).format("HH:mm:ss, DD.MM.YYYY")}
 Отправитель: @id${deletedMessageData.senderId} (${userData.info.name} ${
-				userData.info.surname
-			})
+					userData.info.surname
+				})
 #from_id${deletedMessageData.senderId}
 
 Текст сообщения: ${deletedMessageText || "Отсутствует"}
 
 Прикрепления: ${attachmentsText || "Отсутствуют"}`,
-			chat_id: logsChatId,
-			random_id: getRandomId(),
-			attachment: uploadedAttachments.map((x) => x.link),
-		});
+				chat_id: logsChatId,
+				random_id: getRandomId(),
+				attachment: uploadedAttachments.map((x) => x.link),
+			});
+		} else {
+			VK.group.getVK().api.messages.send({
+				message: `Удалено сообщение #id${event.id} от ${moment(
+					deletedMessageData.created,
+				).format("HH:mm:ss, DD.MM.YYYY")}
+Отправитель: @club${deletedMessageData.senderId}
+#from_id${deletedMessageData.senderId}
+
+Текст сообщения: ${deletedMessageText || "Отсутствует"}
+
+Прикрепления: ${attachmentsText || "Отсутствуют"}`,
+				chat_id: logsChatId,
+				random_id: getRandomId(),
+				attachment: uploadedAttachments.map((x) => x.link),
+			});
+		}
 	}
 
 	public async processEditedMessage(
@@ -88,23 +105,41 @@ export default class UtilsUser {
 			attachmentsText += `\n${index + 1}. ${attachment.type}`;
 		});
 
-		const userData = await this.getUserData(oldMessage.senderId);
+		if (oldMessage.senderId > 0) {
+			const userData = await this.getUserData(oldMessage.senderId);
 
-		VK.group.getVK().api.messages.send({
-			message: `Отредактировано сообщение #${message.id}
+			VK.group.getVK().api.messages.send({
+				message: `Отредактировано сообщение #${message.id}
 						https://vk.com/im?sel=${
 							message.isChat ? `c${message.chatId}` : message.peerId
 						}&msgid=${message.id} от ${moment(oldMessage.updated).format(
-				"HH:mm:ss, DD.MM.YYYY",
-			)}
+					"HH:mm:ss, DD.MM.YYYY",
+				)}
 Отправитель: @id${userData.id} (${userData.info.name} ${userData.info.surname})
 						Предыдущие данные:
 						Текст: ${oldMessage.data[oldMessage.data.length - 2].text || "Отсутствует"}
 												Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
-			chat_id: logsChatId,
-			random_id: getRandomId(),
-			attachment: uploadedAttachments.map((x) => x.link),
-		});
+				chat_id: logsChatId,
+				random_id: getRandomId(),
+				attachment: uploadedAttachments.map((x) => x.link),
+			});
+		} else {
+			VK.group.getVK().api.messages.send({
+				message: `Отредактировано сообщение #${message.id}
+						https://vk.com/im?sel=${
+							message.isChat ? `c${message.chatId}` : message.peerId
+						}&msgid=${message.id} от ${moment(oldMessage.updated).format(
+					"HH:mm:ss, DD.MM.YYYY",
+				)}
+Отправитель: @club${oldMessage.senderId}
+						Предыдущие данные:
+						Текст: ${oldMessage.data[oldMessage.data.length - 2].text || "Отсутствует"}
+												Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
+				chat_id: logsChatId,
+				random_id: getRandomId(),
+				attachment: uploadedAttachments.map((x) => x.link),
+			});
+		}
 	}
 
 	public async saveMessage(message: MessageContext): Promise<void> {
