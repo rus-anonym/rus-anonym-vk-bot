@@ -32,11 +32,14 @@ DB.connection.once("open", function MongoDBConnected() {
 new Interval({
 	source: async () => {
 		const users = await InternalUtils.user.getFriendsBirthday(new Date());
-		InternalUtils.logger.send(`
+		InternalUtils.logger.send(
+			`
 Сегодня ${moment().format("DD.MM.YYYY")} день рождения празднуют:
 ${users.map((user, index) => {
 	return `${index + 1}. @id${user.id}(${user.name} ${user.surname})`;
-})}`);
+})}`,
+			"info",
+		);
 	},
 	plannedTime: moment()
 		.add(1, "day")
