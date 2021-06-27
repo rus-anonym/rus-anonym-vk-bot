@@ -26,3 +26,16 @@ DB.connection.once("open", function MongoDBConnected() {
 		);
 	});
 });
+
+process.on("warning", async (warning) => {
+	InternalUtils.logger.send(
+		`Unhandled warning\n${warning.toString()}`,
+		"error",
+	);
+});
+process.on("uncaughtException", async (error) => {
+	InternalUtils.logger.send(
+		`Unhandled uncaughtException\n${error.toString()}`,
+		"error",
+	);
+});

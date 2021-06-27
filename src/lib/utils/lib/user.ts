@@ -139,7 +139,7 @@ export default class UtilsUser {
 						}&msgid=${message.id} от ${moment(oldMessage.updated).format(
 					"HH:mm:ss, DD.MM.YYYY",
 				)}
-Отправитель: @club${oldMessage.senderId}
+Отправитель: @club${-oldMessage.senderId}
 						Предыдущие данные:
 						Текст: ${oldMessage.data[oldMessage.data.length - 2].text || "Отсутствует"}
 												Прикрепления: ${attachmentsText || "Отсутсвуют"}`,
