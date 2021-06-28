@@ -2,6 +2,7 @@ import "./user/utils/eval";
 import "./user/utils/about";
 import "./user/utils/randomNumber";
 import "./user/utils/choose";
+import "./user/utils/who";
 import "./user/utils/tele2Monday";
 
 import "./user/vk/apiStatus";
