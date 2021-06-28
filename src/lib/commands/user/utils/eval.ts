@@ -1,7 +1,6 @@
 import { Command } from "../../../utils/lib/command";
 
 new Command(/(?:^!zz)(\s(.*))?$/i, async function (message) {
-	await message.loadMessagePayload();
 	if (!message.args[1]) {
 		return message.send(`нет кода`);
 	}
