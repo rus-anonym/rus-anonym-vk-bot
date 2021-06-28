@@ -43,14 +43,6 @@ class DB {
 			undefined,
 			this.connection,
 		),
-		report: typedModel(
-			"report",
-			schemes.report,
-			"reports",
-			undefined,
-			undefined,
-			this.connection,
-		),
 	};
 
 	public schemes = schemes;

@@ -82,12 +82,4 @@ const message = createSchema(
 	},
 );
 
-const report = createSchema(
-	{
-		id: Type.number({ required: true }),
-		friends: Type.array().of(Type.mixed({ _id: false, versionKey: false })),
-	},
-	{ versionKey: false },
-);
-
-export default { user, chat, message, report };
+export default { user, chat, message };
