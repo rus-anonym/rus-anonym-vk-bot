@@ -137,7 +137,8 @@ ${
 				moment(poll.endedAt! * 1000),
 		  )}`
 		: ""
-}\n`;
+}
+String: ${poll.toString()}\n`;
 	}
 	for (const sticker of message.getAttachments(`sticker`)) {
 		++i;
