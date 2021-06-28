@@ -86,17 +86,17 @@ String: ${graffiti.toString()}\n`;
 	for (const link of message.getAttachments(`link`)) {
 		++i;
 		text += `${i}. link
-Title: ${link.title}`;
+Title: ${link.title}\n`;
 	}
 	for (const market of message.getAttachments(`market`)) {
 		++i;
 		await market.loadAttachmentPayload();
-		text += `${i}. market`;
+		text += `${i}. market\n`;
 	}
 	for (const market_album of message.getAttachments(`market_album`)) {
 		++i;
 		await market_album.loadAttachmentPayload();
-		text += `${i}. market_album`;
+		text += `${i}. market_album\n`;
 	}
 	for (const photo of message.getAttachments(`photo`)) {
 		++i;
@@ -119,7 +119,7 @@ Title: ${link.title}`;
 Владелец: @${photo.ownerId! < 0 ? "club" : "id"}${photo.ownerId}
 Разрешение: ${maxResolution.width}x${maxResolution.height}
 Добавлено: ${moment(photo.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
-String: ${photo.toString()}`;
+String: ${photo.toString()}\n`;
 	}
 	for (const poll of message.getAttachments(`poll`)) {
 		++i;
@@ -138,7 +138,7 @@ ${
 				moment(poll.endedAt! * 1000),
 		  )}`
 		: ""
-}`;
+}\n`;
 	}
 	for (const sticker of message.getAttachments(`sticker`)) {
 		++i;
@@ -165,6 +165,35 @@ Pack ID: ${sticker.productId}
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 			userStickerPackInfo.purchase_date! * 1000,
 		).format("DD.MM.YYYY, HH:mm:ss")}\n`;
+	}
+	for (const story of message.getAttachments(`story`)) {
+		++i;
+		await story.loadAttachmentPayload();
+		text += `${i}. story
+String: ${story.toString()}\n`;
+	}
+	for (const video of message.getAttachments(`video`)) {
+		++i;
+		await video.loadAttachmentPayload();
+		text += `${i}. video
+Продолжительность: ${utils.time.precizeDiff(
+			moment().add(video.duration!, "second"),
+			moment(),
+		)}
+Добавлено: ${moment(video.addedAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+Создано: ${moment(video.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+Просмотров: ${utils.number.separator(video.viewsCount!, ".")}
+String: ${video.toString()}\n`;
+	}
+	for (const wall of message.getAttachments(`wall`)) {
+		++i;
+		wall.loadAttachmentPayload();
+		text += `${i}. wall
+String: ${wall.toString()}`;
+	}
+	for (const wall_reply of message.getAttachments(`wall_reply`)) {
+		++i;
+		text += `${i}. wall_reply`;
 	}
 	return text;
 };
