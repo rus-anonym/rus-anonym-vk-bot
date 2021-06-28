@@ -5,6 +5,7 @@ import utils from "rus-anonym-utils";
 import { MessageContext } from "vk-io";
 
 import VK from "../../../VK/core";
+import InternalUtils from "../../../utils/core";
 import { Command } from "../../../utils/lib/command";
 import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
@@ -78,9 +79,66 @@ ID: ${gift.id}`;
 		++i;
 		await graffiti.loadAttachmentPayload();
 		text += `${i}. graffiti
-Owner: @${graffiti.ownerId < 0 ? "club" : "id"}${graffiti.ownerId}
-Resolution: ${graffiti.width}x${graffiti.height}
+Владелец: @${graffiti.ownerId < 0 ? "club" : "id"}${graffiti.ownerId}
+Разрешение: ${graffiti.width}x${graffiti.height}
 String: ${graffiti.toString()}\n`;
+	}
+	for (const link of message.getAttachments(`link`)) {
+		++i;
+		text += `${i}. link
+Title: ${link.title}`;
+	}
+	for (const market of message.getAttachments(`market`)) {
+		++i;
+		await market.loadAttachmentPayload();
+		text += `${i}. market`;
+	}
+	for (const market_album of message.getAttachments(`market_album`)) {
+		++i;
+		await market_album.loadAttachmentPayload();
+		text += `${i}. market_album`;
+	}
+	for (const photo of message.getAttachments(`photo`)) {
+		++i;
+		await photo.loadAttachmentPayload();
+		const maxResolution = photo.sizes!.sort(
+			(
+				a: { width: number; height: number },
+				b: { width: number; height: number },
+			) => {
+				if (a.width > b.width || a.height > b.height) {
+					return -1;
+				} else if (a.width < b.width || a.height < b.height) {
+					return 1;
+				} else {
+					return 0;
+				}
+			},
+		)[0];
+		text += `${i}. photo
+Владелец: @${photo.ownerId! < 0 ? "club" : "id"}${photo.ownerId}
+Разрешение: ${maxResolution.width}x${maxResolution.height}
+Добавлено: ${moment(photo.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+String: ${photo.toString()}`;
+	}
+	for (const poll of message.getAttachments(`poll`)) {
+		++i;
+		await poll.loadAttachmentPayload();
+		text += `${i}. poll
+${
+	poll.authorId
+		? `Создатель: @${poll.authorId < 0 ? "club" : "id"}${poll.authorId}\n`
+		: ""
+}Голосов: ${utils.number.separator(poll.votes!, ".")}
+Создан: ${moment(poll.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+${
+	poll.endedAt! > 0
+		? `Завершится через ${utils.time.precizeDiff(
+				moment(),
+				moment(poll.endedAt! * 1000),
+		  )}`
+		: ""
+}`;
 	}
 	for (const sticker of message.getAttachments(`sticker`)) {
 		++i;
@@ -101,7 +159,7 @@ Pack ID: ${sticker.productId}
 Название: ${stickerPackInfo.name}
 Автор: ${stickerPackInfo.author}
 Описание: ${stickerPackInfo.description}${
-			stickerPackInfo.isFree ? `\nЦена в голосах: ${stickerPackInfo.price}` : ""
+			stickerPackInfo.isFree ? "" : `\nЦена в голосах: ${stickerPackInfo.price}`
 		}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} пак
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
@@ -115,7 +173,8 @@ new Command(/(?:^!whatis)$/i, async function (message) {
 	await message.loadMessagePayload();
 
 	if (message.forwards[0] && message.forwards[0].hasAttachments()) {
-		return message.editMessage({
+		return message.reply({
+			disable_mentions: true,
 			message: `
 Прикрепления:
 ${await AttachmentsToString(message.forwards[0])}`,
@@ -123,7 +182,8 @@ ${await AttachmentsToString(message.forwards[0])}`,
 	}
 
 	if (message.replyMessage?.hasAttachments()) {
-		return message.editMessage({
+		return message.reply({
+			disable_mentions: true,
 			message: `
 Прикрепления:
 ${await AttachmentsToString(message.replyMessage)}`,
@@ -131,7 +191,8 @@ ${await AttachmentsToString(message.replyMessage)}`,
 	}
 
 	if (message.hasAttachments()) {
-		return message.editMessage({
+		return message.reply({
+			disable_mentions: true,
 			message: `
 Прикрепления:
 ${await AttachmentsToString(message)}`,
@@ -139,6 +200,7 @@ ${await AttachmentsToString(message)}`,
 	}
 
 	return message.editMessage({
+		disable_mentions: true,
 		message: `Не нашёл прикреплений`,
 	});
 });
