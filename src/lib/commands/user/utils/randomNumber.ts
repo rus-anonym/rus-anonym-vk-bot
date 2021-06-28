@@ -9,7 +9,8 @@ new Command(
 			const secondNum = utils.number.getRandomInt(50, 100);
 			return message.editMessage({
 				message: `Поскольку границы для выбора числа не были выбраны, я выбирал число от ${firstNum} до ${secondNum}
-Итак моё число это ${utils.number.getRandomInt(firstNum, secondNum)}`,
+Я выбираю число ${utils.number.getRandomInt(firstNum, secondNum)}
+Границы выбора: ${firstNum} и ${secondNum}`,
 			});
 		}
 		if (!message.args[2]) {
@@ -19,10 +20,8 @@ new Command(
 			);
 			return message.editMessage({
 				message: `Поскольку вы не установили верхней границы для выбора числа, я решил что она будет равна ${secondNum}
-Итак моё число это ${utils.number.getRandomInt(
-					Number(message.args[1]),
-					secondNum,
-				)}`,
+Я выбираю число ${utils.number.getRandomInt(Number(message.args[1]), secondNum)}
+Границы выбора: ${Number(message.args[1])} и ${secondNum}`,
 			});
 		}
 		console.log(message.args[2]);
