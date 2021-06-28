@@ -61,13 +61,10 @@ ${
 Последнее появление в сети: ${moment(userData.info.last_seen.date).format(
 				"DD.MM.YYYY, HH:mm:ss",
 		  )}
-Текущий статус: ${userData.info.last_seen.isOnline ? `Онлайн` : `Офлайн`}
-
-Упоминания пользователя: https://vk.com/feed?obj=${
-				userData.id
-		  }&q=&section=mentions
-`
+Текущий статус: ${userData.info.last_seen.isOnline ? `Онлайн` : `Офлайн`}\n`
 		: ""
-}`,
+}Упоминания пользователя: https://vk.com/feed?obj=${
+			userData.id
+		}&q=&section=mentions`,
 	});
 });

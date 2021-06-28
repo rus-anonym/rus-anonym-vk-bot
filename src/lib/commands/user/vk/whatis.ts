@@ -5,7 +5,6 @@ import utils from "rus-anonym-utils";
 import { MessageContext } from "vk-io";
 
 import VK from "../../../VK/core";
-import InternalUtils from "../../../utils/core";
 import { Command } from "../../../utils/lib/command";
 import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
