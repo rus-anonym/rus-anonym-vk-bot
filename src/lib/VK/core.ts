@@ -1,4 +1,4 @@
-import { VK } from "vk-io";
+import { VK, API } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
@@ -27,8 +27,8 @@ abstract class Worker {
 }
 
 abstract class FakeWorker {
-	abstract additional: VK[];
-	public getVK(): VK {
+	abstract additional: API[];
+	public getAPI(): API {
 		return utils.array.random(this.additional);
 	}
 }
@@ -39,11 +39,11 @@ interface FakeUserData {
 }
 
 class FakeUserVK extends FakeWorker {
-	public additional: VK[] = [];
+	public additional: API[] = [];
 	constructor(data: FakeUserData) {
 		super();
 		for (const token of data.tokens) {
-			this.additional.push(new VK({ token }));
+			this.additional.push(new API({ token }));
 		}
 	}
 }
@@ -61,8 +61,8 @@ class FakesAlpha {
 		return utils.array.random(this.user);
 	}
 
-	public getUserFakeVK(): VK {
-		return utils.array.random(this.user).getVK();
+	public getUserFakeAPI(): API {
+		return utils.array.random(this.user).getAPI();
 	}
 }
 
