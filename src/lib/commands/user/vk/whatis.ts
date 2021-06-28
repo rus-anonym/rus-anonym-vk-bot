@@ -4,7 +4,9 @@ import moment from "moment";
 import utils from "rus-anonym-utils";
 import { MessageContext } from "vk-io";
 
+import VK from "../../../VK/core";
 import { Command } from "../../../utils/lib/command";
+import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
 const bytesToSize = (bytes: number): string => {
 	if (bytes === 0) {
@@ -64,13 +66,47 @@ URL: ${doc.url}
 				`Электронная книга`,
 				`Неизвестный`,
 			][doc.typeId! - 1]
-		}`;
+		}
+String: ${doc.toString()}\n`;
+	}
+	for (const gift of message.getAttachments(`gift`)) {
+		++i;
+		text += `${i}. gift
+ID: ${gift.id}`;
+	}
+	for (const graffiti of message.getAttachments(`graffiti`)) {
+		++i;
+		await graffiti.loadAttachmentPayload();
+		text += `${i}. graffiti
+Owner: @${graffiti.ownerId < 0 ? "club" : "id"}${graffiti.ownerId}
+Resolution: ${graffiti.width}x${graffiti.height}
+String: ${graffiti.toString()}\n`;
 	}
 	for (const sticker of message.getAttachments(`sticker`)) {
 		++i;
-		text += `${i}. sticker 
+		const [userStickerPackInfo] = (
+			(await VK.user.getVK().api.store.getProducts({
+				product_ids: [sticker.productId],
+				type: "stickers",
+				user_id: message.senderId,
+			})) as any
+		).items as StoreGetProductsResponse;
+		const [stickerPackInfo] = await utils.vk.user.getStickersInfo(
+			VK.user.getVK().api.options.token,
+			[sticker.productId],
+		);
+		text += `${i}. sticker 	
 ID: ${sticker.id}
-Pack ID: ${sticker.productId}\n`;
+Pack ID: ${sticker.productId} 
+Название: ${stickerPackInfo.name}
+Автор: ${stickerPackInfo.author}
+Описание: ${stickerPackInfo.description}${
+			stickerPackInfo.isFree ? `\nЦена в голосах: ${stickerPackInfo.price}` : ""
+		}
+Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} пак
+${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
+			userStickerPackInfo.purchase_date! * 1000,
+		).format("DD.MM.YYYY, HH:mm:ss")}\n`;
 	}
 	return text;
 };
