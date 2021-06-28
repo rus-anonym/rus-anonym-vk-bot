@@ -26,6 +26,40 @@ abstract class Worker {
 	}
 }
 
+abstract class FakeWorker {
+	abstract additional: VK[];
+	public getVK(): VK {
+		return utils.array.random(this.additional);
+	}
+}
+
+interface FakeUserData {
+	id: number;
+	tokens: string[];
+}
+
+class FakeUserVK extends FakeWorker {
+	public additional: VK[] = [];
+	constructor(data: FakeUserData) {
+		super();
+		for (const token of data.tokens) {
+			this.additional.push(new VK({ token }));
+		}
+	}
+}
+
+class FakesAlpha {
+	public user: FakeUserVK[] = [];
+
+	public getUserFake(): FakeUserVK {
+		return utils.array.random(this.user);
+	}
+
+	public getUserFakeVK(): VK {
+		return utils.array.random(this.user).getVK();
+	}
+}
+
 class UserVK extends Worker {
 	public main = new VK({ token: DB.config.vk.user.tokens[0] });
 
@@ -88,6 +122,7 @@ class GroupVK extends Worker {
 class CoreVK {
 	public user = new UserVK().configure();
 	public group = new GroupVK().configure();
+	public fakes = new FakesAlpha();
 }
 
 const vk = new CoreVK();
