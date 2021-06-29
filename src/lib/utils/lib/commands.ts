@@ -1,12 +1,21 @@
-import { MessageContext, VK } from "vk-io";
+import { ExtractDoc } from "ts-mongoose";
+import { IMessageContextSendOptions, MessageContext, VK } from "vk-io";
+
 import InternalUtils from "../core";
+import DB from "../../DB/core";
 
 interface ModernMessageContext extends MessageContext {
 	args: RegExpExecArray;
 }
 
 export type UserModernMessageContext = ModernMessageContext;
-export type GroupModernMessageContext = ModernMessageContext;
+export interface GroupModernMessageContext extends ModernMessageContext {
+	user: ExtractDoc<typeof DB.group.schemes.user>;
+	sendMessage(
+		text: string | IMessageContextSendOptions,
+		params?: IMessageContextSendOptions,
+	): Promise<MessageContext<Record<string, unknown>>>;
+}
 
 export class UserCommand {
 	public regexp: RegExp;

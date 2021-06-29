@@ -1,10 +1,15 @@
 import { GroupModernMessageContext } from "./../../../utils/lib/commands";
-import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../../VK/core";
 
-function userMessageHandler(message: MessageContext): void {
+async function userMessageHandler(
+	message: GroupModernMessageContext,
+): Promise<void> {
+	if (message.isFromGroup) {
+		return;
+	}
+
 	if (message.text && message.isInbox) {
 		const selectedCommand = InternalUtils.groupCommands.find((command) =>
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -16,14 +21,38 @@ function userMessageHandler(message: MessageContext): void {
 			message.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;
-			selectedCommand
-				.process(message as GroupModernMessageContext, TempVK)
-				.catch((err) => {
-					InternalUtils.logger.send(
-						`Error on execute command\nError: ${err.toString()}`,
-						"error",
+			message.user = await InternalUtils.group.getUserData(message.senderId);
+			message.sendMessage = async (text, params) => {
+				if (typeof text !== "string" && params?.text !== undefined) {
+					params.text =
+						`${message.user.id} (${message.user.nickname}):\n` + params.text;
+				}
+				const paramsForSend = Object.assign(
+					{
+						disable_mentions: true,
+						forward: JSON.stringify({
+							peer_id: message.peerId,
+							conversation_message_ids: message.conversationMessageId,
+							is_reply: 1,
+						}),
+					},
+					typeof text === "string" ? params || {} : text,
+				);
+				if (typeof text === "string") {
+					return await message.send(
+						`${message.user.id} (${message.user.nickname}):\n` + text,
+						paramsForSend,
 					);
-				});
+				} else {
+					return await message.send(paramsForSend);
+				}
+			};
+			selectedCommand.process(message, TempVK).catch((err) => {
+				InternalUtils.logger.send(
+					`Error on execute command\nError: ${err.toString()}`,
+					"error",
+				);
+			});
 		}
 	}
 }
