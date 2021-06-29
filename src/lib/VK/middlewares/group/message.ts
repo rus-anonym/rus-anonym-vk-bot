@@ -23,9 +23,10 @@ async function userMessageHandler(
 			) as RegExpExecArray;
 			message.user = await InternalUtils.group.getUserData(message.senderId);
 			message.sendMessage = async (text, params) => {
-				if (typeof text !== "string" && params?.message !== undefined) {
-					params.message =
-						`${message.user.id} (${message.user.nickname}):\n` + params.message;
+				if (typeof text !== "string" && text.message !== undefined) {
+					text.message =
+						`@id${message.user.id} (${message.user.nickname}):\n` +
+						text.message;
 				}
 				const paramsForSend = Object.assign(
 					{
