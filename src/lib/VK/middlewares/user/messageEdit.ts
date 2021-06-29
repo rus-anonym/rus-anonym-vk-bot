@@ -1,10 +1,10 @@
-import { UserModernMessageContext } from "./../../../utils/lib/commands";
+import { UserModernMessageContext } from "../../../utils/lib/commands";
 import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
-import VK from "../../../VK/core";
+import VK from "../../core";
 
-function userMessageHandler(message: MessageContext): void {
+function userMessageEditHandler(message: MessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
@@ -38,4 +38,4 @@ https://vk.com/im?sel=${
 	}
 }
 
-export default userMessageHandler;
+export default userMessageEditHandler;

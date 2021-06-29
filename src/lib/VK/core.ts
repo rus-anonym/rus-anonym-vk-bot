@@ -79,7 +79,8 @@ class UserVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
-		this.main.updates.on("message", userMiddlewares.messageHandler);
+		this.main.updates.on("message_new", userMiddlewares.messageNewHandler);
+		this.main.updates.on("message_edit", userMiddlewares.messageEditHandler);
 		this.main.updates.on("message_flags", userMiddlewares.messageFlagsHandler);
 		this.main.updates.on(
 			"friend_activity",
