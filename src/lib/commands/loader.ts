@@ -21,3 +21,4 @@ import "./user/graphics/invert";
 import "./user/graphics/sepia";
 import "./user/graphics/posterize";
 import "./user/graphics/contrast";
+import "./user/graphics/grayscale";
