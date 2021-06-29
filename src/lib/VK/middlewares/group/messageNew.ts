@@ -1,9 +1,9 @@
-import { GroupModernMessageContext } from "./../../../utils/lib/commands";
+import { GroupModernMessageContext } from "../../../utils/lib/commands";
 
 import InternalUtils from "../../../utils/core";
-import VK from "../../../VK/core";
+import VK from "../../core";
 
-async function userMessageHandler(
+async function groupMessageNew(
 	message: GroupModernMessageContext,
 ): Promise<void> {
 	if (message.isFromGroup) {
@@ -58,4 +58,4 @@ async function userMessageHandler(
 	}
 }
 
-export default userMessageHandler;
+export default groupMessageNew;

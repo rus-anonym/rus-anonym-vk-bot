@@ -1,11 +1,11 @@
-import messageNewHandler from "./user/messageNew";
-import messageEditHandler from "./user/messageEdit";
-import messageFlagsHandler from "./user/messageFlags";
-import friendActivityHandler from "./user/friendActivity";
+import messageNew from "./user/messageNew";
+import messageEdit from "./user/messageEdit";
+import messageFlags from "./user/messageFlags";
+import friendActivity from "./user/friendActivity";
 
 export default {
-	messageNewHandler,
-	messageEditHandler,
-	messageFlagsHandler,
-	friendActivityHandler,
+	messageNew,
+	messageEdit,
+	messageFlags,
+	friendActivity,
 };

@@ -4,7 +4,7 @@ import { MessageContext } from "vk-io";
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
 
-function userMessageEditHandler(message: MessageContext): void {
+function userMessageEdit(message: MessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
@@ -38,4 +38,4 @@ https://vk.com/im?sel=${
 	}
 }
 
-export default userMessageEditHandler;
+export default userMessageEdit;

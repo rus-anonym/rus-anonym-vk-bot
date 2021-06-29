@@ -4,7 +4,7 @@ import { FriendActivityContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 
-async function userFriendActivityHandler(
+async function userFriendActivity(
 	event: FriendActivityContext,
 ): Promise<void> {
 	const userData = await InternalUtils.user.getUserData(event.userId as number);
@@ -42,4 +42,4 @@ ${userData.info.gender === 1 ? "Была" : "Был"} ${
 	await userData.save();
 }
 
-export default userFriendActivityHandler;
+export default userFriendActivity;

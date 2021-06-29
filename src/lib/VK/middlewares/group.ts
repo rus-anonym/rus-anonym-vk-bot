@@ -1,3 +1,3 @@
-import messageHandler from "./group/message";
+import messageNew from "./group/messageNew";
 
-export default { messageHandler };
+export default {  messageNew };
