@@ -31,7 +31,7 @@ new Command(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
 		});
 
 		return await message.reply({
-			message: `Стикер в сепии:`,
+			message: `Стикер в постеризации:`,
 			attachment: graffiti.toString(),
 		});
 	}
@@ -51,7 +51,7 @@ new Command(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
 		});
 
 		return await message.reply({
-			message: `Фото в сепии:`,
+			message: `Фото в постеризации:`,
 			attachment: photo.toString(),
 		});
 	}
@@ -71,7 +71,7 @@ new Command(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
 		});
 
 		return await message.reply({
-			message: `Фото в сепии:`,
+			message: `Фото в постеризации:`,
 			attachment: photo.toString(),
 		});
 	}
