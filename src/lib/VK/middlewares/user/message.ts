@@ -1,9 +1,10 @@
-import { GroupModernMessageContext } from "../../../utils/lib/commands";
+import { UserModernMessageContext } from "./../../../utils/lib/commands";
+import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../../VK/core";
 
-function userMessageHandler(message: GroupModernMessageContext): void {
+function userMessageHandler(message: MessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
@@ -24,12 +25,14 @@ https://vk.com/im?sel=${
 			message.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;
-			selectedCommand.process(message, TempVK).catch((err) => {
-				InternalUtils.logger.send(
-					`Error on execute command\nError: ${err.toString()}`,
-					"error",
-				);
-			});
+			selectedCommand
+				.process(message as UserModernMessageContext, TempVK)
+				.catch((err) => {
+					InternalUtils.logger.send(
+						`Error on execute command\nError: ${err.toString()}`,
+						"error",
+					);
+				});
 		}
 	}
 }

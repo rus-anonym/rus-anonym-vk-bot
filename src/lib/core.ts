@@ -9,9 +9,9 @@ import InternalUtils from "./utils/core";
 
 import "./commands/loader";
 
-DB.user.connection.once("open", function MongoDBConnected() {
+DB.user.connection.once("open", () => {
 	InternalUtils.logger.send(
-		`Connect to DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+		`Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
 	);
 	VK.user.main.updates.start().then(() => {
 		InternalUtils.logger.send(
@@ -20,6 +20,12 @@ DB.user.connection.once("open", function MongoDBConnected() {
 			)}`,
 		);
 	});
+});
+
+DB.group.connection.once("open", () => {
+	InternalUtils.logger.send(
+		`Connect to GroupBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+	);
 	VK.group.main.updates.start().then(() => {
 		InternalUtils.logger.send(
 			`VK Group polling start at ${moment().format(
@@ -33,8 +39,7 @@ new Interval({
 	source: async () => {
 		const users = await InternalUtils.user.getFriendsBirthday(new Date());
 		InternalUtils.logger.send(
-			`
-Сегодня ${moment().format("DD.MM.YYYY")} день рождения празднуют:
+			`Сегодня ${moment().format("DD.MM.YYYY")} день рождения празднуют:
 ${users.map((user, index) => {
 	return `${index + 1}. @id${user.id}(${user.name} ${user.surname})`;
 })}`,

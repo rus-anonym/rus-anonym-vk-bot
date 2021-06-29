@@ -4,6 +4,7 @@ import utils from "rus-anonym-utils";
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 import userMiddlewares from "./middlewares/user";
+import groupMiddlewares from "./middlewares/group";
 
 abstract class Worker {
 	/**
@@ -121,6 +122,7 @@ class GroupVK extends Worker {
 	});
 
 	public configure() {
+		this.main.updates.on("message", groupMiddlewares.messageHandler);
 		return this;
 	}
 }
