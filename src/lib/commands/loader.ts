@@ -16,3 +16,5 @@ import "./user/vk/reserveScreenName";
 import "./user/vk/info";
 import "./user/vk/whatis";
 import "./user/vk/extendsInfo";
+
+import "./user/graphics/invert";
