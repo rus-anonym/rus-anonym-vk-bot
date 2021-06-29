@@ -37,6 +37,7 @@ import "./group/utils/who";
 import "./group/utils/eval";
 
 import "./group/vk/stickers";
+import "./group/vk/apiStatus";
 
 import "./group/graphics/invert";
 import "./group/graphics/sepia";
