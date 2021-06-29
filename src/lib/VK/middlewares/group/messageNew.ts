@@ -41,7 +41,7 @@ async function groupMessageNew(
 				);
 				if (typeof text === "string") {
 					return await message.send(
-						`${message.user.id} (${message.user.nickname}):\n` + text,
+						`@id${message.user.id} (${message.user.nickname}):\n` + text,
 						paramsForSend,
 					);
 				} else {

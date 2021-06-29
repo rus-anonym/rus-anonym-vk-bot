@@ -35,6 +35,7 @@ import "./group/utils/randomNumber";
 import "./group/utils/tele2Monday";
 import "./group/utils/who";
 import "./group/utils/eval";
+import "./group/utils/nick";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
