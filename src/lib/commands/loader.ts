@@ -19,3 +19,4 @@ import "./user/vk/extendsInfo";
 
 import "./user/graphics/invert";
 import "./user/graphics/sepia";
+import "./user/graphics/posterize";
