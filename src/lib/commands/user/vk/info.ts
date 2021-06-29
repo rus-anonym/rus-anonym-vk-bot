@@ -2,10 +2,10 @@ import { resolveResource } from "vk-io";
 import moment from "moment";
 import utils from "rus-anonym-utils";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 import InternalUtils from "../../../utils/core";
 
-new Command(/(?:^!инфо|!info)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!инфо|!info)(?:\s(.*))?$/i, async function (message, vk) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {

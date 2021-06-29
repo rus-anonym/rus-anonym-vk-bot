@@ -2,7 +2,7 @@ import utils from "rus-anonym-utils";
 import { createCollectIterator, Objects, resolveResource } from "vk-io";
 import { UsersFields } from "vk-io/lib/api/schemas/objects";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 import VK from "../../../VK/core";
 import InternalUtils from "../../../utils/core";
 import DB from "../../../DB/core";
@@ -100,7 +100,7 @@ const UsersGetFields: UsersFields[] = [
 	"is_dead",
 ];
 
-new Command(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message, vk) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {

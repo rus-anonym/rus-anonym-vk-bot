@@ -1,8 +1,8 @@
 import moment from "moment";
 import { resolveResource } from "vk-io";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 	if (!message.isChat) {
 		return message.editMessage({
 			message: "Работает только в беседах",

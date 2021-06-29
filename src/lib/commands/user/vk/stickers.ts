@@ -2,9 +2,9 @@ import utils from "rus-anonym-utils";
 import { resolveResource } from "vk-io";
 
 import DB from "../../../DB/core";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
+new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 	message,
 	vk,
 ) {

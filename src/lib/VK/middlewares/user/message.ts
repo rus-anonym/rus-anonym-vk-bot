@@ -1,9 +1,9 @@
-import { ModernMessageContext } from "./../../../utils/lib/command";
+import { GroupModernMessageContext } from "../../../utils/lib/commands";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../../VK/core";
 
-function userMessageHandler(message: ModernMessageContext): void {
+function userMessageHandler(message: GroupModernMessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
 			`Error on save message #${message.id}\n
@@ -15,7 +15,7 @@ https://vk.com/im?sel=${
 	});
 
 	if (message.isOutbox && message.text) {
-		const selectedCommand = InternalUtils.commands.find((command) =>
+		const selectedCommand = InternalUtils.userCommands.find((command) =>
 			command.check(message.text as string),
 		);
 

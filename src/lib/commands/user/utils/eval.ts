@@ -1,6 +1,6 @@
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!zz)(\s(.*))?$/i, async function (message) {
+new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {
 		return message.send(`нет кода`);
 	}

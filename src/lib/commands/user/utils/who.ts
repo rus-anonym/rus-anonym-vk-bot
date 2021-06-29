@@ -1,9 +1,9 @@
 import utils from "rus-anonym-utils";
 
 import VK from "../../../VK/core";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!кто\s)(.*)$/i, async function (message) {
+new UserCommand(/(?:^!кто\s)(.*)$/i, async function (message) {
 	if (!message.isChat) {
 		return await message.editMessage({
 			message: `Работает только в чатах`,

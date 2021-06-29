@@ -1,9 +1,9 @@
 import utils from "rus-anonym-utils";
 import JIMP from "jimp";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
 	if (message.args[1] && !Number(message.args[1])) {
 		return await message.editMessage({
 			message: `${message.args[1]} не является числом`,

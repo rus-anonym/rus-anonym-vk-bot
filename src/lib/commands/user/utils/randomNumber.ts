@@ -1,7 +1,7 @@
 import utils from "rus-anonym-utils";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(
+new UserCommand(
 	/(?:^!выбери число)(?:\sот(?:\s?)(\d+)(?:\s?)(?:(?:до)?)(?:\s?)(?:(\d+)?))?$/i,
 	async function (message) {
 		if (!message.args[1]) {

@@ -2,10 +2,10 @@ import { createCollectIterator, Objects } from "vk-io";
 import utils from "rus-anonym-utils";
 import moment from "moment";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 import InternalUtils from "../../../utils/core";
 
-new Command(/^(?:!clear)(?:\s(\d+))$/i, async function (context, vk) {
+new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context, vk) {
 	const iterator = createCollectIterator({
 		api: vk.api,
 		method: "messages.getHistory",

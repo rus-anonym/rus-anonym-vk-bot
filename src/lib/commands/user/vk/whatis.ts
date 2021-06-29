@@ -5,7 +5,7 @@ import utils from "rus-anonym-utils";
 import { MessageContext } from "vk-io";
 
 import VK from "../../../VK/core";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
 const bytesToSize = (bytes: number): string => {
@@ -198,7 +198,7 @@ String: ${wall.toString()}`;
 	return text;
 };
 
-new Command(/(?:^!whatis)$/i, async function (message) {
+new UserCommand(/(?:^!whatis)$/i, async function (message) {
 	await message.loadMessagePayload();
 
 	if (message.forwards[0] && message.forwards[0].hasAttachments()) {

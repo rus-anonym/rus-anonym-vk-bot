@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/^(?:!tester)$/i, async function (message) {
+new UserCommand(/^(?:!tester)$/i, async function (message) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {

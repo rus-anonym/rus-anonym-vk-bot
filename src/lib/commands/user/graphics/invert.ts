@@ -1,9 +1,9 @@
 import utils from "rus-anonym-utils";
 import JIMP from "jimp";
 
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!invert)$/i, async function (message, vk) {
+new UserCommand(/(?:^!invert)$/i, async function (message, vk) {
 	await message.loadMessagePayload();
 
 	if (message.replyMessage?.hasAttachments("sticker")) {
