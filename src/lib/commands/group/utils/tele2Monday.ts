@@ -2,9 +2,9 @@ import moment from "moment";
 import axios from "axios";
 import cheerio from "cheerio";
 
-import { UserCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "./../../../utils/lib/commands";
 
-new UserCommand(/(?:^!tele2|!теле2)$/i, async function (message) {
+new GroupCommand(/(?:^подарки теле2)$/i, async function (message) {
 	const tele2Monday = await (
 		await axios.get("https://mskponedelniki.tele2.ru/")
 	).data;
@@ -29,7 +29,7 @@ new UserCommand(/(?:^!tele2|!теле2)$/i, async function (message) {
 		text += `${Number(i) + 1}. ${mondayGifts[i]}\n`;
 	}
 
-	return message.editMessage({
+	return message.sendMessage({
 		message: `На ${moment().format("DD.MM.YYYY")} следующие подарки:
 ${text}`,
 	});

@@ -1,3 +1,6 @@
+/**
+ * User commands
+ */
 import "./user/utils/eval";
 import "./user/utils/about";
 import "./user/utils/randomNumber";
@@ -22,3 +25,15 @@ import "./user/graphics/sepia";
 import "./user/graphics/posterize";
 import "./user/graphics/contrast";
 import "./user/graphics/grayscale";
+
+/**
+ * Group commands
+ */
+
+import "./group/utils/choose";
+import "./group/utils/randomNumber";
+import "./group/utils/tele2Monday";
+import "./group/utils/who";
+import "./group/utils/eval";
+
+import "./group/vk/stickers";
