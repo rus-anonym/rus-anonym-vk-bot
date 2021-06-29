@@ -2,15 +2,20 @@ import { typedModel } from "ts-mongoose";
 import mongoose from "mongoose";
 
 import config from "../../DB/config.json";
-import schemes from "./schemes";
+import userSchemes from "./userSchemes";
+import groupSchemes from "./groupSchemes";
 
 mongoose.Schema.Types.String.checkRequired((text) => text !== null);
 
-class DB {
-	public config = config;
+abstract class DB {
+	abstract connection: unknown;
+	abstract models: unknown;
+	abstract schemes: unknown;
+}
 
+class UserDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.db.mongo.login}:${config.db.mongo.password}@${config.db.mongo.address}/${config.db.mongo.db}`,
+		`mongodb+srv://${config.db.mongo.user.login}:${config.db.mongo.user.password}@${config.db.mongo.user.address}/${config.db.mongo.user.db}`,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -21,7 +26,7 @@ class DB {
 	public models = {
 		message: typedModel(
 			"message",
-			schemes.message,
+			userSchemes.message,
 			"messages",
 			undefined,
 			undefined,
@@ -29,7 +34,7 @@ class DB {
 		),
 		user: typedModel(
 			"user",
-			schemes.user,
+			userSchemes.user,
 			"users",
 			undefined,
 			undefined,
@@ -37,7 +42,7 @@ class DB {
 		),
 		chat: typedModel(
 			"chat",
-			schemes.chat,
+			userSchemes.chat,
 			"chats",
 			undefined,
 			undefined,
@@ -45,9 +50,40 @@ class DB {
 		),
 	};
 
-	public schemes = schemes;
+	public schemes = userSchemes;
 }
 
-const DataBase = new DB();
+class GroupDB extends DB {
+	public connection = mongoose.createConnection(
+		`mongodb+srv://${config.db.mongo.group.login}:${config.db.mongo.group.password}@${config.db.mongo.group.address}/${config.db.mongo.group.db}`,
+		{
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+		},
+	);
+
+	public models = {
+		user: typedModel(
+			"user",
+			groupSchemes.user,
+			"users",
+			undefined,
+			undefined,
+			this.connection,
+		),
+	};
+
+	public schemes = groupSchemes;
+}
+
+class CoreDB {
+	public config = config;
+
+	public user = new UserDB();
+	public group = new GroupDB();
+}
+
+const DataBase = new CoreDB();
 
 export default DataBase;

@@ -24,7 +24,7 @@ export default class UtilsUser {
 	public async processDeletedMessage(
 		event: MessageFlagsContext<ContextDefaultState>,
 	): Promise<void> {
-		const deletedMessageData = await DB.models.message.findOne({
+		const deletedMessageData = await DB.user.models.message.findOne({
 			id: event.id,
 		});
 
@@ -98,7 +98,7 @@ export default class UtilsUser {
 
 	public async processEditedMessage(
 		message: MessageContext,
-		oldMessage: ExtractDoc<typeof DB.schemes.message>,
+		oldMessage: ExtractDoc<typeof DB.user.schemes.message>,
 	): Promise<void> {
 		const logsChatId =
 			oldMessage.peerType === "chat"
@@ -153,7 +153,7 @@ export default class UtilsUser {
 	public async saveMessage(message: MessageContext): Promise<void> {
 		switch (message.subTypes[0]) {
 			case "message_new": {
-				await new DB.models.message({
+				await new DB.user.models.message({
 					id: message.id,
 					conversationMessageId: message.conversationMessageId,
 					peerId: message.peerId,
@@ -188,7 +188,7 @@ export default class UtilsUser {
 				break;
 			}
 			case "message_edit": {
-				const oldMessageData = await DB.models.message.findOne({
+				const oldMessageData = await DB.user.models.message.findOne({
 					id: message.id,
 				});
 				if (oldMessageData) {
@@ -249,11 +249,11 @@ export default class UtilsUser {
 		}
 
 		if (message.isChat && message.chatId) {
-			const chatData = await DB.models.chat.findOne({
+			const chatData = await DB.user.models.chat.findOne({
 				id: message.chatId,
 			});
 			if (!chatData) {
-				const newChatData = new DB.models.chat({
+				const newChatData = new DB.user.models.chat({
 					id: message.chatId,
 					messages: [message.id],
 					updateDate: new Date(),
@@ -270,15 +270,15 @@ export default class UtilsUser {
 
 	public async getUserData(
 		id: number,
-	): Promise<ExtractDoc<typeof DB.schemes.user>> {
-		const userData = await DB.models.user.findOne({
+	): Promise<ExtractDoc<typeof DB.user.schemes.user>> {
+		const userData = await DB.user.models.user.findOne({
 			id,
 		});
 		if (!userData) {
 			const [VK_USER_DATA] = await VK.group
 				.getVK()
 				.api.users.get({ user_id: id, fields: ["status", "last_seen", "sex"] });
-			const newUserData = new DB.models.user({
+			const newUserData = new DB.user.models.user({
 				id,
 				info: {
 					name: VK_USER_DATA.first_name,

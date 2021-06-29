@@ -9,7 +9,7 @@ import InternalUtils from "./utils/core";
 
 import "./commands/loader";
 
-DB.connection.once("open", function MongoDBConnected() {
+DB.user.connection.once("open", function MongoDBConnected() {
 	InternalUtils.logger.send(
 		`Connect to DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
 	);
