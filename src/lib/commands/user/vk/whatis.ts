@@ -147,6 +147,7 @@ String: ${poll.toString()}\n`;
 				product_ids: [sticker.productId],
 				type: "stickers",
 				user_id: message.senderId,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			})) as any
 		).items as StoreGetProductsResponse;
 		const [stickerPackInfo] = await utils.vk.user.getStickersInfo(
@@ -191,7 +192,8 @@ String: ${video.toString()}\n`;
 		text += `${i}. wall
 String: ${wall.toString()}`;
 	}
-	for (const wall_reply of message.getAttachments(`wall_reply`)) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	for (const _wall_reply of message.getAttachments(`wall_reply`)) {
 		++i;
 		text += `${i}. wall_reply`;
 	}
