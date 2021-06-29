@@ -37,3 +37,9 @@ import "./group/utils/who";
 import "./group/utils/eval";
 
 import "./group/vk/stickers";
+
+import "./group/graphics/invert";
+import "./group/graphics/sepia";
+import "./group/graphics/posterize";
+import "./group/graphics/contrast";
+import "./group/graphics/grayscale";
