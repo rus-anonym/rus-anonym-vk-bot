@@ -11,6 +11,10 @@ async function groupMessageNew(
 	}
 
 	if (message.text && message.isInbox) {
+		if (message.text === "бот" && message.chatId === 20) {
+			await message.send("понг");
+			return;
+		}
 		const selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			message.text!,
