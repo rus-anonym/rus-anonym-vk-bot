@@ -162,6 +162,7 @@ Pack ID: ${sticker.productId}
 Описание: ${stickerPackInfo.description}${
 			stickerPackInfo.isFree ? "" : `\nЦена в голосах: ${stickerPackInfo.price}`
 		}
+Ссылка: ${stickerPackInfo.url}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} пак
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 			userStickerPackInfo.purchase_date! * 1000,

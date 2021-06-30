@@ -166,6 +166,7 @@ Pack ID: ${sticker.productId}
 						stickerPackInfo.price * 7
 				  }₽`
 		}
+Ссылка: ${stickerPackInfo.url}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} пак
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 			userStickerPackInfo.purchase_date! * 1000,
