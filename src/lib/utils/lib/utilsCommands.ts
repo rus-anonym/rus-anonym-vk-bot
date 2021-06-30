@@ -156,7 +156,9 @@ Pack ID: ${sticker.productId}
 					  }₽`
 			}
 Ссылка: ${stickerPackInfo.url}
-Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} пак
+Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} ${
+				stickerPackInfo.isStyle ? "стиль" : "стикерпак"
+			}
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 				userStickerPackInfo.purchase_date! * 1000,
 			).format("DD.MM.YYYY, HH:mm:ss")}\n`;
