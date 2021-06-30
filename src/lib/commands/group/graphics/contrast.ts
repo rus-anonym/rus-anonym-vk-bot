@@ -21,7 +21,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 		});
 	}
 
-	const posterizeEffect = message.args[1] ? Number(message.args[1]) : 3;
+	const contrastEffect = message.args[1] ? Number(message.args[1]) : 0.5;
 
 	if (message.replyMessage?.hasAttachments("sticker")) {
 		const source = utils.array.last(
@@ -29,7 +29,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 		);
 
 		const image = await JIMP.read(source.url);
-		image.posterize(posterizeEffect);
+		image.posterize(contrastEffect);
 
 		const graffiti = await VK.user.getVK().upload.documentGraffiti({
 			group_id: DB.config.vk.group.id,
@@ -49,7 +49,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 		const source = message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
 
 		const image = await JIMP.read(source as string);
-		image.posterize(posterizeEffect);
+		image.posterize(contrastEffect);
 
 		const photo = await vk.upload.messagePhoto({
 			peer_id: message.peerId,
@@ -69,7 +69,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 		const source = message.getAttachments("photo")[0].largeSizeUrl;
 
 		const image = await JIMP.read(source as string);
-		image.posterize(posterizeEffect);
+		image.posterize(contrastEffect);
 
 		const photo = await vk.upload.messagePhoto({
 			peer_id: message.peerId,

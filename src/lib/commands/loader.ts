@@ -40,6 +40,7 @@ import "./group/utils/nick";
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
 import "./group/vk/whatis";
+import "./group/vk/isTester";
 
 import "./group/graphics/invert";
 import "./group/graphics/sepia";
