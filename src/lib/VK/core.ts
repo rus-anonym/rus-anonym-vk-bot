@@ -124,6 +124,8 @@ class GroupVK extends Worker {
 		this.main.updates.on("like_add", groupMiddlewares.likeAdd);
 		this.main.updates.on("like_remove", groupMiddlewares.likeRemove);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
+		this.main.updates.on("group_join", groupMiddlewares.groupJoin);
+		this.main.updates.on("group_leave", groupMiddlewares.groupLeave);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
 				`Необработанное событие группы:
