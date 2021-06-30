@@ -1,15 +1,17 @@
 import moment from "moment";
+
 moment.locale("ru");
 
 import VK from "./VK/core";
 import DB from "./DB/core";
 import InternalUtils from "./utils/core";
 
+import "./scheduler";
 import "./commands/loader";
 
-DB.connection.once("open", function MongoDBConnected() {
+DB.user.connection.once("open", () => {
 	InternalUtils.logger.send(
-		`Connect to DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+		`Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
 	);
 	VK.user.main.updates.start().then(() => {
 		InternalUtils.logger.send(
@@ -18,6 +20,12 @@ DB.connection.once("open", function MongoDBConnected() {
 			)}`,
 		);
 	});
+});
+
+DB.group.connection.once("open", () => {
+	InternalUtils.logger.send(
+		`Connect to GroupBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+	);
 	VK.group.main.updates.start().then(() => {
 		InternalUtils.logger.send(
 			`VK Group polling start at ${moment().format(
@@ -25,4 +33,17 @@ DB.connection.once("open", function MongoDBConnected() {
 			)}`,
 		);
 	});
+});
+
+process.on("warning", async (warning) => {
+	InternalUtils.logger.send(
+		`Unhandled warning\n${warning.toString()}`,
+		"error",
+	);
+});
+process.on("uncaughtException", async (error) => {
+	InternalUtils.logger.send(
+		`Unhandled uncaughtException\n${error.toString()}`,
+		"error",
+	);
 });

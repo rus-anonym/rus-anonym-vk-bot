@@ -1,8 +1,8 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!api|!апи)$/i, async function (message) {
+new UserCommand(/(?:^!api|!апи)$/i, async function (message) {
 	const VK_API_STATUS = await utils.vk.api.status();
 
 	return message.editMessage({

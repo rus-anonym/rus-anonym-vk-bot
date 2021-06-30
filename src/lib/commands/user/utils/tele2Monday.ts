@@ -1,10 +1,10 @@
 import moment from "moment";
-import { Command } from "../../../utils/lib/command";
-
 import axios from "axios";
 import cheerio from "cheerio";
 
-new Command(/(?:^!tele2|!теле2)$/i, async function (message) {
+import { UserCommand } from "../../../utils/lib/commands";
+
+new UserCommand(/(?:^!tele2|!теле2)$/i, async function (message) {
 	const tele2Monday = await (
 		await axios.get("https://mskponedelniki.tele2.ru/")
 	).data;

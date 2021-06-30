@@ -1,9 +1,10 @@
-import { VK } from "vk-io";
+import { VK, API } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 import userMiddlewares from "./middlewares/user";
+import groupMiddlewares from "./middlewares/group";
 
 abstract class Worker {
 	/**
@@ -26,6 +27,46 @@ abstract class Worker {
 	}
 }
 
+abstract class FakeWorker {
+	abstract additional: API[];
+	public getAPI(): API {
+		return utils.array.random(this.additional);
+	}
+}
+
+interface FakeUserData {
+	id: number;
+	tokens: string[];
+}
+
+class FakeUserVK extends FakeWorker {
+	public additional: API[] = [];
+	constructor(data: FakeUserData) {
+		super();
+		for (const token of data.tokens) {
+			this.additional.push(new API({ token }));
+		}
+	}
+}
+
+class FakesAlpha {
+	public user: FakeUserVK[] = [];
+
+	constructor() {
+		for (const fakeUser of DB.config.vk.userFakes) {
+			this.user.push(new FakeUserVK(fakeUser));
+		}
+	}
+
+	public getUserFake(): FakeUserVK {
+		return utils.array.random(this.user);
+	}
+
+	public getUserFakeAPI(): API {
+		return utils.array.random(this.user).getAPI();
+	}
+}
+
 class UserVK extends Worker {
 	public main = new VK({ token: DB.config.vk.user.tokens[0] });
 
@@ -38,18 +79,18 @@ class UserVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
-		this.main.updates.on("message", userMiddlewares.messageHandler);
-		this.main.updates.on("message_flags", userMiddlewares.messageFlagsHandler);
-		this.main.updates.on(
-			"friend_activity",
-			userMiddlewares.friendActivityHandler,
-		);
+		this.main.updates.on("message_new", userMiddlewares.messageNew);
+		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
+		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
+		this.main.updates.on("friend_activity", userMiddlewares.friendActivity);
+		this.main.updates.on("chat_kick_user", () => null);
+		this.main.updates.on("chat_invite_user", () => null);
 		this.main.updates.on("messages_read", () => null);
 		this.main.updates.on("typing", () => null);
 		this.main.updates.on("dialog_flags", () => null);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
-				`Необработанное событие:
+				`Необработанное событие пользователя:
 Type: ${event.type}
 SubTypes: ${JSON.stringify(event.subTypes)}`,
 				"error",
@@ -81,6 +122,45 @@ class GroupVK extends Worker {
 	});
 
 	public configure() {
+		this.main.updates.on("message_new", groupMiddlewares.messageNew);
+		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
+		this.main.updates.on("group_join", groupMiddlewares.groupJoin);
+		this.main.updates.on("group_leave", groupMiddlewares.groupLeave);
+		this.main.updates.on("user_block", groupMiddlewares.userBlock);
+		this.main.updates.on("user_unblock", groupMiddlewares.userUnblock);
+		this.main.updates.on("like_add", () => null);
+		this.main.updates.on("like_remove", () => null);
+		this.main.updates.on("message_reply", () => null);
+		this.main.updates.on("message_typing_state", () => null);
+		this.main.updates.on("typing_group", () => null);
+		this.main.updates.on("chat_kick_user", () => null);
+		this.main.updates.on("chat_invite_user", () => null);
+		this.main.updates.on(
+			"group_officers_edit",
+			groupMiddlewares.groupOfficersEdit,
+		);
+		this.main.updates.use(async (event) => {
+			InternalUtils.logger.send(
+				`Необработанное событие группы:
+Type: ${event.type}
+SubTypes: ${JSON.stringify(event.subTypes)}`,
+				"error",
+				{
+					attachment: (
+						await vk.group.getVK().upload.messageDocument({
+							source: {
+								value: Buffer.from(
+									JSON.stringify(event.toJSON(), null, "\t"),
+									"utf-8",
+								),
+								filename: "event.txt",
+							},
+							peer_id: 2e9 + DB.config.vk.group.logs.conversations.errors,
+						})
+					).toString(),
+				},
+			);
+		});
 		return this;
 	}
 }
@@ -88,6 +168,7 @@ class GroupVK extends Worker {
 class CoreVK {
 	public user = new UserVK().configure();
 	public group = new GroupVK().configure();
+	public fakes = new FakesAlpha();
 }
 
 const vk = new CoreVK();

@@ -1,13 +1,13 @@
-import { ContextDefaultState, MessageFlagsContext } from "vk-io";
+import { MessageFlagsContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 
-function userMessageFlagsHandler(
-	event: MessageFlagsContext<ContextDefaultState>,
-): void {
+function userMessageFlags(event: MessageFlagsContext, next: () => void): void {
 	if (event.isDeletedForAll) {
 		InternalUtils.user.processDeletedMessage(event);
+		return;
 	}
+	next();
 }
 
-export default userMessageFlagsHandler;
+export default userMessageFlags;

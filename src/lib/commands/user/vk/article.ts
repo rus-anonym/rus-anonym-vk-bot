@@ -1,8 +1,8 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/^(?:!article|!статья)(?:\s(.*))$/i, async function (message) {
+new UserCommand(/^(?:!article|!статья)(?:\s(.*))$/i, async function (message) {
 	try {
 		const article = await utils.vk.article.getByURL(message.args[1].trim());
 

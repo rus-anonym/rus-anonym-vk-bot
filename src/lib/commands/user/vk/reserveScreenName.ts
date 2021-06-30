@@ -1,7 +1,7 @@
 import { resolveResource } from "vk-io";
-import { Command } from "../../../utils/lib/command";
+import { UserCommand } from "../../../utils/lib/commands";
 
-new Command(/(?:^!reserve)(?:\s(.*))$/i, async function (message, vk) {
+new UserCommand(/(?:^!reserve)(?:\s(.*))$/i, async function (message, vk) {
 	try {
 		await resolveResource({ resource: message.args[1] });
 		return message.editMessage({
