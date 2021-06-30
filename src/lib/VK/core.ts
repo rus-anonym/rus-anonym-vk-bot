@@ -126,6 +126,10 @@ class GroupVK extends Worker {
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
 		this.main.updates.on("group_join", groupMiddlewares.groupJoin);
 		this.main.updates.on("group_leave", groupMiddlewares.groupLeave);
+		this.main.updates.on(
+			"group_officers_edit",
+			groupMiddlewares.groupOfficersEdit,
+		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
 				`Необработанное событие группы:

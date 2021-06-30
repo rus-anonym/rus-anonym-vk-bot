@@ -4,6 +4,7 @@ import likeRemove from "./group/likeRemove";
 import wallPostNew from "./group/wallPostNew";
 import groupJoin from "./group/groupJoin";
 import groupLeave from "./group/groupLeave";
+import groupOfficersEdit from "./group/groupOfficersEdit";
 
 export default {
 	messageNew,
@@ -12,4 +13,5 @@ export default {
 	wallPostNew,
 	groupJoin,
 	groupLeave,
+	groupOfficersEdit,
 };
