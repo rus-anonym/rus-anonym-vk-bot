@@ -83,6 +83,8 @@ class UserVK extends Worker {
 		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
 		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
 		this.main.updates.on("friend_activity", userMiddlewares.friendActivity);
+		this.main.updates.on("chat_kick_user", () => null);
+		this.main.updates.on("chat_invite_user", () => null);
 		this.main.updates.on("messages_read", () => null);
 		this.main.updates.on("typing", () => null);
 		this.main.updates.on("dialog_flags", () => null);
@@ -121,14 +123,16 @@ class GroupVK extends Worker {
 
 	public configure() {
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
-		this.main.updates.on("message_reply", () => null);
-		this.main.updates.on("message_typing_state", () => null);
-		this.main.updates.on("typing_group", () => null);
 		this.main.updates.on("like_add", groupMiddlewares.likeAdd);
 		this.main.updates.on("like_remove", groupMiddlewares.likeRemove);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
 		this.main.updates.on("group_join", groupMiddlewares.groupJoin);
 		this.main.updates.on("group_leave", groupMiddlewares.groupLeave);
+		this.main.updates.on("message_reply", () => null);
+		this.main.updates.on("message_typing_state", () => null);
+		this.main.updates.on("typing_group", () => null);
+		this.main.updates.on("chat_kick_user", () => null);
+		this.main.updates.on("chat_invite_user", () => null);
 		this.main.updates.on(
 			"group_officers_edit",
 			groupMiddlewares.groupOfficersEdit,
