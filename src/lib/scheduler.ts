@@ -1,20 +1,17 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import scheduler, { Interval } from "simple-scheduler-task";
+import * as scheduler from "simple-scheduler-task";
 
 import InternalUtils from "./utils/core";
 import DB from "./DB/core";
 
-new Interval({
+new scheduler.Interval({
 	source: async () => {
 		const users = await InternalUtils.user.getFriendsBirthday(new Date());
-		InternalUtils.logger.send(
-			`Сегодня ${moment().format("DD.MM.YYYY")} день рождения празднуют:
+		return `Сегодня ${moment().format("DD.MM.YYYY")} день рождения празднуют:
 ${users.map((user, index) => {
 	return `${index + 1}. @id${user.id}(${user.name} ${user.surname})`;
-})}`,
-			"info",
-		);
+})}`;
 	},
 	plannedTime: moment()
 		.add(1, "day")
@@ -24,27 +21,26 @@ ${users.map((user, index) => {
 		.toDate(),
 	type: "getBirthdays",
 	intervalTimer: 24 * 60 * 60 * 1000,
+	inform: true,
 });
 
-new Interval({
+new scheduler.Interval({
 	source: async () => {
 		const oldMessages = await DB.user.models.message.deleteMany({
 			created: {
 				$lt: moment().subtract(1, "day").toDate(),
 			},
 		});
-		InternalUtils.logger.send(
-			`Удалено ${oldMessages.deletedCount} ${utils.string.declOfNum(
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				oldMessages.deletedCount!,
-				["старое сообщение", "старых сообщения", "старых сообщений"],
-			)}`,
-			"info",
-		);
+		return `Удалено ${oldMessages.deletedCount} ${utils.string.declOfNum(
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			oldMessages.deletedCount!,
+			["старое сообщение", "старых сообщения", "старых сообщений"],
+		)}`;
 	},
 	plannedTime: moment().toDate(),
 	type: "cleanOldMessages",
 	intervalTimer: 24 * 60 * 60 * 1000,
+	inform: true,
 });
 
 scheduler.events.on("executions", (execution) => {
