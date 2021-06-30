@@ -5,7 +5,7 @@ import VK from "../../../VK/core";
 async function groupJoin(event: GroupMemberContext): Promise<void> {
 	const [userData] = await VK.fakes
 		.getUserFakeAPI()
-		.users.get({ user_ids: event.likerId.toString(), fields: ["sex"] });
+		.users.get({ user_ids: event.userId.toString(), fields: ["sex"] });
 	VK.group.getVK().api.messages.send({
 		message: `@id${event.userId} (${userData.first_name} ${
 			userData.last_name
