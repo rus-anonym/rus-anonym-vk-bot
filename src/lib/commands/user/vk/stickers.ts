@@ -44,7 +44,10 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 		.join(", ");
 
 	return message.editMessage({
-		message: `У @id${userID} найдено ${utils.number.separator(
+		message: `У @id${userID} ${utils.string.declOfNum(
+			userStickers.items.length,
+			["найден", "найдено", "найдено"],
+		)} ${utils.number.separator(
 			userStickers.items.length,
 			".",
 		)} ${utils.string.declOfNum(userStickers.items.length, [

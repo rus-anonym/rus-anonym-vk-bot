@@ -39,7 +39,10 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message, 
 		.join(", ");
 
 	return message.sendMessage({
-		message: `У @id${userID} найдено ${utils.number.separator(
+		message: `У @id${userID} ${utils.string.declOfNum(
+			userStickers.items.length,
+			["найден", "найдено", "найдено"],
+		)} ${utils.number.separator(
 			userStickers.items.length,
 			".",
 		)} ${utils.string.declOfNum(userStickers.items.length, [
