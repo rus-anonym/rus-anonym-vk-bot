@@ -88,7 +88,7 @@ class UserVK extends Worker {
 		this.main.updates.on("dialog_flags", () => null);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
-				`Необработанное событие:
+				`Необработанное событие пользователя:
 Type: ${event.type}
 SubTypes: ${JSON.stringify(event.subTypes)}`,
 				"error",
@@ -121,6 +121,30 @@ class GroupVK extends Worker {
 
 	public configure() {
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
+		this.main.updates.on("like_add", groupMiddlewares.likeAdd);
+		this.main.updates.on("like_remove", groupMiddlewares.likeRemove);
+		this.main.updates.use(async (event) => {
+			InternalUtils.logger.send(
+				`Необработанное событие группы:
+Type: ${event.type}
+SubTypes: ${JSON.stringify(event.subTypes)}`,
+				"error",
+				{
+					attachment: (
+						await vk.group.getVK().upload.messageDocument({
+							source: {
+								value: Buffer.from(
+									JSON.stringify(event.toJSON(), null, "\t"),
+									"utf-8",
+								),
+								filename: "event.txt",
+							},
+							peer_id: 2e9 + DB.config.vk.group.logs.conversations.errors,
+						})
+					).toString(),
+				},
+			);
+		});
 		return this;
 	}
 }
