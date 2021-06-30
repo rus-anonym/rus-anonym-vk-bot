@@ -121,6 +121,9 @@ class GroupVK extends Worker {
 
 	public configure() {
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
+		this.main.updates.on("message_reply", () => null);
+		this.main.updates.on("message_typing_state", () => null);
+		this.main.updates.on("typing_group", () => null);
 		this.main.updates.on("like_add", groupMiddlewares.likeAdd);
 		this.main.updates.on("like_remove", groupMiddlewares.likeRemove);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
