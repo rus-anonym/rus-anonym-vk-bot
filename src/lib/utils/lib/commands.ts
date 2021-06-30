@@ -1,8 +1,14 @@
 import { ExtractDoc } from "ts-mongoose";
-import { IMessageContextSendOptions, MessageContext, VK } from "vk-io";
+import {
+	IMessageContextSendOptions,
+	MessageContext,
+	resolveResource,
+	VK,
+} from "vk-io";
 
 import InternalUtils from "../core";
 import DB from "../../DB/core";
+import UtilsVK from "../../VK/core";
 
 interface ModernMessageContext extends MessageContext {
 	args: RegExpExecArray;
@@ -76,6 +82,27 @@ export class UtilsUserCommands extends UtilsCommands {
 	public findCommand(input: string): UserCommand | undefined {
 		return this.list.find((x) => x.check(input));
 	}
+	public async getUserId(message: UserModernMessageContext): Promise<number> {
+		if (message.forwards[0]) {
+			return message.forwards[0].senderId;
+		} else if (message.replyMessage) {
+			return message.replyMessage.senderId;
+		} else if (message.args[1]) {
+			try {
+				const linkData = await resolveResource({
+					resource: message.args[1],
+					api: UtilsVK.group.getVK().api,
+				});
+				return linkData.id;
+			} catch (error) {
+				throw new Error("Не смог распознать ссылку");
+			}
+		} else if (!message.isChat) {
+			return message.peerId;
+		} else {
+			throw new Error("Не смог распознать ссылку");
+		}
+	}
 }
 
 export class UtilsGroupCommands extends UtilsCommands {
@@ -85,5 +112,24 @@ export class UtilsGroupCommands extends UtilsCommands {
 	}
 	public findCommand(input: string): GroupCommand | undefined {
 		return this.list.find((x) => x.check(input));
+	}
+	public async getUserId(message: GroupModernMessageContext): Promise<number> {
+		if (message.forwards[0]) {
+			return message.forwards[0].senderId;
+		} else if (message.replyMessage) {
+			return message.replyMessage.senderId;
+		} else if (message.args[1]) {
+			try {
+				const linkData = await resolveResource({
+					resource: message.args[1],
+					api: UtilsVK.group.getVK().api,
+				});
+				return linkData.id;
+			} catch (error) {
+				throw new Error("Не смог распознать ссылку");
+			}
+		} else {
+			throw new Error("Не смог распознать ссылку");
+		}
 	}
 }

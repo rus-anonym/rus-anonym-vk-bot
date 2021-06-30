@@ -1,6 +1,7 @@
 import moment from "moment";
-import { resolveResource } from "vk-io";
+
 import { UserCommand } from "../../../utils/lib/commands";
+import InternalUtils from "../../../utils/core";
 
 new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 	if (!message.isChat) {
@@ -11,25 +12,11 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 
 	await message.loadMessagePayload();
 	let userID;
-	if (message.forwards[0]) {
-		userID = message.forwards[0].senderId;
-	} else if (message.replyMessage) {
-		userID = message.replyMessage.senderId;
-	} else if (message.args[1]) {
-		try {
-			const linkData = await resolveResource({
-				resource: message.args[1],
-				api: vk.api,
-			});
-			userID = linkData.id;
-		} catch (error) {
-			return await message.editMessage({
-				message: "Не смог распознать ссылку",
-			});
-		}
-	} else {
-		return await message.editMessage({
-			message: "Не смог распознать ссылку",
+	try {
+		userID = await InternalUtils.userCommands.getUserId(message);
+	} catch (error) {
+		return await message.sendMessage({
+			message: error.message,
 		});
 	}
 

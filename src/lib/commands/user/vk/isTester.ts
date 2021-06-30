@@ -1,16 +1,17 @@
 import axios from "axios";
 
 import { UserCommand } from "../../../utils/lib/commands";
+import InternalUtils from "../../../utils/core";
 
 new UserCommand(/^(?:!tester)$/i, async function (message) {
 	await message.loadMessagePayload();
 	let userID;
-	if (message.forwards[0]) {
-		userID = message.forwards[0].senderId;
-	} else if (message.replyMessage) {
-		userID = message.replyMessage.senderId;
-	} else {
-		userID = message.senderId;
+	try {
+		userID = await InternalUtils.userCommands.getUserId(message);
+	} catch (error) {
+		return await message.sendMessage({
+			message: error.message,
+		});
 	}
 
 	try {

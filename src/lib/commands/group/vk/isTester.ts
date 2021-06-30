@@ -1,15 +1,16 @@
 import axios from "axios";
 
 import { GroupCommand } from "../../../utils/lib/commands";
+import InternalUtils from "../../../utils/core";
 
-new GroupCommand(/^(?:\/tester)$/i, async function (message) {
+new GroupCommand(/^(?:\/tester)(?:\s(.*))?$/i, async function (message) {
 	let userID;
-	if (message.forwards[0]) {
-		userID = message.forwards[0].senderId;
-	} else if (message.replyMessage) {
-		userID = message.replyMessage.senderId;
-	} else {
-		userID = message.senderId;
+	try {
+		userID = await InternalUtils.groupCommands.getUserId(message);
+	} catch (error) {
+		return await message.sendMessage({
+			message: error.message,
+		});
 	}
 
 	try {

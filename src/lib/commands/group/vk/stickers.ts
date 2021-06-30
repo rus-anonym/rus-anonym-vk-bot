@@ -1,31 +1,17 @@
 import utils from "rus-anonym-utils";
-import { resolveResource } from "vk-io";
 
 import VK from "../../../VK/core";
+import InternalUtils from "../../../utils/core";
 import { GroupCommand } from "../../../utils/lib/commands";
 
-new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message, vk) {
+new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) {
 	await message.loadMessagePayload();
 	let userID;
-	if (message.forwards[0]) {
-		userID = message.forwards[0].senderId;
-	} else if (message.replyMessage) {
-		userID = message.replyMessage.senderId;
-	} else if (message.args[1]) {
-		try {
-			const linkData = await resolveResource({
-				resource: message.args[1],
-				api: vk.api,
-			});
-			userID = linkData.id;
-		} catch (error) {
-			return await message.sendMessage({
-				message: "Не смог распознать ссылку",
-			});
-		}
-	} else {
+	try {
+		userID = await InternalUtils.groupCommands.getUserId(message);
+	} catch (error) {
 		return await message.sendMessage({
-			message: "Не смог распознать ссылку",
+			message: error.message,
 		});
 	}
 
