@@ -17,8 +17,20 @@ export interface GroupModernMessageContext extends ModernMessageContext {
 	): Promise<MessageContext<Record<string, unknown>>>;
 }
 
-export class UserCommand {
+abstract class Command {
 	public regexp: RegExp;
+	abstract process: unknown;
+
+	constructor(regexp: RegExp) {
+		this.regexp = regexp;
+	}
+
+	public check(input: string): boolean {
+		return this.regexp.test(input);
+	}
+}
+
+export class UserCommand extends Command {
 	public process: (
 		message: UserModernMessageContext,
 		vk: VK,
@@ -28,18 +40,13 @@ export class UserCommand {
 		regexp: RegExp,
 		process: (message: UserModernMessageContext, vk: VK) => Promise<unknown>,
 	) {
-		this.regexp = regexp;
+		super(regexp);
 		this.process = process;
-		InternalUtils.userCommands.push(this);
-	}
-
-	public check(input: string): boolean {
-		return this.regexp.test(input);
+		InternalUtils.userCommands.addCommand(this);
 	}
 }
 
-export class GroupCommand {
-	public regexp: RegExp;
+export class GroupCommand extends Command {
 	public process: (
 		message: GroupModernMessageContext,
 		vk: VK,
@@ -49,12 +56,34 @@ export class GroupCommand {
 		regexp: RegExp,
 		process: (message: GroupModernMessageContext, vk: VK) => Promise<unknown>,
 	) {
-		this.regexp = regexp;
+		super(regexp);
 		this.process = process;
-		InternalUtils.groupCommands.push(this);
+		InternalUtils.groupCommands.addCommand(this);
 	}
+}
 
-	public check(input: string): boolean {
-		return this.regexp.test(input);
+abstract class UtilsCommands {
+	abstract list: unknown[];
+	abstract addCommand(command: unknown): void;
+	abstract findCommand(input: string): unknown;
+}
+
+export class UtilsUserCommands extends UtilsCommands {
+	public list: UserCommand[] = [];
+	public addCommand(command: UserCommand): void {
+		this.list.push(command);
+	}
+	public findCommand(input: string): UserCommand | undefined {
+		return this.list.find((x) => x.check(input));
+	}
+}
+
+export class UtilsGroupCommands extends UtilsCommands {
+	public list: GroupCommand[] = [];
+	public addCommand(command: GroupCommand): void {
+		this.list.push(command);
+	}
+	public findCommand(input: string): GroupCommand | undefined {
+		return this.list.find((x) => x.check(input));
 	}
 }
