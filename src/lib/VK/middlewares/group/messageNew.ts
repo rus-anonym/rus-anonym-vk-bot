@@ -11,9 +11,9 @@ async function groupMessageNew(
 	}
 
 	if (message.text && message.isInbox) {
-		const selectedCommand = InternalUtils.groupCommands.find((command) =>
+		const selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			command.check(message.text!),
+			message.text!,
 		);
 
 		if (selectedCommand) {

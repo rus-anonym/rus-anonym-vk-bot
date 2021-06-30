@@ -16,9 +16,9 @@ https://vk.com/im?sel=${
 	});
 
 	if (message.isOutbox && message.text) {
-		const selectedCommand = InternalUtils.userCommands.find((command) =>
+		const selectedCommand = InternalUtils.userCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			command.check(message.text!),
+			message.text!,
 		);
 
 		if (selectedCommand) {
