@@ -24,7 +24,6 @@ new GroupCommand(
 Границы выбора: ${Number(message.args[1])} и ${secondNum}`,
 			});
 		}
-		console.log(message.args[2]);
 		return message.sendMessage({
 			message: `Я выбираю число ${utils.number.getRandomInt(
 				Number(message.args[1]),
