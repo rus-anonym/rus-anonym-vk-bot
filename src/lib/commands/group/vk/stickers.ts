@@ -4,7 +4,7 @@ import { resolveResource } from "vk-io";
 import VK from "../../../VK/core";
 import { GroupCommand } from "../../../utils/lib/commands";
 
-new GroupCommand(/^(?:!стикеры)(?:\s(.*))?$/i, async function (message, vk) {
+new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message, vk) {
 	await message.loadMessagePayload();
 	let userID;
 	if (message.forwards[0]) {
