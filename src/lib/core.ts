@@ -6,7 +6,7 @@ import VK from "./VK/core";
 import DB from "./DB/core";
 import InternalUtils from "./utils/core";
 
-import "./intervals";
+import "./scheduler";
 import "./commands/loader";
 
 DB.user.connection.once("open", () => {
