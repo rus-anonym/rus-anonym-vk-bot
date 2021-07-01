@@ -18,8 +18,8 @@ jobs:
           script_stop: true
           script: |
             cd /Work/Bots/UserBot
-            git fetch
-            git checkout master
+            git fetch -q
+            git checkout master -q
             rm -rf ./node_modules/
             npm install --legacy-peer-deps
             npm run build
