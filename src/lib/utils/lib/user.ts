@@ -45,8 +45,8 @@ export default class UtilsUser {
 
 		const logsChatId =
 			deletedMessageData.peerType === "chat"
-				? DB.config.vk.group.logs.conversations.conversations
-				: DB.config.vk.group.logs.conversations.messages;
+				? DB.config.VK.group.logs.conversations.conversations
+				: DB.config.VK.group.logs.conversations.messages;
 
 		const uploadedAttachments = await this.uploadAttachments(
 			deletedMessageData.data[deletedMessageData.data.length - 1].attachments,
@@ -102,8 +102,8 @@ export default class UtilsUser {
 	): Promise<void> {
 		const logsChatId =
 			oldMessage.peerType === "chat"
-				? DB.config.vk.group.logs.conversations.conversations
-				: DB.config.vk.group.logs.conversations.messages;
+				? DB.config.VK.group.logs.conversations.conversations
+				: DB.config.VK.group.logs.conversations.messages;
 		const uploadedAttachments = await this.uploadAttachments(
 			oldMessage.data[oldMessage.data.length - 2].attachments,
 			logsChatId,
@@ -159,7 +159,7 @@ export default class UtilsUser {
 					peerId: message.peerId,
 					peerType: message.peerType,
 					senderId:
-						message.isOutbox === true ? DB.config.vk.user.id : message.senderId,
+						message.isOutbox === true ? DB.config.VK.user.id : message.senderId,
 					senderType: message.senderType,
 					created: new Date(message.createdAt * 1000),
 					updated: new Date(message.createdAt * 1000),
@@ -236,7 +236,7 @@ export default class UtilsUser {
 
 		if (!message.isGroup) {
 			const fixedSenderId = message.isOutbox
-				? DB.config.vk.user.id
+				? DB.config.VK.user.id
 				: message.senderId;
 			const userData = await this.getUserData(fixedSenderId);
 			if (message.isChat === false) {

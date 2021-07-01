@@ -15,7 +15,7 @@ new GroupCommand(/(?:^\/grayscale)$/i, async function (message, vk) {
 		image.grayscale();
 
 		const graffiti = await VK.user.getVK().upload.documentGraffiti({
-			group_id: DB.config.vk.group.id,
+			group_id: DB.config.VK.group.id,
 			source: {
 				value: await image.getBufferAsync(JIMP.MIME_PNG),
 				filename: "sticker.png",

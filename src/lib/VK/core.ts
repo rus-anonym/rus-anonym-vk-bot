@@ -53,7 +53,7 @@ class FakesAlpha {
 	public user: FakeUserVK[] = [];
 
 	constructor() {
-		for (const fakeUser of DB.config.vk.userFakes) {
+		for (const fakeUser of DB.config.VK.userFakes) {
 			this.user.push(new FakeUserVK(fakeUser));
 		}
 	}
@@ -68,9 +68,9 @@ class FakesAlpha {
 }
 
 class UserVK extends Worker {
-	public main = new VK({ token: DB.config.vk.user.tokens[0] });
+	public main = new VK({ token: DB.config.VK.user.tokens[0] });
 
-	public additional = DB.config.vk.user.tokens.splice(1).map((token) => {
+	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
 		return new VK({ token });
 	});
 
@@ -104,7 +104,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 								),
 								filename: "event.txt",
 							},
-							peer_id: 2e9 + DB.config.vk.group.logs.conversations.errors,
+							peer_id: 2e9 + DB.config.VK.group.logs.conversations.errors,
 						})
 					).toString(),
 				},
@@ -115,9 +115,9 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 }
 
 class GroupVK extends Worker {
-	public main = new VK({ token: DB.config.vk.group.tokens[0] });
+	public main = new VK({ token: DB.config.VK.group.tokens[0] });
 
-	public additional = DB.config.vk.group.tokens.splice(1).map((token) => {
+	public additional = DB.config.VK.group.tokens.splice(1).map((token) => {
 		return new VK({ token });
 	});
 
@@ -155,7 +155,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 								),
 								filename: "event.txt",
 							},
-							peer_id: 2e9 + DB.config.vk.group.logs.conversations.errors,
+							peer_id: 2e9 + DB.config.VK.group.logs.conversations.errors,
 						})
 					).toString(),
 				},
