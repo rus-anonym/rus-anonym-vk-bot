@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Server
+      - name: Retrieving modified files
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
@@ -18,12 +18,33 @@ jobs:
           script_stop: true
           script: |
             cd /Work/Bots/UserBot
-            git fetch -q
-            git checkout master -q
-            git pull -q
+            git fetch
+            git checkout master
+            git pull
+      - name: build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
+          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          script_stop: true
+          script: |
+            cd /Work/Bots/UserBot
             rm -rf ./node_modules/
             npm install --legacy-peer-deps
             npm run build
-            pm2 start ./dist/main.js --name="UserBot"
+      - name: build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
+          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          script_stop: true
+          script: |
+            cd /Work/Bots/UserBot
+            pm2 start ./dist/main.js --name="UserBot" > /dev/null
+
       - name: Final
         run: echo "Succesfully deployed"
