@@ -20,9 +20,9 @@ jobs:
             cd /Work/Bots/UserBot
             git fetch
             git checkout master
-            yarn build
             rm -rf ./node_modules/
-            yarn
+            npm install --legacy-peer-deps
+            npm run build
             pm2 start ./dist/main.js --name="UserBot"
       - name: Final
         run: echo "Succesfully deployed"
