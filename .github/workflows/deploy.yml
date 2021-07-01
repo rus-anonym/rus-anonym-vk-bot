@@ -14,6 +14,8 @@ jobs:
           node-version: "16"
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
+      - name: Create config.json
+        run: echo ${{ secrets.DEPLOY_BOT_CONFIG }} > ./src/DB/config.json
       - name: Build Appliction
         run: npm run build
       - name: Copy package.json
