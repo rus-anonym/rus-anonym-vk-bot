@@ -22,7 +22,7 @@ new UserCommand(/(?:^!инфо|!info)(?:\s(.*))?$/i, async function (message) {
 		message: `@id${userData.id} (${userData.info.name} ${
 			userData.info.surname
 		}):
-Статус: ${userData.info.status}
+Статус: ${userData.info.extends.status}
 Сообщений: ${userData.messages.length}
 Сообщений в ЛС: ${userData.personalMessages.length}
 Сообщений в беседах: ${
