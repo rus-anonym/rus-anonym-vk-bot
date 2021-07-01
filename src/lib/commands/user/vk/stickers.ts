@@ -1,6 +1,6 @@
 import utils from "rus-anonym-utils";
 
-import DB from "../../../DB/core";
+import VK from "../../../VK/core";
 import { UserCommand } from "../../../utils/lib/commands";
 import InternalUtils from "../../../utils/core";
 
@@ -18,7 +18,7 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 	}
 
 	const userStickers = await utils.vk.user.getUserStickerPacks(
-		DB.config.vk.user.vkme,
+		VK.fakes.getUserFakeAPI().options.token,
 		userID,
 	);
 

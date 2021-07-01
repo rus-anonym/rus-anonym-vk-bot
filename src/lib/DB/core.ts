@@ -15,7 +15,7 @@ abstract class DB {
 
 class UserDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.db.mongo.user.login}:${config.db.mongo.user.password}@${config.db.mongo.user.address}/${config.db.mongo.user.db}`,
+		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.user.name}`,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -55,7 +55,7 @@ class UserDB extends DB {
 
 class GroupDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.db.mongo.group.login}:${config.db.mongo.group.password}@${config.db.mongo.group.address}/${config.db.mongo.group.db}`,
+		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.group.name}`,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
