@@ -8,27 +8,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "16"
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
-      - name: Create config.json
-        run: echo ${{ secrets.DEPLOY_BOT_CONFIG }} > ./src/DB/config.json
-      - name: Build Appliction
-        run: npm run build
-      - name: Copy package.json
-        run: cp ./package.json ./dist/package.json
       - name: Deploy to Server
-        uses: appleboy/scp-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           port: ${{ secrets.DEPLOY_SERVER_PORT }}
           username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
-          source: ./dist
-          target: /Work/Bots/UserBot
-          strip_components: 1
+          script_stop: true
+          script: |
+            cd /Work/Bots/UserBot
+            git fetch
+            git checkout master
+            yarn build
+            rm -rf ./node_modules/
+            yarn
+            pm2 start ./dist/main.js --name="UserBot"
       - name: Final
         run: echo "Succesfully deployed"
