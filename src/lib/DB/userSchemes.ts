@@ -8,13 +8,12 @@ const user = createSchema(
 		info: Type.object({ required: true }).of({
 			name: Type.string({ required: true }),
 			surname: Type.string({ required: true }),
-			status: Type.string({ required: true }),
 			gender: Type.number({ required: true }),
 			last_seen: Type.object().of({
 				date: Type.date({ required: true }),
 				isOnline: Type.boolean({ required: true }),
 			}),
-			extends: Type.object().of({
+			extends: Type.object({ required: true }).of({
 				name_nom: Type.string({ required: true }),
 				name_gen: Type.string({ required: true }),
 				name_dat: Type.string({ required: true }),
@@ -30,7 +29,6 @@ const user = createSchema(
 				domain: Type.string({ required: true }),
 				photo_max_orig: Type.string({ required: true }),
 				status: Type.string({ required: true }),
-				sex: Type.number({ required: true }),
 				counters: Type.object({ required: true }).of({
 					albums: Type.number({ required: true }),
 					audios: Type.number({ required: true }),
