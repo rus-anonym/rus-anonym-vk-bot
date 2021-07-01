@@ -137,25 +137,29 @@ new scheduler.Interval({
 	inform: true,
 });
 
-new scheduler.Interval({
-	source: async () => {
-		const users = await DB.user.models.user.distinct(`id`);
-		for (const chunk of utils.array.splitTo(users, 100)) {
-			const chunkInfo = await VK.user.getVK().api.users.get({
-				user_ids: chunk,
-				fields: UsersGetFields,
-			});
-			for (const userId of chunkInfo) {
-				const user = await DB.user.models.user.findOne({ id: userId });
-				
-			}
-		}
-	},
-	plannedTime: moment().toDate(),
-	intervalTimer: 4 * 60 * 60 * 1000,
-	inform: true,
-	type: "updateUsersData",
-});
+// new scheduler.Interval({
+// 	source: async () => {
+// 		const users = await DB.user.models.user.distinct(`id`);
+// 		const output: string[] = [];
+// 		for (const chunk of utils.array.splitTo(users, 100)) {
+// 			const chunkInfo = await VK.user.getVK().api.users.get({
+// 				user_ids: chunk,
+// 				fields: UsersGetFields,
+// 			});
+// 			for (const userInfo of chunkInfo) {
+// 				const user = await DB.user.models.user.findOne({ id: userInfo.id });
+// 				output.push(
+// 					`Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name})`,
+// 				);
+
+// 			}
+// 		}
+// 	},
+// 	plannedTime: moment().toDate(),
+// 	intervalTimer: 4 * 60 * 60 * 1000,
+// 	inform: true,
+// 	type: "updateUsersData",
+// });
 
 scheduler.events.on("executions", (execution) => {
 	InternalUtils.logger.send(
