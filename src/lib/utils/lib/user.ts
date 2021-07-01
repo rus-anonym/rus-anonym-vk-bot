@@ -283,7 +283,6 @@ export default class UtilsUser {
 				info: {
 					name: VK_USER_DATA.first_name,
 					surname: VK_USER_DATA.last_name,
-					status: VK_USER_DATA.status,
 					gender: VK_USER_DATA.sex || 0,
 					last_seen:
 						VK_USER_DATA.last_seen && VK_USER_DATA.last_seen.time
@@ -292,6 +291,32 @@ export default class UtilsUser {
 									isOnline: false,
 							  }
 							: null,
+					extends: {
+						name_nom: VK_USER_DATA.first_name_nom,
+						name_gen: VK_USER_DATA.first_name_gen,
+						name_dat: VK_USER_DATA.first_name_dat,
+						name_acc: VK_USER_DATA.first_name_acc,
+						name_ins: VK_USER_DATA.first_name_ins,
+						name_abl: VK_USER_DATA.first_name_abl,
+						surname_nom: VK_USER_DATA.last_name_nom,
+						surname_gen: VK_USER_DATA.last_name_gen,
+						surname_dat: VK_USER_DATA.last_name_dat,
+						surname_acc: VK_USER_DATA.last_name_acc,
+						surname_ins: VK_USER_DATA.last_name_ins,
+						surname_abl: VK_USER_DATA.last_name_abl,
+						domain: VK_USER_DATA.domain,
+						photo_max_orig: VK_USER_DATA.photo_max_orig,
+						status: VK_USER_DATA.status,
+						counters: {
+							albums: VK_USER_DATA.counters?.albums,
+							audios: VK_USER_DATA.counters?.audios,
+							friends: VK_USER_DATA.counters?.friends,
+							pages: VK_USER_DATA.counters?.pages,
+							subscriptions: VK_USER_DATA.counters?.subscriptions,
+							videos: VK_USER_DATA.counters?.videos,
+							posts: VK_USER_DATA.counters?.posts,
+						},
+					},
 				},
 				messages: [],
 				personalMessages: [],
