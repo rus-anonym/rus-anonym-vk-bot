@@ -137,29 +137,65 @@ new scheduler.Interval({
 	inform: true,
 });
 
-// new scheduler.Interval({
-// 	source: async () => {
-// 		const users = await DB.user.models.user.distinct(`id`);
-// 		const output: string[] = [];
-// 		for (const chunk of utils.array.splitTo(users, 100)) {
-// 			const chunkInfo = await VK.user.getVK().api.users.get({
-// 				user_ids: chunk,
-// 				fields: UsersGetFields,
-// 			});
-// 			for (const userInfo of chunkInfo) {
-// 				const user = await DB.user.models.user.findOne({ id: userInfo.id });
-// 				output.push(
-// 					`Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name})`,
-// 				);
-
-// 			}
-// 		}
-// 	},
-// 	plannedTime: moment().toDate(),
-// 	intervalTimer: 4 * 60 * 60 * 1000,
-// 	inform: true,
-// 	type: "updateUsersData",
-// });
+new scheduler.Interval({
+	source: async () => {
+		const users = await DB.user.models.user.distinct(`id`);
+		const output: string[] = [];
+		for (const chunk of utils.array.splitTo(users, 100)) {
+			const chunkInfo = await VK.user.getVK().api.users.get({
+				user_ids: chunk,
+				fields: UsersGetFields,
+			});
+			for (const userInfo of chunkInfo) {
+				const user = await DB.user.models.user.findOne({ id: userInfo.id });
+				if (!user) {
+					break;
+				}
+				output.push(
+					`\nLog: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name})`,
+				);
+				if (user.info.name !== userInfo.first_name) {
+					output.push(
+						`Имя изменено: ${user.info.name} => ${userInfo.first_name}`,
+					);
+				}
+				if (user.info.surname !== userInfo.last_name) {
+					output.push(
+						`Фамилия изменена: ${user.info.surname} => ${userInfo.last_name}`,
+					);
+				}
+				if (user.info.extends.domain !== userInfo.domain) {
+					output.push(
+						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
+					);
+				}
+				if (user.info.extends.photo_max_orig !== userInfo.photo_max_orig) {
+					output.push(`Аватарка изменена:
+Было: ${userInfo.extends.photo_max_orig}
+Стало: ${userInfo.photo_max_orig}`);
+				}
+				if (user.info.extends.status !== userInfo.status) {
+					output.push(`Статус изменён:
+Был: ${user.info.extends.status}
+Стал: ${userInfo.status}\n`);
+				}
+				if (
+					utils.array.last(output) ===
+					`\nLog: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name})`
+				) {
+					output.pop();
+				} else {
+					await InternalUtils.user.updateUserData(userInfo, user);
+				}
+			}
+		}
+		return output.join("\n");
+	},
+	plannedTime: moment().toDate(),
+	intervalTimer: 4 * 60 * 60 * 1000,
+	inform: true,
+	type: "updateUsersData",
+});
 
 scheduler.events.on("executions", (execution) => {
 	InternalUtils.logger.send(

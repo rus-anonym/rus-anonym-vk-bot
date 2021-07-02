@@ -29,16 +29,13 @@ const user = createSchema(
 				domain: Type.string({ required: true }),
 				photo_max_orig: Type.string({ required: true }),
 				status: Type.string({ required: true }),
-				counters: Type.object({ required: true }).of({
-					albums: Type.number({ required: true }),
-					audios: Type.number({ required: true }),
-					friends: Type.number({ required: true }),
-					pages: Type.number({ required: true }),
-					subscriptions: Type.number({ required: true }),
-					videos: Type.number({ required: true }),
-					posts: Type.number({ required: true }),
-				}),
 			}),
+			isBot: Type.boolean({ required: true }),
+			isTrack: Type.boolean({ required: true }),
+			full: Type.object().of({
+				stickers: Type.array({ required: true }).of(Type.number()),
+			}),
+			lastUpdate: Type.date({ required: true }),
 		}),
 		messages: Type.array({ required: true }).of(
 			Type.number({ required: true }),
