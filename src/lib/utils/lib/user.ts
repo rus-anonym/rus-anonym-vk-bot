@@ -7,6 +7,7 @@ import {
 	MessageContext,
 	MessageFlagsContext,
 	createCollectIterator,
+	resolveResource,
 } from "vk-io";
 import { ExtractDoc } from "ts-mongoose";
 
@@ -489,6 +490,28 @@ export default class UtilsUser {
 			`Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`
 		) {
 			InternalUtils.logger.send(log, "user_track");
+		}
+	}
+
+	public async reserveScreenName(domain: string): Promise<number> {
+		try {
+			await resolveResource({ resource: domain });
+			throw new Error("Already used");
+		} catch (error) {
+			return (
+				await VK.user.getVK().api.execute({
+					code: `var group = API.groups.create({
+"title": "Reserve domain ${domain}",
+});
+
+API.groups.edit({
+"group_id": group.id,
+"screen_name": "${domain}"
+});
+
+return group.id;`,
+				})
+			).response;
 		}
 	}
 
