@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import moment from "moment";
 import utils from "rus-anonym-utils";
 import {
@@ -12,13 +13,109 @@ import { ExtractDoc } from "ts-mongoose";
 import VK from "../../VK/core";
 import InternalUtils from "../core";
 import DB from "../../DB/core";
-import { FriendsUserXtrLists } from "vk-io/lib/api/schemas/objects";
+import {
+	FriendsUserXtrLists,
+	UsersFields,
+	UsersUserFull,
+} from "vk-io/lib/api/schemas/objects";
 
 interface BirthdayUser {
 	name: string;
 	surname: string;
 	id: number;
 }
+
+const UsersGetFields: UsersFields[] = [
+	"first_name_nom",
+	"first_name_gen",
+	"first_name_dat",
+	"first_name_acc",
+	"first_name_ins",
+	"first_name_abl",
+	"last_name_nom",
+	"last_name_gen",
+	"last_name_dat",
+	"last_name_acc",
+	"last_name_ins",
+	"last_name_abl",
+	"photo_id",
+	"verified",
+	"sex",
+	"bdate",
+	"city",
+	"country",
+	"home_town",
+	"has_photo",
+	"photo_50",
+	"photo_100",
+	"photo_200_orig",
+	"photo_200",
+	"photo_400",
+	"photo_400_orig",
+	"photo_max",
+	"photo_max_orig",
+	"photo_max_size",
+	"online",
+	"lists",
+	"domain",
+	"has_mobile",
+	"contacts",
+	"site",
+	"education",
+	"universities",
+	"schools",
+	"status",
+	"last_seen",
+	"followers_count",
+	"counters",
+	"common_count",
+	"occupation",
+	"nickname",
+	"relatives",
+	"relation",
+	"personal",
+	"connections",
+	"exports",
+	"wall_comments",
+	"activities",
+	"interests",
+	"music",
+	"movies",
+	"tv",
+	"books",
+	"games",
+	"about",
+	"quotes",
+	"can_post",
+	"can_see_all_posts",
+	"can_see_audio",
+	"can_write_private_message",
+	"can_send_friend_request",
+	"is_favorite",
+	"is_hidden_from_feed",
+	"timezone",
+	"screen_name",
+	"maiden_name",
+	"crop_photo",
+	"is_friend",
+	"friend_status",
+	"career",
+	"military",
+	"blacklisted",
+	"blacklisted_by_me",
+	"can_subscribe_posts",
+	"descriptions",
+	"trending",
+	"mutual",
+	"friendship_weeks",
+	"can_invite_to_chats",
+	"stories_archive_count",
+	"video_live_level",
+	"video_live_count",
+	"clips_count",
+	"service_description",
+	"is_dead",
+];
 
 export default class UtilsUser {
 	public async processDeletedMessage(
@@ -275,9 +372,9 @@ export default class UtilsUser {
 			id,
 		});
 		if (!userData) {
-			const [VK_USER_DATA] = await VK.group
+			const [VK_USER_DATA] = await VK.user
 				.getVK()
-				.api.users.get({ user_id: id, fields: ["status", "last_seen", "sex"] });
+				.api.users.get({ user_id: id, fields: UsersGetFields });
 			const newUserData = new DB.user.models.user({
 				id,
 				info: {
@@ -307,16 +404,10 @@ export default class UtilsUser {
 						domain: VK_USER_DATA.domain,
 						photo_max_orig: VK_USER_DATA.photo_max_orig,
 						status: VK_USER_DATA.status,
-						counters: {
-							albums: VK_USER_DATA.counters?.albums,
-							audios: VK_USER_DATA.counters?.audios,
-							friends: VK_USER_DATA.counters?.friends,
-							pages: VK_USER_DATA.counters?.pages,
-							subscriptions: VK_USER_DATA.counters?.subscriptions,
-							videos: VK_USER_DATA.counters?.videos,
-							posts: VK_USER_DATA.counters?.posts,
-						},
 					},
+					isBot: false,
+					isTrack: false,
+					lastUpdate: new Date(),
 				},
 				messages: [],
 				personalMessages: [],
@@ -327,6 +418,78 @@ export default class UtilsUser {
 			return newUserData;
 		}
 		return userData;
+	}
+
+	public async updateUserData(
+		user: UsersUserFull,
+		databaseUser: ExtractDoc<typeof DB.user.schemes.user>,
+	): Promise<void> {
+		databaseUser.info.name = user.first_name;
+		databaseUser.info.extends.name_nom = user.first_name_nom!;
+		databaseUser.info.extends.name_gen = user.first_name_gen!;
+		databaseUser.info.extends.name_dat = user.first_name_dat!;
+		databaseUser.info.extends.name_acc = user.first_name_acc!;
+		databaseUser.info.extends.name_ins = user.first_name_ins!;
+		databaseUser.info.extends.name_abl = user.first_name_abl!;
+
+		databaseUser.info.surname = user.last_name;
+		databaseUser.info.extends.surname_nom = user.last_name_nom!;
+		databaseUser.info.extends.surname_gen = user.last_name_gen!;
+		databaseUser.info.extends.surname_dat = user.last_name_dat!;
+		databaseUser.info.extends.surname_acc = user.last_name_acc!;
+		databaseUser.info.extends.surname_ins = user.last_name_ins!;
+		databaseUser.info.extends.surname_abl = user.last_name_abl!;
+
+		databaseUser.info.extends.domain = user.domain!;
+
+		databaseUser.info.extends.photo_max_orig = user.photo_max_orig!;
+
+		databaseUser.info.extends.status = user.status!;
+
+		databaseUser.info.lastUpdate = new Date();
+
+		databaseUser.markModified("info");
+
+		await databaseUser.save();
+	}
+
+	public async updateTrackUserData(
+		id: number,
+		userInfo?: UsersUserFull,
+	): Promise<void> {
+		if (!userInfo) {
+			[userInfo] = await VK.user.getVK().api.users.get({
+				user_ids: id.toString(),
+				fields: UsersGetFields,
+			});
+		}
+		const databaseUser = await DB.user.models.user.findOne({ id: userInfo.id });
+		if (!databaseUser) {
+			throw new Error("User not found");
+		}
+
+		let log = `Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`;
+		const userStickerPacks = await utils.vk.user.getUserStickerPacks(
+			VK.fakes.getUserFakeAPI().options.token,
+			userInfo.id,
+		);
+		const newUserStickerPacks = userStickerPacks.items.filter(
+			(x) => x.purchaseDate! < databaseUser.info.lastUpdate,
+		);
+		if (newUserStickerPacks.length > 0) {
+			const totalPrice = utils.array.number.total(
+				newUserStickerPacks.map((x) => x.price),
+			);
+			log += `\nУ пользователя появились новые стикеры: ${newUserStickerPacks
+				.map((x) => x.name)
+				.join(",")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
+		}
+		if (
+			log !==
+			`Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`
+		) {
+			InternalUtils.logger.send(log, "user_track");
+		}
 	}
 
 	public async getFriendsBirthday(date: Date): Promise<BirthdayUser[]> {
