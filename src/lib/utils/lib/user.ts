@@ -499,21 +499,15 @@ export default class UtilsUser {
 			await resolveResource({ resource: domain, api: VK.group.getVK().api });
 		} catch (error) {
 			if (error instanceof ResourceError) {
-				return (
-					await VK.user.getVK().api.execute({
-						code: `var group = API.groups.create({
-"title": "Reserve domain ${domain}",
-});
-
-API.groups.edit({
-"group_id": group.id,
-"screen_name": "${domain}",
-"access": 2
-});
-
-return group.id;`,
-					})
-				).response;
+				const group = await VK.user.getVK().api.groups.create({
+					title: `Reserve ${domain}`,
+				});
+				await VK.user.getVK().api.groups.edit({
+					group_id: group.id,
+					screen_name: domain,
+					access: 2,
+				});
+				return group.id;
 			} else {
 				throw new Error("Unknown error");
 			}
