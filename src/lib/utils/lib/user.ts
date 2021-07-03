@@ -7,6 +7,8 @@ import {
 	MessageContext,
 	MessageFlagsContext,
 	createCollectIterator,
+	resolveResource,
+	ResourceError,
 } from "vk-io";
 import { ExtractDoc } from "ts-mongoose";
 
@@ -490,6 +492,33 @@ export default class UtilsUser {
 		) {
 			InternalUtils.logger.send(log, "user_track");
 		}
+	}
+
+	public async reserveScreenName(domain: string): Promise<number> {
+		try {
+			await resolveResource({ resource: domain, api: VK.group.getVK().api });
+		} catch (error) {
+			if (error instanceof ResourceError) {
+				return (
+					await VK.user.getVK().api.execute({
+						code: `var group = API.groups.create({
+"title": "Reserve domain ${domain}",
+});
+
+API.groups.edit({
+"group_id": group.id,
+"screen_name": "${domain}",
+"access": 2
+});
+
+return group.id;`,
+					})
+				).response;
+			} else {
+				throw new Error("Unknown error");
+			}
+		}
+		throw new Error("Domain already used");
 	}
 
 	public async getFriendsBirthday(date: Date): Promise<BirthdayUser[]> {

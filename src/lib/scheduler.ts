@@ -141,7 +141,7 @@ new scheduler.Interval({
 	source: async () => {
 		const users = await DB.user.models.user.distinct(`id`);
 		const output: string[] = [];
-		for (const chunk of utils.array.splitTo(users, 100)) {
+		for (const chunk of utils.array.splitTo(users, 250)) {
 			const chunkInfo = await VK.user.getVK().api.users.get({
 				user_ids: chunk,
 				fields: UsersGetFields,
@@ -168,16 +168,6 @@ new scheduler.Interval({
 					output.push(
 						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 					);
-				}
-				if (user.info.extends.photo_max_orig !== userInfo.photo_max_orig) {
-					output.push(`Аватарка изменена:
-Было: ${userInfo.extends.photo_max_orig}
-Стало: ${userInfo.photo_max_orig}`);
-				}
-				if (user.info.extends.status !== userInfo.status) {
-					output.push(`Статус изменён:
-Был: ${user.info.extends.status}
-Стал: ${userInfo.status}\n`);
 				}
 				if (
 					utils.array.last(output) ===

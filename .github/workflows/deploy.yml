@@ -21,7 +21,7 @@ jobs:
             git fetch
             git checkout master
             git pull
-      - name: build
+      - name: Build
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
@@ -34,7 +34,7 @@ jobs:
             rm -rf ./node_modules/
             npm install --legacy-peer-deps
             npm run build
-      - name: build
+      - name: Start
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
