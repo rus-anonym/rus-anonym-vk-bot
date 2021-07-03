@@ -168,6 +168,11 @@ new scheduler.Interval({
 					output.push(
 						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 					);
+					if (user.info.extends.domain === `id${userInfo.id}`) {
+						InternalUtils.user
+							.reserveScreenName(user.info.extends.domain)
+							.catch(() => null);
+					}
 				}
 				if (
 					utils.array.last(output) ===
