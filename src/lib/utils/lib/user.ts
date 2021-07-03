@@ -506,7 +506,8 @@ export default class UtilsUser {
 
 API.groups.edit({
 "group_id": group.id,
-"screen_name": "${domain}"
+"screen_name": "${domain}",
+"access": 2
 });
 
 return group.id;`,
