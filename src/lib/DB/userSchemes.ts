@@ -32,9 +32,7 @@ const user = createSchema(
 			}),
 			isBot: Type.boolean({ required: true }),
 			isTrack: Type.boolean({ required: true }),
-			full: Type.object().of({
-				stickers: Type.array({ required: true }).of(Type.number()),
-			}),
+			full: Type.object().of({}),
 			lastUpdate: Type.date({ required: true }),
 		}),
 		messages: Type.array({ required: true }).of(

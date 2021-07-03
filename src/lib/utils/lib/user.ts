@@ -454,23 +454,42 @@ export default class UtilsUser {
 	}
 
 	public async updateTrackUserData(
-		user: UsersUserFull,
-		databaseUser: ExtractDoc<typeof DB.user.schemes.user>,
+		id: number,
+		userInfo?: UsersUserFull,
 	): Promise<void> {
-		if (!databaseUser.info.full) {
-			databaseUser.info.full = {
-				stickers: [],
-			};
+		if (!userInfo) {
+			[userInfo] = await VK.user.getVK().api.users.get({
+				user_ids: id.toString(),
+				fields: UsersGetFields,
+			});
 		}
-		let log = `Track Log: @id${user.id} (${user.first_name} ${user.last_name}):`;
+		const databaseUser = await DB.user.models.user.findOne({ id: userInfo.id });
+		if (!databaseUser) {
+			throw new Error("User not found");
+		}
+
+		let log = `Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`;
 		const userStickerPacks = await utils.vk.user.getUserStickerPacks(
 			VK.fakes.getUserFakeAPI().options.token,
-			user.id,
+			userInfo.id,
 		);
-		const userStickerPacksIDs = userStickerPacks.items.map((x) => x.id);
-		const diff = databaseUser.info.full!.stickers.filter(
-			(x) => userStickerPacksIDs.indexOf(x) < 0,
+		const newUserStickerPacks = userStickerPacks.items.filter(
+			(x) => x.purchaseDate! < databaseUser.info.lastUpdate,
 		);
+		if (newUserStickerPacks.length > 0) {
+			const totalPrice = utils.array.number.total(
+				newUserStickerPacks.map((x) => x.price),
+			);
+			log += `\nУ пользователя появились новые стикеры: ${newUserStickerPacks
+				.map((x) => x.name)
+				.join(",")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
+		}
+		if (
+			log !==
+			`Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`
+		) {
+			InternalUtils.logger.send(log, "user_track");
+		}
 	}
 
 	public async getFriendsBirthday(date: Date): Promise<BirthdayUser[]> {

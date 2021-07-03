@@ -11,7 +11,8 @@ type Log =
 	| "rest"
 	| "error"
 	| "friend_activity"
-	| "info";
+	| "info"
+	| "user_track";
 export default class UtilsLogger {
 	public async send(
 		message: string,
@@ -36,6 +37,10 @@ export default class UtilsLogger {
 				break;
 			case "info":
 				selectedChat = DB.config.VK.group.logs.conversations.info;
+				prefix = "ℹ";
+				break;
+			case "user_track":
+				selectedChat = DB.config.VK.group.logs.conversations.userTrack;
 				prefix = "ℹ";
 				break;
 			case "friend_activity":
