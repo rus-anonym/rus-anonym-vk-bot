@@ -141,7 +141,7 @@ new scheduler.Interval({
 	source: async () => {
 		const users = await DB.user.models.user.distinct(`id`);
 		const output: string[] = [];
-		for (const chunk of utils.array.splitTo(users, 250)) {
+		for (const chunk of utils.array.splitTo(users, 1000)) {
 			const chunkInfo = await VK.user.getVK().api.users.get({
 				user_ids: chunk,
 				fields: UsersGetFields,
@@ -168,6 +168,11 @@ new scheduler.Interval({
 					output.push(
 						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 					);
+					if (user.info.extends.domain === `id${userInfo.id}`) {
+						InternalUtils.user
+							.reserveScreenName(user.info.extends.domain)
+							.catch(() => null);
+					}
 				}
 				if (
 					utils.array.last(output) ===
@@ -182,7 +187,7 @@ new scheduler.Interval({
 		return output.join("\n");
 	},
 	plannedTime: moment().toDate(),
-	intervalTimer: 4 * 60 * 60 * 1000,
+	intervalTimer: 1 * 60 * 60 * 1000,
 	inform: true,
 	type: "updateUsersData",
 });
