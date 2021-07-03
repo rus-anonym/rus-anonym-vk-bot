@@ -169,16 +169,6 @@ new scheduler.Interval({
 						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 					);
 				}
-				if (user.info.extends.photo_max_orig !== userInfo.photo_max_orig) {
-					output.push(`Аватарка изменена:
-Было: ${userInfo.info.extends.photo_max_orig}
-Стало: ${userInfo.photo_max_orig}`);
-				}
-				if (user.info.extends.status !== userInfo.status) {
-					output.push(`Статус изменён:
-Был: ${user.info.extends.status}
-Стал: ${userInfo.status}`);
-				}
 				if (
 					utils.array.last(output) ===
 					`\nLog: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name})`
