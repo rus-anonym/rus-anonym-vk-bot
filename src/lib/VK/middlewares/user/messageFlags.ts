@@ -11,6 +11,9 @@ function userMessageFlags(event: MessageFlagsContext, next: () => void): void {
 		InternalUtils.user.processDeletedMessage(event);
 		return;
 	}
+	if (event.isAudioMessageListened) {
+		return;
+	}
 	next();
 }
 
