@@ -219,7 +219,7 @@ new scheduler.Interval({
 				}
 			}
 		}
-		return output.join("\n");
+		return output.length > 0 ? output.join("\n") : null;
 	},
 	plannedTime: moment().toDate(),
 	intervalTimer: 1 * 60 * 60 * 1000,
