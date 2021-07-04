@@ -35,6 +35,7 @@ const user = createSchema(
 			full: Type.object().of({
 				friends: Type.array({ required: true }).of(Type.number()),
 				hiddenFriends: Type.array({ required: true }).of(Type.number()),
+				groups: Type.array({ required: true }).of(Type.number()),
 			}),
 			lastUpdate: Type.date({ required: true }),
 		}),

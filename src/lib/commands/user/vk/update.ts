@@ -1,7 +1,8 @@
 import { UserCommand } from "../../../utils/lib/commands";
+
 import InternalUtils from "../../../utils/core";
 
-new UserCommand(/(?:^!track)(?:\s(.*))?$/i, async function (message) {
+new UserCommand(/^(?:!update)$/i, async function (message) {
 	await message.loadMessagePayload();
 	let userID;
 	try {
@@ -13,14 +14,9 @@ new UserCommand(/(?:^!track)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	const userData = await InternalUtils.user.getUserData(userID);
+	await InternalUtils.user.updateTrackUserData(userID);
 
-	userData.info.isTrack = !userData.info.isTrack;
-	userData.markModified("info.isTrack");
-	await userData.save();
-
-	return await message.reply({
-		message: `Отслеживание пользователя @id${userID} ${
-			userData.info.isTrack ? "включено" : "отключено"
-		}`,
+	return await message.editMessage({
+		message: `Данные о @id${userID} (${userData.info.extends.name_abl} ${userData.info.extends.surname_abl}) обновлены`,
 	});
 });

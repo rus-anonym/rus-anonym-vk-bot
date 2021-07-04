@@ -226,7 +226,7 @@ new scheduler.Interval({
 		return output.length > 0 ? output.join("\n") : null;
 	},
 	plannedTime: moment().toDate(),
-	intervalTimer: 1 * 60 * 60 * 1000,
+	intervalTimer: 30 * 60 * 1000,
 	inform: true,
 	type: "updateUsersData",
 });
