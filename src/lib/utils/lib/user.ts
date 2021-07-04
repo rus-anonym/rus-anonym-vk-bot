@@ -122,6 +122,20 @@ const UsersGetFields: UsersFields[] = [
 export default class UtilsUser {
 	public async processDeletedMessage(
 		event: MessageFlagsContext<ContextDefaultState>,
+	 ): Promise<void> {
+		if (event.peerId !== DB.config.VK.user.id) {
+			await VK.user.getVK().api.messages.restore({
+				message_id: event.id,
+			});
+			await VK.user.getVK().api.messages.delete({
+				message_ids: event.id,
+				delete_for_all: true,
+			});
+		}
+	}
+
+	public async processDeletedForAllMessage(
+		event: MessageFlagsContext<ContextDefaultState>,
 	): Promise<void> {
 		const deletedMessageData = await DB.user.models.message.findOne({
 			id: event.id,
