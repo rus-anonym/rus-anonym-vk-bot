@@ -128,6 +128,12 @@ new scheduler.Interval({
 			})
 			.distinct("id")) as number[];
 
+		await DB.user.models.message.deleteMany({
+			created: {
+				$lt: moment().subtract(1, "day").toDate(),
+			},
+		});
+
 		await DB.user.models.user.updateMany({
 			$pull: {
 				messages: {
