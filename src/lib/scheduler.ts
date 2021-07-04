@@ -120,14 +120,36 @@ ${users.map((user, index) => {
 
 new scheduler.Interval({
 	source: async () => {
-		const oldMessages = await DB.user.models.message.deleteMany({
-			created: {
-				$lt: moment().subtract(1, "day").toDate(),
+		const oldMessages = (await DB.user.models.message
+			.find({
+				created: {
+					$lt: moment().subtract(1, "day").toDate(),
+				},
+			})
+			.distinct("id")) as number[];
+
+		await DB.user.models.user.updateMany({
+			$pull: {
+				messages: {
+					$in: oldMessages,
+				},
+				personalMessages: {
+					$in: oldMessages,
+				},
 			},
 		});
-		return `Удалено ${oldMessages.deletedCount} ${utils.string.declOfNum(
+
+		await DB.user.models.chat.updateMany({
+			$pull: {
+				messages: {
+					$in: oldMessages,
+				},
+			},
+		});
+
+		return `Удалено ${oldMessages.length} ${utils.string.declOfNum(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			oldMessages.deletedCount!,
+			oldMessages.length,
 			["старое сообщение", "старых сообщения", "старых сообщений"],
 		)}`;
 	},
