@@ -1,10 +1,27 @@
-import { VK, API } from "vk-io";
+import { VK, API, CallbackService } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
+import Captcha from "./captcha";
+
 import userMiddlewares from "./middlewares/user";
 import groupMiddlewares from "./middlewares/group";
+
+const callbackService = new CallbackService();
+
+callbackService.onCaptcha(async (payload, retry) => {
+	const captcha = new Captcha(payload.src);
+	const key = await captcha.resolve();
+	try {
+		await retry(key);
+		captcha.good();
+		InternalUtils.logger.send("Капча распознана", "captcha");
+	} catch (error) {
+		captcha.bad();
+		InternalUtils.logger.send("Капча не распознана", "captcha");
+	}
+});
 
 abstract class Worker {
 	/**
@@ -44,7 +61,7 @@ class FakeUserVK extends FakeWorker {
 	constructor(data: FakeUserData) {
 		super();
 		for (const token of data.tokens) {
-			this.additional.push(new API({ token }));
+			this.additional.push(new API({ token, callbackService }));
 		}
 	}
 }
@@ -68,10 +85,10 @@ class FakesAlpha {
 }
 
 class UserVK extends Worker {
-	public main = new VK({ token: DB.config.VK.user.tokens[0] });
+	public main = new VK({ token: DB.config.VK.user.tokens[0], callbackService });
 
 	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
-		return new VK({ token });
+		return new VK({ token, callbackService });
 	});
 
 	public configure() {
@@ -115,10 +132,13 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 }
 
 class GroupVK extends Worker {
-	public main = new VK({ token: DB.config.VK.group.tokens[0] });
+	public main = new VK({
+		token: DB.config.VK.group.tokens[0],
+		callbackService,
+	});
 
 	public additional = DB.config.VK.group.tokens.splice(1).map((token) => {
-		return new VK({ token });
+		return new VK({ token, callbackService });
 	});
 
 	public configure() {
