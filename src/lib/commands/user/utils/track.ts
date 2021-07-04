@@ -15,7 +15,7 @@ new UserCommand(/(?:^!track)(?:\s(.*))?$/i, async function (message) {
 	const userData = await InternalUtils.user.getUserData(userID);
 
 	userData.info.isTrack = !userData.info.isTrack;
-
+	userData.markModified("info.isTrack");
 	await userData.save();
 
 	return await message.reply({
