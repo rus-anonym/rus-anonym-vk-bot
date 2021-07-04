@@ -75,6 +75,18 @@ String: ${graffiti.toString()}\n`;
 			++i;
 			text += `${i}. link
 Title: ${link.title}\n`;
+			try {
+				const articleData = await utils.vk.article.getByURL(link.url);
+				text += `Это статья:
+${articleData.shares_formatted}
+${articleData.views_formatted}
+Опубликована: ${moment(articleData.published).format("DD.MM.YYYY, HH:mm:ss")}
+String: article${articleData.owner_id}_${articleData.id}_${
+					articleData.access_hash
+				}`;
+			} catch {
+				//
+			}
 		}
 		for (const market of message.getAttachments(`market`)) {
 			++i;
