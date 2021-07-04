@@ -120,14 +120,42 @@ ${users.map((user, index) => {
 
 new scheduler.Interval({
 	source: async () => {
-		const oldMessages = await DB.user.models.message.deleteMany({
+		const oldMessages = (await DB.user.models.message
+			.find({
+				created: {
+					$lt: moment().subtract(1, "day").toDate(),
+				},
+			})
+			.distinct("id")) as number[];
+
+		await DB.user.models.message.deleteMany({
 			created: {
 				$lt: moment().subtract(1, "day").toDate(),
 			},
 		});
-		return `Удалено ${oldMessages.deletedCount} ${utils.string.declOfNum(
+
+		await DB.user.models.user.updateMany({
+			$pull: {
+				messages: {
+					$in: oldMessages,
+				},
+				personalMessages: {
+					$in: oldMessages,
+				},
+			},
+		});
+
+		await DB.user.models.chat.updateMany({
+			$pull: {
+				messages: {
+					$in: oldMessages,
+				},
+			},
+		});
+
+		return `Удалено ${oldMessages.length} ${utils.string.declOfNum(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			oldMessages.deletedCount!,
+			oldMessages.length,
 			["старое сообщение", "старых сообщения", "старых сообщений"],
 		)}`;
 	},
@@ -148,7 +176,11 @@ new scheduler.Interval({
 			});
 			for (const userInfo of chunkInfo) {
 				const user = await DB.user.models.user.findOne({ id: userInfo.id });
-				if (!user) {
+				if (!user || user.info.isBot) {
+					break;
+				}
+				if (user.info.isTrack) {
+					InternalUtils.user.updateTrackUserData(user.id, userInfo);
 					break;
 				}
 				output.push(
@@ -168,10 +200,17 @@ new scheduler.Interval({
 					output.push(
 						`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 					);
-					if (user.info.extends.domain === `id${userInfo.id}`) {
-						InternalUtils.user
-							.reserveScreenName(user.info.extends.domain)
-							.catch(() => null);
+					if (user.info.extends.domain !== `id${userInfo.id}`) {
+						try {
+							await InternalUtils.user.reserveScreenName(
+								user.info.extends.domain,
+							);
+							output.push(
+								`Удачная попытка резервирования @${user.info.extends.domain}`,
+							);
+						} catch (error) {
+							output.push(`Неудачная попытка резервирования домена`);
+						}
 					}
 				}
 				if (
@@ -184,7 +223,7 @@ new scheduler.Interval({
 				}
 			}
 		}
-		return output.join("\n");
+		return output.length > 0 ? output.join("\n") : null;
 	},
 	plannedTime: moment().toDate(),
 	intervalTimer: 1 * 60 * 60 * 1000,

@@ -9,6 +9,7 @@ import {
 	createCollectIterator,
 	resolveResource,
 	ResourceError,
+	Objects,
 } from "vk-io";
 import { ExtractDoc } from "ts-mongoose";
 
@@ -121,6 +122,20 @@ const UsersGetFields: UsersFields[] = [
 
 export default class UtilsUser {
 	public async processDeletedMessage(
+		event: MessageFlagsContext<ContextDefaultState>,
+	): Promise<void> {
+		if (event.peerId !== DB.config.VK.user.id) {
+			await VK.user.getVK().api.messages.restore({
+				message_id: event.id,
+			});
+			await VK.user.getVK().api.messages.delete({
+				message_ids: event.id,
+				delete_for_all: true,
+			});
+		}
+	}
+
+	public async processDeletedForAllMessage(
 		event: MessageFlagsContext<ContextDefaultState>,
 	): Promise<void> {
 		const deletedMessageData = await DB.user.models.message.findOne({
@@ -465,18 +480,29 @@ export default class UtilsUser {
 				fields: UsersGetFields,
 			});
 		}
+
 		const databaseUser = await DB.user.models.user.findOne({ id: userInfo.id });
 		if (!databaseUser) {
 			throw new Error("User not found");
 		}
 
+		const isFirstExtendInfo = !databaseUser.info.full;
+
+		if (isFirstExtendInfo) {
+			databaseUser.info.full = {
+				friends: [],
+				hiddenFriends: [],
+			};
+		}
+
 		let log = `Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`;
+
 		const userStickerPacks = await utils.vk.user.getUserStickerPacks(
 			VK.fakes.getUserFakeAPI().options.token,
 			userInfo.id,
 		);
 		const newUserStickerPacks = userStickerPacks.items.filter(
-			(x) => x.purchaseDate! < databaseUser.info.lastUpdate,
+			(x) => x.purchaseDate! > databaseUser.info.lastUpdate,
 		);
 		if (newUserStickerPacks.length > 0) {
 			const totalPrice = utils.array.number.total(
@@ -484,8 +510,68 @@ export default class UtilsUser {
 			);
 			log += `\nУ пользователя появились новые стикеры: ${newUserStickerPacks
 				.map((x) => x.name)
-				.join(",")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
+				.join(", ")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
 		}
+
+		const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
+			api: VK.fakes.getUserFakeAPI(),
+			method: "friends.get",
+			params: {
+				user_id: id,
+				fields: ["first_name", "last_name"],
+			},
+			countPerRequest: 2500,
+			parallelRequests: 2,
+		});
+		const friendsIDs: number[] = [];
+
+		log += `\nFriends Logs:`;
+
+		for await (const chunk of friendsIterator) {
+			for (const friend of chunk.items) {
+				if (!databaseUser.info.full!.friends.includes(friend.id)) {
+					if (!isFirstExtendInfo) {
+						log += `\nДобавлен новый друг: @id${friend.id} (${friend.first_name} ${friend.last_name})`;
+					}
+					databaseUser.info.full!.friends.push(friend.id);
+				}
+				friendsIDs.push(friend.id);
+			}
+		}
+
+		const friendsDiff = databaseUser.info.full!.friends.filter((x) => {
+			return friendsIDs.indexOf(x) < 0;
+		});
+
+		if (friendsDiff.length > 0) {
+			const friendsDiffInfo = await VK.user.getVK().api.users.get({
+				user_ids: friendsDiff.map((x) => String(x)),
+			});
+			for (const user of friendsDiffInfo) {
+				try {
+					const userFriends = await VK.user.getVK().api.friends.get({
+						user_ids: user.id.toString(),
+					});
+					if (userFriends.includes(user.id)) {
+						log += `\nДобавлен в скрытые: @id${user.id} (${user.first_name} ${user.last_name})`;
+						databaseUser.info.full!.hiddenFriends.push(user.id);
+					} else {
+						log += `\nУдалён из друзей: @id${user.id} (${user.first_name} ${user.last_name})`;
+					}
+				} catch (error) {
+					log += `\nУдалён из друзей: @id${user.id} (${user.first_name} ${user.last_name})`;
+				}
+			}
+
+			databaseUser.info.full!.friends = friendsIDs;
+		}
+
+		if (log.endsWith(`\nFriends Logs:`)) {
+			log = log.slice(0, -14);
+		}
+
+		await this.updateUserData(userInfo, databaseUser);
+
 		if (
 			log !==
 			`Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`
