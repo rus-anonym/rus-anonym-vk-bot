@@ -176,7 +176,11 @@ new scheduler.Interval({
 			});
 			for (const userInfo of chunkInfo) {
 				const user = await DB.user.models.user.findOne({ id: userInfo.id });
-				if (!user) {
+				if (!user || user.info.isBot) {
+					break;
+				}
+				if (user.info.isTrack) {
+					InternalUtils.user.updateTrackUserData(user.id, userInfo);
 					break;
 				}
 				output.push(
