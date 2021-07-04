@@ -492,6 +492,7 @@ export default class UtilsUser {
 			databaseUser.info.full = {
 				friends: [],
 				hiddenFriends: [],
+				groups: [],
 			};
 		}
 
@@ -514,14 +515,13 @@ export default class UtilsUser {
 		}
 
 		const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
-			api: VK.fakes.getUserFakeAPI(),
+			api: VK.user.getVK().api,
 			method: "friends.get",
 			params: {
 				user_id: id,
 				fields: ["first_name", "last_name"],
 			},
 			countPerRequest: 2500,
-			parallelRequests: 2,
 		});
 		const friendsIDs: number[] = [];
 
@@ -568,6 +568,49 @@ export default class UtilsUser {
 
 		if (log.endsWith(`\nFriends Logs:`)) {
 			log = log.slice(0, -14);
+		}
+
+		const groupsIterator = createCollectIterator<Objects.GroupsGroupFull>({
+			api: VK.user.getVK().api,
+			method: "groups.get",
+			params: {
+				user_id: id,
+				extended: 1,
+			},
+			countPerRequest: 500,
+		});
+		const groupsIDs: number[] = [];
+
+		log += `\nGroups Logs:`;
+
+		for await (const chunk of groupsIterator) {
+			for (const group of chunk.items) {
+				if (!databaseUser.info.full!.groups.includes(group.id)) {
+					if (!isFirstExtendInfo) {
+						log += `\nВступил в новую группу: @club${group.id} (${group.name})`;
+					}
+					databaseUser.info.full!.groups.push(group.id);
+				}
+				groupsIDs.push(group.id);
+			}
+		}
+
+		const groupsDiff = databaseUser.info.full!.groups.filter((x) => {
+			return groupsIDs.indexOf(x) < 0;
+		});
+
+		if (groupsDiff.length > 0) {
+			const groupsDiffInfo = await VK.user.getVK().api.groups.getById({
+				group_ids: groupsDiff.map((x) => String(x)),
+			});
+			for (const group of groupsDiffInfo) {
+				log += `\nВышел из группы: @club${group.id} (${group.name})`;
+			}
+			databaseUser.info.full!.groups = groupsIDs;
+		}
+
+		if (log.endsWith(`\nGroups Logs:`)) {
+			log = log.slice(0, -13);
 		}
 
 		await this.updateUserData(userInfo, databaseUser);
