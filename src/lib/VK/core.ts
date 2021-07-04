@@ -124,10 +124,10 @@ class GroupVK extends Worker {
 	public configure() {
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
-		this.main.updates.on("group_join", groupMiddlewares.groupJoin);
-		this.main.updates.on("group_leave", groupMiddlewares.groupLeave);
 		this.main.updates.on("user_block", groupMiddlewares.userBlock);
 		this.main.updates.on("user_unblock", groupMiddlewares.userUnblock);
+		this.main.updates.on("group_join", () => null);
+		this.main.updates.on("group_leave", () => null);
 		this.main.updates.on("like_add", () => null);
 		this.main.updates.on("like_remove", () => null);
 		this.main.updates.on("message_reply", () => null);
