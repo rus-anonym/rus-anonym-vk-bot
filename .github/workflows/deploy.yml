@@ -45,6 +45,7 @@ jobs:
           script_stop: true
           script: |
             cd /Work/Bots/UserBot
+            pm2 stop ./dist/main.js > /dev/null
             pm2 start ./dist/main.js --name="UserBot" > /dev/null
 
       - name: Final
