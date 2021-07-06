@@ -121,12 +121,23 @@ const UsersGetFields: UsersFields[] = [
 ];
 
 export default class UtilsUser {
+	private splittedWord = `defbca1234567890`.split("");
+
 	public async processDeletedMessage(
 		event: MessageFlagsContext<ContextDefaultState>,
 	): Promise<void> {
 		if (event.peerId !== DB.config.VK.user.id) {
 			await VK.user.getVK().api.messages.restore({
 				message_id: event.id,
+			});
+			await VK.user.getVK().api.messages.edit({
+				message_id: event.id,
+				message: this.getRandomMessage(),
+				peer_id: event.peerId,
+				attachment: "null",
+				keep_forward_messages: 0,
+				keep_snippets: 0,
+				dont_parse_links: 0,
 			});
 			await VK.user.getVK().api.messages.delete({
 				message_ids: event.id,
@@ -833,5 +844,13 @@ export default class UtilsUser {
 		}
 
 		return response;
+	}
+
+	private getRandomMessage() {
+		let output = "";
+		for (let i = 0; i < 85; ++i) {
+			output += utils.array.random(this.splittedWord);
+		}
+		return output;
 	}
 }

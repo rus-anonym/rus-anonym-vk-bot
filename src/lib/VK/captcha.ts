@@ -53,8 +53,8 @@ class Captcha {
 	public async resolve(): Promise<string> {
 		await this.loadImage();
 		await this.sendToRuCaptcha();
-		for (let i = 0; i < 10; ++i) {
-			await utils.sleep(7500);
+		for (let i = 0; i < 30; ++i) {
+			await utils.sleep(2000);
 			await this.checkResolve();
 			if (this.answer !== undefined) {
 				i = 10;

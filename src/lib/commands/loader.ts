@@ -39,6 +39,7 @@ import "./group/utils/who";
 import "./group/utils/eval";
 import "./group/utils/nick";
 import "./group/utils/commands";
+import "./group/utils/about";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
