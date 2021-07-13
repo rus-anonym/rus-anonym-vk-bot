@@ -22,7 +22,12 @@ new scheduler.Interval({
 
 new scheduler.Interval({
 	source: cleanOldMessages,
-	plannedTime: moment().toDate(),
+	plannedTime: moment()
+		.add(1, "day")
+		.set("hour", 0)
+		.set("minute", 0)
+		.set("second", 0)
+		.toDate(),
 	type: "cleanOldMessages",
 	intervalTimer: 24 * 60 * 60 * 1000,
 	inform: true,
