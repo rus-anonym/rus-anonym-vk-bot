@@ -1,24 +1,34 @@
 import { VK, API, CallbackService } from "vk-io";
 import utils from "rus-anonym-utils";
+import { Captcha, Solver } from "rucaptcha-io";
 
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
-import Captcha from "./captcha";
 
 import userMiddlewares from "./middlewares/user";
 import groupMiddlewares from "./middlewares/group";
 
+const solver = new Solver({
+	token: DB.config.rucaptcha.token,
+});
+
 const callbackService = new CallbackService();
 
 callbackService.onCaptcha(async (payload, retry) => {
-	const captcha = new Captcha(payload.src);
-	const key = await captcha.resolve();
+	const captcha = new Captcha(payload.src, solver);
+	const key = await captcha.auto();
 	try {
 		await retry(key);
-		captcha.good();
-		InternalUtils.logger.send("Капча распознана", "captcha");
+		captcha.markAnswerAsGood();
+		InternalUtils.logger.send(
+			`SID: ${payload.sid}
+Type: ${payload.type}
+${payload.request ? `Method: ${payload.request.method}` : ""}
+Status: Good`,
+			"captcha",
+		);
 	} catch (error) {
-		captcha.bad();
+		captcha.markAnswerAsBad();
 		InternalUtils.logger.send("Капча не распознана", "captcha");
 	}
 });
