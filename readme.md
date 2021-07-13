@@ -81,7 +81,7 @@ To assemble a project, use
 ```bash
 $ yarn build
 # Or
-$ npm build
+$ npm run build
 ```
 
 ## Project launch
