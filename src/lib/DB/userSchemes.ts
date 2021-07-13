@@ -98,6 +98,8 @@ const message = createSchema(
 		created: Type.date({ required: true }),
 		updated: Type.date({ required: true }),
 		isOutbox: Type.boolean({ required: true }),
+		isDeleted: Type.boolean({ required: true }),
+		isDeletedForAll: Type.boolean({ required: true }),
 		events: Type.array({ required: true }).of(event),
 		data: Type.array({ required: true }).of(Type.mixed({ required: true })),
 	},
