@@ -23,6 +23,7 @@ export default class UtilsCommands {
 			)}
 High Quality Audio: ${audio.isHq ? "Да" : "Нет"}
 Добавлен: ${moment(audio.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+URL: ${audio.url}
 String: ${audio.toString()}\n`;
 		}
 		for (const audioMessage of message.getAttachments("audio_message")) {
@@ -151,14 +152,14 @@ String: ${poll.toString()}\n`;
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})) as any
 			).items as StoreGetProductsResponse;
-			const [stickerPackInfo] = await utils.vk.user.getStickersInfo(
+			const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
 				VK.user.getVK().api.options.token,
 				[sticker.productId],
 			);
 			text += `${i}. sticker 	
 ID: ${sticker.id}
 Pack ID: ${sticker.productId} 
-Название: ${stickerPackInfo.name}
+Название: ${stickerPackInfo.title}
 Автор: ${stickerPackInfo.author}
 Описание: ${stickerPackInfo.description}${
 				stickerPackInfo.isFree
@@ -168,9 +169,10 @@ Pack ID: ${sticker.productId}
 					  }₽`
 			}
 Ссылка: ${stickerPackInfo.url}
+Copyright: ${stickerPackInfo.copyright}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} ${
-				stickerPackInfo.isStyle ? "стиль" : "стикерпак"
-			}
+				stickerPackInfo.isAnimation ? "анимированный" : "обычный"
+			} ${stickerPackInfo.isStyle ? "стиль" : "стикерпак"}
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 				userStickerPackInfo.purchase_date! * 1000,
 			).format("DD.MM.YYYY, HH:mm:ss")}\n`;

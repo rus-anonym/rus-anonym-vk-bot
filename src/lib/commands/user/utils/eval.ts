@@ -2,20 +2,33 @@ import { UserCommand } from "../../../utils/lib/commands";
 
 new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {
-		return message.send(`нет кода`);
+		return message.reply(`нет кода`);
 	}
 	try {
 		const answer: string | number | JSON = await eval(message.args[1]);
 		if (typeof answer === "string") {
-			return await message.send(`Результат: ${answer}`);
+			return await message.reply(`Результат: ${answer}`, {
+				disable_mentions: true,
+				dont_parse_links: true,
+			});
 		} else if (typeof answer === "number") {
-			return await message.send(`Значение: ${answer}`);
+			return await message.reply(`Значение: ${answer}`, {
+				disable_mentions: true,
+				dont_parse_links: true,
+			});
 		} else {
-			return await message.send(
+			return await message.reply(
 				`JSON Stringify: ${JSON.stringify(answer, null, "　\t")}`,
+				{
+					disable_mentions: true,
+					dont_parse_links: true,
+				},
 			);
 		}
 	} catch (err) {
-		return await message.send(`Ошибка: ${err.toString()}`);
+		return await message.reply(`Ошибка: ${err.toString()}`, {
+			disable_mentions: true,
+			dont_parse_links: true,
+		});
 	}
 });

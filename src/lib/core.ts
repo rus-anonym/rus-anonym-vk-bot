@@ -6,7 +6,7 @@ import VK from "./VK/core";
 import DB from "./DB/core";
 import InternalUtils from "./utils/core";
 
-import "./scheduler";
+import "./scheduler/core";
 import "./commands/loader";
 
 DB.user.connection.once("open", () => {
@@ -36,14 +36,16 @@ DB.group.connection.once("open", () => {
 });
 
 process.on("warning", async (warning) => {
-	InternalUtils.logger.send(
-		`Unhandled warning\n${warning.toString()}`,
-		"error",
-	);
+	InternalUtils.logger
+		.send(`Unhandled warning\n${warning.toString()}`, "error")
+		.catch(() => {
+			console.log(warning);
+		});
 });
 process.on("uncaughtException", async (error) => {
-	InternalUtils.logger.send(
-		`Unhandled uncaughtException\n${error.toString()}`,
-		"error",
-	);
+	InternalUtils.logger
+		.send(`Unhandled uncaughtException\n${error.toString()}`, "error")
+		.catch(() => {
+			console.log(error);
+		});
 });

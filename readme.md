@@ -4,28 +4,11 @@
 
 ## The bot is made to simplify the work in the VK dialogues.
 
-## Installation [Manual]
-
-```bash
-# Delete package-lock.json
-$ rm package-lock.json
-
-# Install dependencies
-$ npm install
-# Or
-$ yarn add
-```
-
-This command should install **mime-type**, **moment**, **rus-anonym-utils**, **simple-scheduler-task**, **vk-io**, and **vk-io-question** libraries.
-
-- _We are deleting `package-lock.json` before running `npm install` to fix npm errors failing to install git dependencies._
-  - _You can also use `npm ci` and it will work too._
-
-## Installation [Auto]
+## Installation
 
 ```bash
 # Install dependencies
-$ npm
+$ npm install --legacy-peer-deps
 # Or
 $ yarn
 ```
@@ -34,42 +17,60 @@ $ yarn
 
 ### You must create a config.json file in the ./src/DB directory with the following parameters
 
-```json
+```jsonc
 {
-	"vk": {
+	"VK": {
 		"user": {
-			"token": "Token from your page",
-			"id": "Your page's numerical identifier"
-		},
+			"id": 0, // User ID
+			"tokens": [], // Array with user tokens
+			"vkme": "", // User VK Me token
+			"friends": {
+				"list": {
+					"viewOnline": [] // array with the IDs of the lists of friends who can see online
+				}
+			}
+		}, // User
+		"userFakes": [
+			{
+				"id": 0, // Fake user ID
+				"tokens": [] // Array with tokens from a fake user
+			}
+		], // Array with fake users
 		"group": {
-			"token": "Token group from which notifications will be received",
-			"id": "Group numeric identifier"
-		},
-		"logs": {
-			"conversations": {
-				"errors": "Chat (group) ID to which notifications will be received",
-				"rest": "Chat (group) ID to which notifications will be received",
-				"messages": "Chat (group) ID to which notifications will be received",
-				"conversations": "Chat (group) ID to which notifications will be received"
+			"id": 0, // Group ID
+			"tokens": [], // Array with group tokens
+			"logs": {
+				"conversations": {
+					"messages": 0,
+					"conversations": 0,
+					"rest": 0,
+					"errors": 0,
+					"friends_activity": 0,
+					"info": 0,
+					"userTrack": 0,
+					"captcha": 0
+				} // Conversation identifiers, for the group bot
+			}
+		} // Group
+	},
+	"DBMS": {
+		"mongo": {
+			"login": "", // Mongo DB login
+			"password": "", // Mongo DB password
+			"address": "", // Adress to MongoDB
+			"database": {
+				"user": {
+					"name": "" // UserBot database name
+				},
+				"group": {
+					"name": "" // GroupBot database name
+				}
 			}
 		}
 	},
-	"stels": {
-		"enable": false,
-		"mode": "bomb",
-		"messages": [],
-		"exception": []
-	},
-	"censoringWord": [
-		"vto.pe",
-		"@all",
-		"@everyone",
-		"@тут",
-		"@все",
-		"@здесь",
-		"@here",
-		"@online"
-	]
+	"rucaptcha": {
+		"token": "" // RuCaptcha token
+	}
 }
 ```
 
@@ -88,5 +89,5 @@ $ npm build
 To start a project, use
 
 ```bash
-$ node ./out/main.js
+$ node ./dist/main.js
 ```

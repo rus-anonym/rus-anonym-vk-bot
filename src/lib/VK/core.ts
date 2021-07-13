@@ -21,15 +21,37 @@ callbackService.onCaptcha(async (payload, retry) => {
 		await retry(key);
 		captcha.markAnswerAsGood();
 		InternalUtils.logger.send(
-			`SID: ${payload.sid}
+			`Captcha solve report
+SID: ${payload.sid}
 Type: ${payload.type}
-${payload.request ? `Method: ${payload.request.method}` : ""}
+${
+	payload.request
+		? `
+Method: ${payload.request.method}
+Params: ${JSON.stringify(payload.request.params, null, "\t")}
+Attempt: ${payload.request.retries}`
+		: ""
+}
 Status: Good`,
 			"captcha",
 		);
 	} catch (error) {
 		captcha.markAnswerAsBad();
-		InternalUtils.logger.send("Капча не распознана", "captcha");
+		InternalUtils.logger.send(
+			`Captcha solve report
+SID: ${payload.sid}
+Type: ${payload.type}
+${
+	payload.request
+		? `
+Method: ${payload.request.method}
+Params: ${JSON.stringify(payload.request.params, null, "\t")}
+Attempt: ${payload.request.retries}`
+		: ""
+}
+Status: Bad`,
+			"captcha",
+		);
 	}
 });
 
@@ -95,10 +117,24 @@ class FakesAlpha {
 }
 
 class UserVK extends Worker {
-	public main = new VK({ token: DB.config.VK.user.tokens[0], callbackService });
+	public main = new VK({
+		token: DB.config.VK.user.tokens[0],
+		callbackService,
+		apiVersion: "5.157",
+		apiHeaders: {
+			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+		},
+	});
 
 	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
-		return new VK({ token, callbackService });
+		return new VK({
+			token,
+			callbackService,
+			apiVersion: "5.157",
+			apiHeaders: {
+				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+			},
+		});
 	});
 
 	public configure() {
