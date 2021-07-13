@@ -117,10 +117,24 @@ class FakesAlpha {
 }
 
 class UserVK extends Worker {
-	public main = new VK({ token: DB.config.VK.user.tokens[0], callbackService });
+	public main = new VK({
+		token: DB.config.VK.user.tokens[0],
+		callbackService,
+		apiVersion: "5.157",
+		apiHeaders: {
+			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+		},
+	});
 
 	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
-		return new VK({ token, callbackService });
+		return new VK({
+			token,
+			callbackService,
+			apiVersion: "5.157",
+			apiHeaders: {
+				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+			},
+		});
 	});
 
 	public configure() {
