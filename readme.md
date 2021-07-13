@@ -23,7 +23,12 @@ $ yarn
 		"user": {
 			"id": 0, // User ID
 			"tokens": [], // Array with user tokens
-			"vkme": "" // User VK Me token
+			"vkme": "", // User VK Me token
+			"friends": {
+				"list": {
+					"viewOnline": [] // array with the IDs of the lists of friends who can see online
+				}
+			}
 		}, // User
 		"userFakes": [
 			{
