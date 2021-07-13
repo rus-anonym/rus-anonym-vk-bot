@@ -37,7 +37,21 @@ Status: Good`,
 		);
 	} catch (error) {
 		captcha.markAnswerAsBad();
-		InternalUtils.logger.send("Капча не распознана", "captcha");
+		InternalUtils.logger.send(
+			`Captcha solve report
+SID: ${payload.sid}
+Type: ${payload.type}
+${
+	payload.request
+		? `
+Method: ${payload.request.method}
+Params: ${JSON.stringify(payload.request.params, null, "\t")}
+Attempt: ${payload.request.retries}`
+		: ""
+}
+Status: Bad`,
+			"captcha",
+		);
 	}
 });
 
