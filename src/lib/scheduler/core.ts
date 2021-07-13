@@ -6,6 +6,7 @@ import InternalUtils from "../utils/core";
 import updateUserData from "./tasks/updateUsersData";
 import cleanOldMessages from "./tasks/cleanOldMessages";
 import getBirthdays from "./tasks/getBirthdays";
+import updateOnlinePrivacySettings from "./tasks/updateOnlinePrivacySettings";
 
 new scheduler.Interval({
 	source: getBirthdays,
@@ -39,6 +40,14 @@ new scheduler.Interval({
 	intervalTimer: 30 * 60 * 1000,
 	inform: true,
 	type: "updateUsersData",
+});
+
+new scheduler.Interval({
+	source: updateOnlinePrivacySettings,
+	plannedTime: moment().toDate(),
+	intervalTimer: 30 * 60 * 1000,
+	inform: true,
+	type: "updateOnlinePrivacySettings",
 });
 
 scheduler.events.on("executions", (execution) => {
