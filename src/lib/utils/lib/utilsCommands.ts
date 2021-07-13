@@ -23,6 +23,7 @@ export default class UtilsCommands {
 			)}
 High Quality Audio: ${audio.isHq ? "Да" : "Нет"}
 Добавлен: ${moment(audio.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
+URL: ${audio.url}
 String: ${audio.toString()}\n`;
 		}
 		for (const audioMessage of message.getAttachments("audio_message")) {
