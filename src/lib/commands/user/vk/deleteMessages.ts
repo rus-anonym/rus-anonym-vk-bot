@@ -15,6 +15,8 @@ new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 				},
 				senderId: DB.config.VK.user.id,
 				peerId: context.peerId,
+				isDeleted: false,
+				isDeletedForAll: false,
 				created: {
 					$gte: moment().subtract(1, "day").toDate(),
 				},
