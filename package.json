@@ -14,18 +14,18 @@
 		"cheerio": "^1.0.0-rc.10",
 		"jimp": "^0.16.1",
 		"moment": "^2.29.1",
-		"mongoose": "^5.13.0",
+		"mongoose": "^5.13.2",
 		"rucaptcha-io": "^1.0.0",
-		"rus-anonym-utils": "^2.5.1",
+		"rus-anonym-utils": "^2.5.2",
 		"simple-scheduler-task": "^3.2.3",
 		"ts-mongoose": "^0.0.24",
 		"typescript-eslint": "^0.0.1-alpha.0",
-		"vk-io": "^4.3.1"
+		"vk-io": "^4.3.2"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^4.28.1",
-		"@typescript-eslint/parser": "^4.28.1",
-		"eslint": "^7.29.0",
-		"typescript": "^4.3.4"
+		"@typescript-eslint/eslint-plugin": "^4.28.3",
+		"@typescript-eslint/parser": "^4.28.3",
+		"eslint": "^7.30.0",
+		"typescript": "^4.3.5"
 	}
 }
