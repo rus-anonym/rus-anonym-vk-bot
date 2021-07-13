@@ -18,10 +18,11 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 	const userStickers = await utils.vk.user.getUserStickerPacks(
 		VK.fakes.getUserFakeAPI().options.token,
 		userID,
+		true,
 	);
 
 	const stickersText = userStickers.items
-		.map((stickerPack) => stickerPack.name)
+		.map((stickerPack) => stickerPack.title)
 		.join(", ");
 
 	return message.sendMessage({
@@ -35,9 +36,11 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 			"стикерпак",
 			"стикерпака",
 			"стикерпаков",
-		])} на сумму ${utils.number.separator(userStickers.total_price * 7, ".")}₽
-Платных: ${userStickers.paid}
-Бесплатных: ${userStickers.free}
+		])} на сумму ${utils.number.separator(userStickers.totalPrice * 7, ".")}₽
+Платных: ${userStickers.stats.paid}
+Бесплатных: ${userStickers.stats.free}
+Анимированных: ${userStickers.stats.animated}
+Стилей: ${userStickers.stats.styles}
 \n\n${stickersText.length < 3900 ? stickersText : ""}`,
 		disable_mentions: true,
 	});

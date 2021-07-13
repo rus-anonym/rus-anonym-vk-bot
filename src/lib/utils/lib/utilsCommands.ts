@@ -158,7 +158,7 @@ String: ${poll.toString()}\n`;
 			text += `${i}. sticker 	
 ID: ${sticker.id}
 Pack ID: ${sticker.productId} 
-Название: ${stickerPackInfo.name}
+Название: ${stickerPackInfo.title}
 Автор: ${stickerPackInfo.author}
 Описание: ${stickerPackInfo.description}${
 				stickerPackInfo.isFree

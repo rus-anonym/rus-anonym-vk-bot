@@ -512,6 +512,7 @@ export default class UtilsUser {
 		const userStickerPacks = await utils.vk.user.getUserStickerPacks(
 			VK.fakes.getUserFakeAPI().options.token,
 			userInfo.id,
+			true,
 		);
 		const newUserStickerPacks = userStickerPacks.items.filter(
 			(x) => x.purchaseDate! > databaseUser.info.lastUpdate,
@@ -521,7 +522,7 @@ export default class UtilsUser {
 				newUserStickerPacks.map((x) => x.price),
 			);
 			log += `\nУ пользователя появились новые стикеры: ${newUserStickerPacks
-				.map((x) => x.name)
+				.map((x) => x.title)
 				.join(", ")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
 		}
 

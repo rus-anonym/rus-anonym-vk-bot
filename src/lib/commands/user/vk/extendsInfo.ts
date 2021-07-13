@@ -325,16 +325,17 @@ https://vk.com/id${group.id}
 	const userStickers = await utils.vk.user.getUserStickerPacks(
 		VK.fakes.getUserFakeAPI().options.token,
 		userData.id,
+		true,
 	);
 
 	reportText += `Стикеры пользователя: 
 Потрачено: ${utils.number.separator(
-		userStickers.total_price,
+		userStickers.totalPrice,
 		".",
-	)} голосов, либо ${utils.number.separator(userStickers.total_price * 7, ".")}₽
+	)} голосов, либо ${utils.number.separator(userStickers.totalPrice * 7, ".")}₽
 ${userStickers.items
 	.map((pack, index) => {
-		return `${index}. ${pack.name}
+		return `${index}. ${pack.title}
 Автор: ${pack.author}
 Описание: ${pack.description}
 Цена: ${pack.price}`;
