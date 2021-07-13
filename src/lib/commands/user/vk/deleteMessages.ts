@@ -1,68 +1,56 @@
-import { createCollectIterator, Objects } from "vk-io";
 import utils from "rus-anonym-utils";
 import moment from "moment";
 
+import DB from "../../../DB/core";
+import VK from "../../../VK/core";
+
 import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
 
-new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context, vk) {
-	const iterator = createCollectIterator({
-		api: vk.api,
-		method: "messages.getHistory",
-		countPerRequest: 200,
-		params: {
-			peer_id: context.peerId,
+new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
+	const messagesForDelete = (await DB.user.models.message.aggregate([
+		{
+			$match: {
+				id: {
+					$ne: context.id,
+				},
+				senderId: DB.config.VK.user.id,
+				peerId: context.peerId,
+				isDeleted: false,
+				isDeletedForAll: false,
+				created: {
+					$gte: moment().subtract(1, "day").toDate(),
+				},
+			},
 		},
-		maxCount: Number(context.args[1]) || 10,
-	});
+		{
+			$sort: {
+				created: -1,
+			},
+		},
+		{
+			$limit: Number(context.args[1] || 10),
+		},
+		{
+			$group: {
+				_id: "$id",
+			},
+		},
+	])) as Array<{ _id: number }>;
 
-	const minimalTimeForDelete = moment().subtract(1, "day");
+	let deletedMessages = 0;
 
-	for await (const chunk of iterator) {
-		const splittedChunk = utils.array.splitOn(chunk.items, 1000);
-
-		for (const nestedChunk of splittedChunk as Objects.MessagesMessage[][]) {
-			const filteredNestedChunk = nestedChunk.filter(
-				(x) => x.out === 1 && moment(x.date * 1000) > minimalTimeForDelete,
-			);
-
-			// for (const message of filteredNestedChunk) {
-			// 	if (
-			// 		message.text ||
-			// 		(message.attachments &&
-			// 			message.attachments[0] &&
-			// 			message.attachments[0].type !== "sticker")
-			// 	) {
-			// 		await VK.user.getVK().api.messages.edit({
-			// 			message_id: message.id,
-			// 			peer_id: message.peer_id,
-			// 			keep_snippets: 0,
-			// 			keep_forward_messages: 0,
-			// 			dont_parse_links: true,
-			// 			attachment: "",
-			// 			message: (() => {
-			// 				let output = "";
-			// 				const words = "defbca1234567890";
-			// 				while (output.length < 4000) {
-			// 					output += words[Math.floor(Math.random() * words.length)];
-			// 				}
-			// 				return output;
-			// 			})(),
-			// 		});
-			// 	}
-			// }
-			await vk.api.messages.delete({
-				delete_for_all: 1,
-				message_ids: filteredNestedChunk.map((x) => x.id),
-			});
-		}
+	for (const chunk of utils.array.splitTo(messagesForDelete, 1000)) {
+		await VK.user.getVK().api.messages.delete({
+			message_ids: chunk.map((x) => x._id),
+			delete_for_all: 1,
+		});
+		deletedMessages += chunk.length;
 	}
 
-	InternalUtils.logger.send(
-		`Очистил ${
-			Number(context.args[1]) || 10
-		} сообщений в чате https://vk.com/im?sel=${context.isChat ? "c" : ""}${
-			context.peerId
-		}`,
-	);
+	await context.editMessage({
+		message: `Удалил ${deletedMessages} ${utils.string.declOfNum(
+			deletedMessages,
+			["сообщение", `сообщения`, `сообщений`],
+		)}`,
+	});
 });

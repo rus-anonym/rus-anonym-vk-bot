@@ -126,6 +126,20 @@ export default class UtilsUser {
 	public async processDeletedMessage(
 		event: MessageFlagsContext<ContextDefaultState>,
 	): Promise<void> {
+		DB.user.models.message
+			.findOne({
+				id: event.id,
+			})
+			.then((deletedMessageData) => {
+				if (deletedMessageData) {
+					deletedMessageData.isDeleted = true;
+					deletedMessageData.isDeletedForAll = false;
+					deletedMessageData.markModified("isDeleted");
+					deletedMessageData.markModified("isDeletedForAll");
+					deletedMessageData.save();
+				}
+			});
+
 		if (event.peerId !== DB.config.VK.user.id) {
 			await VK.user.getVK().api.messages.restore({
 				message_id: event.id,
@@ -160,6 +174,12 @@ export default class UtilsUser {
 			);
 			return;
 		}
+
+		deletedMessageData.isDeleted = false;
+		deletedMessageData.isDeletedForAll = true;
+		deletedMessageData.markModified("isDeleted");
+		deletedMessageData.markModified("isDeletedForAll");
+		deletedMessageData.save();
 
 		if (deletedMessageData.isOutbox) {
 			return;
@@ -288,6 +308,8 @@ export default class UtilsUser {
 					senderType: message.senderType,
 					created: new Date(message.createdAt * 1000),
 					updated: new Date(message.createdAt * 1000),
+					isDeleted: false,
+					isDeletedForAll: false,
 					isOutbox: message.isOutbox,
 					events: [
 						{
