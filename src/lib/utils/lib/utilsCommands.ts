@@ -168,6 +168,7 @@ Pack ID: ${sticker.productId}
 					  }₽`
 			}
 Ссылка: ${stickerPackInfo.url}
+Copyright: ${stickerPackInfo.copyright}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} ${
 				stickerPackInfo.isAnimation ? "анимированный" : "обычный"
 			} ${stickerPackInfo.isStyle ? "стиль" : "стикерпак"}
