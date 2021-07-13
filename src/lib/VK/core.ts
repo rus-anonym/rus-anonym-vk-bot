@@ -21,9 +21,17 @@ callbackService.onCaptcha(async (payload, retry) => {
 		await retry(key);
 		captcha.markAnswerAsGood();
 		InternalUtils.logger.send(
-			`SID: ${payload.sid}
+			`Captcha solve report
+SID: ${payload.sid}
 Type: ${payload.type}
-${payload.request ? `Method: ${payload.request.method}` : ""}
+${
+	payload.request
+		? `
+Method: ${payload.request.method}
+Params: ${JSON.stringify(payload.request.params, null, "\t")}
+Attempt: ${payload.request.retries}`
+		: ""
+}
 Status: Good`,
 			"captcha",
 		);
