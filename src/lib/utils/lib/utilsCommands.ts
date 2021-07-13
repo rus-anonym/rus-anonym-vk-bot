@@ -151,7 +151,7 @@ String: ${poll.toString()}\n`;
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})) as any
 			).items as StoreGetProductsResponse;
-			const [stickerPackInfo] = await utils.vk.user.getStickersInfo(
+			const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
 				VK.user.getVK().api.options.token,
 				[sticker.productId],
 			);
@@ -169,8 +169,8 @@ Pack ID: ${sticker.productId}
 			}
 Ссылка: ${stickerPackInfo.url}
 Это ${stickerPackInfo.isFree ? "бесплатный" : "платный"} ${
-				stickerPackInfo.isStyle ? "стиль" : "стикерпак"
-			}
+				stickerPackInfo.isAnimation ? "анимированный" : "обычный"
+			} ${stickerPackInfo.isStyle ? "стиль" : "стикерпак"}
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 				userStickerPackInfo.purchase_date! * 1000,
 			).format("DD.MM.YYYY, HH:mm:ss")}\n`;

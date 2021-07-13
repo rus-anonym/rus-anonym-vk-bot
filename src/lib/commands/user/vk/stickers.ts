@@ -42,7 +42,9 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 Платных: ${userStickers.stats.paid}
 Бесплатных: ${userStickers.stats.free}
 Анимированных: ${userStickers.stats.animated}
+Обычных: ${userStickers.stats.notAnimated}
 Стилей: ${userStickers.stats.styles}
+Не стилей: ${userStickers.stats.notStyles}
 \n\n${stickersText.length < 3900 ? stickersText : ""}`,
 		disable_mentions: true,
 	});
