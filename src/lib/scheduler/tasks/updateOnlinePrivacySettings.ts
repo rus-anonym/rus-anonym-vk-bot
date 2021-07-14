@@ -20,23 +20,49 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 	).settings.find((x: { key: string }) => x.key === "online").value.owners
 		.allowed as number[];
 
-	const usersSeeOnlineDiff = currentUsersSeeOnlineStatus.filter((x) => {
-		return uniqueUsersList.indexOf(x) < 0;
-	});
-
-	if (usersSeeOnlineDiff.length > 0) {
+	if (
+		utils.array.number.total(uniqueUsersList) !==
+		utils.array.number.total(currentUsersSeeOnlineStatus)
+	) {
+		const newUsersWhoSeeOnline = uniqueUsersList.filter(
+			(x) => currentUsersSeeOnlineStatus.indexOf(x) < 0,
+		);
+		const usersWhoNotSeeOnline = currentUsersSeeOnlineStatus.filter(
+			(x) => uniqueUsersList.indexOf(x) < 0,
+		);
 		await VK.user.getVK().api.call("account.setPrivacy", {
 			key: "online",
 			value: uniqueUsersList,
 		});
-		let text = `Данным пользователя дано право на просмотр статуса онлайна:`;
 		const usersInfo = await VK.group.getVK().api.users.get({
-			user_ids: uniqueUsersList.join(),
+			user_ids: utils.array
+				.makeUnique(newUsersWhoSeeOnline.concat(usersWhoNotSeeOnline))
+				.join(),
 		});
-		for (let i = 0; i < usersInfo.length; ++i) {
-			text += `\n${Number(i) + 1}. @id${usersInfo[i].id} (${
-				usersInfo[i].first_name
-			} ${usersInfo[i].last_name})`;
+		let text = "";
+		let i = 0;
+		if (newUsersWhoSeeOnline.length > 0) {
+			text += `Данным пользователя дано право на просмотр статуса онлайна:`;
+			for (const user of newUsersWhoSeeOnline) {
+				const userData = usersInfo.find((x) => x.id === user);
+				if (userData) {
+					++i;
+					text += `\n${i}. @id${userData.id} (${userData.first_name}  ${userData.last_name})`;
+				}
+			}
+		}
+		if (usersWhoNotSeeOnline.length > 0) {
+			i = 0;
+			text += `${
+				text === "" ? "" : "\n\n"
+			}У данных пользователей право на просмотр статуса онлайна убрано:`;
+			for (const user of usersWhoNotSeeOnline) {
+				const userData = usersInfo.find((x) => x.id === user);
+				if (userData) {
+					++i;
+					text += `\n${i}. @id${userData.id} (${userData.first_name}  ${userData.last_name})`;
+				}
+			}
 		}
 		return text;
 	} else {
