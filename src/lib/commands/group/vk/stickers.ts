@@ -40,7 +40,7 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 Обычных: ${userStickers.stats.packs.simple}
 Анимированных: ${userStickers.stats.packs.animated}
 
-Бесплатных: ${userStickers.stats.packs.freeSimple}
+Бесплатных обычных: ${userStickers.stats.packs.freeSimple}
 Бесплатных анимированных: ${userStickers.stats.packs.freeAnimated}
 Всего бесплатных: ${userStickers.stats.packs.free}
 
@@ -52,7 +52,7 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 Обычных: ${userStickers.stats.styles.simple}
 Анимированных: ${userStickers.stats.styles.animated}
 
-Бесплатных: ${userStickers.stats.styles.freeSimple}
+Бесплатных обычных: ${userStickers.stats.styles.freeSimple}
 Бесплатных анимированных: ${userStickers.stats.styles.freeAnimated}
 Всего бесплатных: ${userStickers.stats.styles.free}
 
