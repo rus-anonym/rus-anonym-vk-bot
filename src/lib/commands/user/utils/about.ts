@@ -11,7 +11,7 @@ Chats: ${await DB.user.models.chat.countDocuments()}
 Group DB Stats:
 Users: ${await DB.group.models.user.countDocuments()}
 
-Author: @rus_anonym
-Source Code: https://vk.com/rus_anonym`,
+Author: https://vk.com/rus_anonym
+Source Code: https://github.com/RusAnonym/rus-anonym-vk-bot`,
 	});
 });

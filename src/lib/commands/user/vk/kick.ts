@@ -15,7 +15,7 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 	try {
 		userID = await InternalUtils.userCommands.getUserId(message);
 	} catch (error) {
-		return await message.sendMessage({
+		return await message.editMessage({
 			message: error.message,
 		});
 	}
