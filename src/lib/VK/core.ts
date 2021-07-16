@@ -93,7 +93,17 @@ class FakeUserVK extends FakeWorker {
 	constructor(data: FakeUserData) {
 		super();
 		for (const token of data.tokens) {
-			this.additional.push(new API({ token, callbackService }));
+			this.additional.push(
+				new API({
+					token,
+					callbackService,
+					apiVersion: "5.157",
+					apiHeaders: {
+						"User-Agent":
+							"VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
+					},
+				}),
+			);
 		}
 	}
 }
@@ -122,7 +132,7 @@ class UserVK extends Worker {
 		callbackService,
 		apiVersion: "5.157",
 		apiHeaders: {
-			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
 		},
 	});
 
@@ -132,7 +142,7 @@ class UserVK extends Worker {
 			callbackService,
 			apiVersion: "5.157",
 			apiHeaders: {
-				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; Rus; BOT; ru; 0x0)",
+				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
 			},
 		});
 	});

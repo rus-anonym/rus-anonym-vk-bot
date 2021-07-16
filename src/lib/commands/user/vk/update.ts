@@ -8,7 +8,7 @@ new UserCommand(/^(?:!update)$/i, async function (message) {
 	try {
 		userID = await InternalUtils.userCommands.getUserId(message);
 	} catch (error) {
-		return await message.sendMessage({
+		return await message.editMessage({
 			message: error.message,
 		});
 	}

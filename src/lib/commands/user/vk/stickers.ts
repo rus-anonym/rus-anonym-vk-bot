@@ -12,7 +12,7 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 	try {
 		userID = await InternalUtils.userCommands.getUserId(message);
 	} catch (error) {
-		return await message.sendMessage({
+		return await message.editMessage({
 			message: error.message,
 		});
 	}
@@ -38,28 +38,28 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 Бесплатных: ${userStickers.stats.free}
 
 Паков: ${userStickers.stats.packs.count}
-Обычных: ${userStickers.stats.packs.simple}
-Анимированных: ${userStickers.stats.packs.animated}
+⠀Обычных: ${userStickers.stats.packs.simple}
+⠀Анимированных: ${userStickers.stats.packs.animated}
 
-Бесплатных обычных: ${userStickers.stats.packs.freeSimple}
-Бесплатных анимированных: ${userStickers.stats.packs.freeAnimated}
-Всего бесплатных: ${userStickers.stats.packs.free}
+⠀Бесплатных обычных: ${userStickers.stats.packs.freeSimple}
+⠀Бесплатных анимированных: ${userStickers.stats.packs.freeAnimated}
+⠀Всего бесплатных: ${userStickers.stats.packs.free}
 
-Платных обычных: ${userStickers.stats.packs.paidSimple}
-Платных анимированных: ${userStickers.stats.packs.paidAnimated}
-Всего платных: ${userStickers.stats.packs.paid}
+⠀Платных обычных: ${userStickers.stats.packs.paidSimple}
+⠀Платных анимированных: ${userStickers.stats.packs.paidAnimated}
+⠀Всего платных: ${userStickers.stats.packs.paid}
 
 Стилей: ${userStickers.stats.styles.count}
-Обычных: ${userStickers.stats.styles.simple}
-Анимированных: ${userStickers.stats.styles.animated}
+⠀Обычных: ${userStickers.stats.styles.simple}
+⠀Анимированных: ${userStickers.stats.styles.animated}
 
-Бесплатных обычных: ${userStickers.stats.styles.freeSimple}
-Бесплатных анимированных: ${userStickers.stats.styles.freeAnimated}
-Всего бесплатных: ${userStickers.stats.styles.free}
+⠀Бесплатных обычных: ${userStickers.stats.styles.freeSimple}
+⠀Бесплатных анимированных: ${userStickers.stats.styles.freeAnimated}
+⠀Всего бесплатных: ${userStickers.stats.styles.free}
 
-Платных обычных: ${userStickers.stats.styles.paidSimple}
-Платных анимированных: ${userStickers.stats.styles.paidAnimated}
-Всего платных: ${userStickers.stats.styles.paid}`,
+⠀Платных обычных: ${userStickers.stats.styles.paidSimple}
+⠀Платных анимированных: ${userStickers.stats.styles.paidAnimated}
+⠀Всего платных: ${userStickers.stats.styles.paid}`,
 		disable_mentions: true,
 	});
 });
