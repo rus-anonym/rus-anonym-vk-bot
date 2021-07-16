@@ -12,6 +12,6 @@ Group DB Stats:
 Users: ${await DB.group.models.user.countDocuments()}
 
 Author: @rus_anonym
-Source Code: https://github.com/RusAnonym/rus-anonym-vk-bot`,
+Source Code: https://vk.com/rus_anonym`,
 	});
 });
