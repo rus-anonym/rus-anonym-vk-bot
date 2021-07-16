@@ -21,6 +21,7 @@ import {
 	UsersFields,
 	UsersUserFull,
 } from "vk-io/lib/api/schemas/objects";
+import { GroupsGetByIdLegacyResponse } from "vk-io/lib/api/schemas/responses";
 
 interface BirthdayUser {
 	name: string;
@@ -634,9 +635,11 @@ export default class UtilsUser {
 		});
 
 		if (groupsDiff.length > 0) {
-			const groupsDiffInfo = await VK.user.getVK().api.groups.getById({
-				group_ids: groupsDiff.map((x) => String(x)),
-			});
+			const groupsDiffInfo = (
+				(await VK.user.getVK().api.groups.getById({
+					group_ids: groupsDiff.map((x) => String(x)),
+				})) as unknown as any
+			).groups as GroupsGetByIdLegacyResponse;
 			for (const group of groupsDiffInfo) {
 				log += `\nВышел из группы: @club${group.id} (${group.name})`;
 			}
