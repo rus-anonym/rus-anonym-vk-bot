@@ -33,6 +33,9 @@ const user = createSchema(
 			isBot: Type.boolean({ required: true }),
 			isTrack: Type.boolean({ required: true }),
 			full: Type.object({ default: {} }).of({
+				settings: Type.object({ required: true, default: {} }).of({
+					getAudios: Type.boolean({ required: true, default: true }),
+				}),
 				friends: Type.array({ required: true, default: [] }).of(Type.number()),
 				hiddenFriends: Type.array({ required: true, default: [] }).of(
 					Type.number(),
@@ -53,6 +56,7 @@ const user = createSchema(
 	},
 	{
 		versionKey: false,
+		minimize: false,
 	},
 );
 

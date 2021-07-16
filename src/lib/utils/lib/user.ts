@@ -524,9 +524,13 @@ export default class UtilsUser {
 
 		if (isFirstExtendInfo) {
 			databaseUser.info.full = {
+				settings: {
+					getAudios: true,
+				},
 				friends: [],
 				hiddenFriends: [],
 				groups: [],
+				audios: [],
 			};
 		}
 
@@ -638,6 +642,7 @@ export default class UtilsUser {
 			const groupsDiffInfo = (
 				(await VK.user.getVK().api.groups.getById({
 					group_ids: groupsDiff.map((x) => String(x)),
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})) as unknown as any
 			).groups as GroupsGetByIdLegacyResponse;
 			for (const group of groupsDiffInfo) {
@@ -648,6 +653,64 @@ export default class UtilsUser {
 
 		if (log.endsWith(`\nGroups Logs:`)) {
 			log = log.slice(0, -13);
+		}
+
+		if (databaseUser.info.full!.settings.getAudios) {
+			try {
+				const audioIterator = createCollectIterator<{
+					id: number;
+					date: number;
+					title: string;
+					artist: string;
+				}>({
+					api: VK.user.getVK().api,
+					method: "audio.get",
+					params: {
+						user_id: id,
+					},
+					countPerRequest: 500,
+				});
+				const audioIDs: number[] = [];
+
+				log += `\nAudio Logs:`;
+
+				for await (const chunk of audioIterator) {
+					for (const audio of chunk.items) {
+						if (!databaseUser.info.full!.audios.includes(audio.id)) {
+							if (!isFirstExtendInfo) {
+								log += `\nДобавлена новая аудиозапись: ${audio.title} - ${
+									audio.artist
+								} [${moment(audio.date * 1000).format(
+									"DD.MM.YYYY, HH:mm:ss",
+								)}]`;
+							}
+							databaseUser.info.full!.audios.push(audio.id);
+						}
+						audioIDs.push(audio.id);
+					}
+				}
+
+				const audiosDiff = databaseUser.info.full!.audios.filter((x) => {
+					return audioIDs.indexOf(x) < 0;
+				});
+
+				if (audiosDiff.length > 0) {
+					log += `\n ${utils.string.declOfNum(audiosDiff.length, [
+						"Удалена",
+						"Удалено",
+						"Удалено",
+					])} ${audiosDiff.length} ${utils.string.declOfNum(audiosDiff.length, [
+						"аудиозапись",
+						"аудиозаписи",
+						"аудиозаписей",
+					])}`;
+					databaseUser.info.full!.audios = audioIDs;
+				}
+			} catch (error) {
+				console.log(error);
+				log += `\nНе удалось получить аудиозаписи пользователя, обработка аудиозаписей отключена`;
+				databaseUser.info.full!.settings.getAudios = false;
+			}
 		}
 
 		await this.updateUserData(userInfo, databaseUser);
