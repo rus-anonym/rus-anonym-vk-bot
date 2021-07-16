@@ -1,4 +1,6 @@
 import utils from "rus-anonym-utils";
+import { Interval } from "simple-scheduler-task";
+
 import { UsersFields } from "vk-io/lib/api/schemas/objects";
 
 import InternalUtils from "../../utils/core";
@@ -157,4 +159,12 @@ async function updateUsersData(): Promise<string | null> {
 	return output.length > 0 ? output.join("\n") : null;
 }
 
-export default updateUsersData;
+export default new Interval({
+	source: updateUsersData,
+	cron: "*/30 * * * *",
+	onDone: (log) => {
+		if (log.response) {
+			InternalUtils.logger.send(`${log.response}`, "info");
+		}
+	},
+});

@@ -1,4 +1,7 @@
 import utils from "rus-anonym-utils";
+import { Interval } from "simple-scheduler-task";
+
+import InternalUtils from "../../utils/core";
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 
@@ -70,4 +73,12 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 	}
 }
 
-export default updateOnlinePrivacySettings;
+export default new Interval({
+	source: updateOnlinePrivacySettings,
+	cron: "*/30 * * * *",
+	onDone: (log) => {
+		if (log.response) {
+			InternalUtils.logger.send(`${log.response}`, "info");
+		}
+	},
+});

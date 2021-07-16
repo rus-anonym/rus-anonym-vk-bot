@@ -1,7 +1,9 @@
 import utils from "rus-anonym-utils";
+import { Interval } from "simple-scheduler-task";
 import moment from "moment";
 
 import DB from "../../DB/core";
+import InternalUtils from "../../utils/core";
 
 async function cleanOldMessages(): Promise<string> {
 	const oldMessages = (await DB.user.models.message
@@ -44,4 +46,14 @@ async function cleanOldMessages(): Promise<string> {
 	)}`;
 }
 
-export default cleanOldMessages;
+export default new Interval({
+	source: cleanOldMessages,
+	type: "cleanOldMessages",
+	cron: "0 0 * * *",
+	onDone: (log) => {
+		InternalUtils.logger.send(
+			`${log.response} за ${log.executionTime}ms`,
+			"info",
+		);
+	},
+});
