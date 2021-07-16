@@ -711,6 +711,10 @@ export default class UtilsUser {
 				log += `\nНе удалось получить аудиозаписи пользователя, обработка аудиозаписей отключена`;
 				databaseUser.info.full!.settings.getAudios = false;
 			}
+
+			if (log.endsWith(`\nAudio Logs:`)) {
+				log = log.slice(0, -12);
+			}
 		}
 
 		await this.updateUserData(userInfo, databaseUser);
