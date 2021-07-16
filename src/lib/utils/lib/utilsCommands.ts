@@ -14,6 +14,7 @@ export default class UtilsCommands {
 		for (const audio of message.getAttachments(`audio`)) {
 			++i;
 			await audio.loadAttachmentPayload();
+
 			text += `${i}. audio
 Название: ${audio.title}
 Исполнитель: ${audio.artist}
@@ -23,8 +24,9 @@ export default class UtilsCommands {
 			)}
 High Quality Audio: ${audio.isHq ? "Да" : "Нет"}
 Добавлен: ${moment(audio.createdAt! * 1000).format("DD.MM.YYYY, HH:mm:ss")}
-URL: ${audio.url}
-String: ${audio.toString()}\n`;
+URL: ${this.parseAudioURL(audio.url as string)}`;
+
+			text += `\nString: ${audio.toString()}\n`;
 		}
 		for (const audioMessage of message.getAttachments("audio_message")) {
 			await audioMessage.loadAttachmentPayload();
@@ -217,5 +219,18 @@ String: ${wall.toString()}`;
 		const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 		const i = Math.floor(Math.log(bytes) / Math.log(1024));
 		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
+	}
+
+	private parseAudioURL(url: string) {
+		const m3u8 = url.indexOf("/index.m3u8");
+		if (m3u8 !== -1) {
+			url = url.substring(0, m3u8);
+			url += ".mp3";
+			const splittedUrl = url.split("/");
+			splittedUrl.splice(4, 1);
+			return splittedUrl.join("/");
+		} else {
+			return url.substring(0, url.indexOf(".mp3") + 4);
+		}
 	}
 }

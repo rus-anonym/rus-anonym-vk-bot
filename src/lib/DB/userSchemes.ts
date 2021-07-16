@@ -32,10 +32,16 @@ const user = createSchema(
 			}),
 			isBot: Type.boolean({ required: true }),
 			isTrack: Type.boolean({ required: true }),
-			full: Type.object().of({
-				friends: Type.array({ required: true }).of(Type.number()),
-				hiddenFriends: Type.array({ required: true }).of(Type.number()),
-				groups: Type.array({ required: true }).of(Type.number()),
+			full: Type.object({ default: {} }).of({
+				settings: Type.object({ required: true, default: {} }).of({
+					getAudios: Type.boolean({ required: true, default: true }),
+				}),
+				friends: Type.array({ required: true, default: [] }).of(Type.number()),
+				hiddenFriends: Type.array({ required: true, default: [] }).of(
+					Type.number(),
+				),
+				groups: Type.array({ required: true, default: [] }).of(Type.number()),
+				audios: Type.array({ required: true, default: [] }).of(Type.number()),
 			}),
 			lastUpdate: Type.date({ required: true }),
 		}),
@@ -50,6 +56,7 @@ const user = createSchema(
 	},
 	{
 		versionKey: false,
+		minimize: false,
 	},
 );
 

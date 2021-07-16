@@ -16,16 +16,16 @@
 		"moment": "^2.29.1",
 		"mongoose": "^5.13.2",
 		"rucaptcha-io": "^1.0.0",
-		"rus-anonym-utils": "^2.5.3",
-		"simple-scheduler-task": "^3.2.3",
+		"rus-anonym-utils": "^2.5.4",
+		"simple-scheduler-task": "^4.0.0",
 		"ts-mongoose": "^0.0.24",
-		"typescript-eslint": "^0.0.1-alpha.0",
 		"vk-io": "^4.3.2"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^4.28.3",
 		"@typescript-eslint/parser": "^4.28.3",
 		"eslint": "^7.30.0",
+		"typescript-eslint": "^0.0.1-alpha.0",
 		"typescript": "^4.3.5"
 	}
 }

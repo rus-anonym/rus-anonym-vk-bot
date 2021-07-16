@@ -1,4 +1,5 @@
 import moment from "moment";
+import { Interval } from "simple-scheduler-task";
 
 import InternalUtils from "../../utils/core";
 
@@ -10,4 +11,10 @@ ${users.map((user, index) => {
 })}`;
 }
 
-export default getBirthdays;
+export default new Interval({
+	source: getBirthdays,
+	cron: "0 0 * * *",
+	onDone: (log) => {
+		InternalUtils.logger.send(`${log.response}`, "info");
+	},
+});

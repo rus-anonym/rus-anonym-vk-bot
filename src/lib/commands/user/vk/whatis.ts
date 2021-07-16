@@ -34,5 +34,6 @@ ${await InternalUtls.commands.attachmentsToString(message)}`,
 	return message.editMessage({
 		disable_mentions: true,
 		message: `Не нашёл прикреплений`,
+		dont_parse_links: true,
 	});
 });

@@ -22,11 +22,6 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 		userID,
 		true,
 	);
-
-	const stickersText = userStickers.items
-		.map((stickerPack) => stickerPack.title)
-		.join(", ");
-
 	return message.editMessage({
 		message: `У @id${userID} ${utils.string.declOfNum(
 			userStickers.items.length,
@@ -41,11 +36,30 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 		])} на сумму ${utils.number.separator(userStickers.totalPrice * 7, ".")}₽
 Платных: ${userStickers.stats.paid}
 Бесплатных: ${userStickers.stats.free}
-Анимированных: ${userStickers.stats.animated}
-Обычных: ${userStickers.stats.notAnimated}
-Стилей: ${userStickers.stats.styles}
-Не стилей: ${userStickers.stats.notStyles}
-\n\n${stickersText.length < 3900 ? stickersText : ""}`,
+
+Паков: ${userStickers.stats.packs.count}
+Обычных: ${userStickers.stats.packs.simple}
+Анимированных: ${userStickers.stats.packs.animated}
+
+Бесплатных обычных: ${userStickers.stats.packs.freeSimple}
+Бесплатных анимированных: ${userStickers.stats.packs.freeAnimated}
+Всего бесплатных: ${userStickers.stats.packs.free}
+
+Платных обычных: ${userStickers.stats.packs.paidSimple}
+Платных анимированных: ${userStickers.stats.packs.paidAnimated}
+Всего платных: ${userStickers.stats.packs.paid}
+
+Стилей: ${userStickers.stats.styles.count}
+Обычных: ${userStickers.stats.styles.simple}
+Анимированных: ${userStickers.stats.styles.animated}
+
+Бесплатных обычных: ${userStickers.stats.styles.freeSimple}
+Бесплатных анимированных: ${userStickers.stats.styles.freeAnimated}
+Всего бесплатных: ${userStickers.stats.styles.free}
+
+Платных обычных: ${userStickers.stats.styles.paidSimple}
+Платных анимированных: ${userStickers.stats.styles.paidAnimated}
+Всего платных: ${userStickers.stats.styles.paid}`,
 		disable_mentions: true,
 	});
 });
