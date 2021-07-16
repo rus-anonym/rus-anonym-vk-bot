@@ -36,7 +36,7 @@ Status: Good`,
 			"captcha",
 		);
 	} catch (error) {
-		captcha.markAnswerAsBad();
+		// captcha.markAnswerAsBad();
 		InternalUtils.logger.send(
 			`Captcha solve report
 SID: ${payload.sid}
