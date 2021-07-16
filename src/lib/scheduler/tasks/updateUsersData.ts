@@ -102,7 +102,7 @@ const UsersGetFields: UsersFields[] = [
 async function updateUsersData(): Promise<string | null> {
 	const users = await DB.user.models.user.distinct(`id`);
 	const output: string[] = [];
-	for (const chunk of utils.array.splitTo(users, 1000)) {
+	for (const chunk of utils.array.splitTo(users, 250)) {
 		const chunkInfo = await VK.user.getVK().api.users.get({
 			user_ids: chunk,
 			fields: UsersGetFields,
@@ -161,6 +161,7 @@ async function updateUsersData(): Promise<string | null> {
 
 export default new Interval({
 	source: updateUsersData,
+	plannedTime: Date.now(),
 	cron: "*/30 * * * *",
 	onDone: (log) => {
 		if (log.response) {
