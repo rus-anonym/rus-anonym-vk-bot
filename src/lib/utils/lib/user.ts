@@ -668,7 +668,7 @@ export default class UtilsUser {
 					params: {
 						user_id: id,
 					},
-					countPerRequest: 500,
+					countPerRequest: 5000,
 				});
 				const audioIDs: number[] = [];
 
