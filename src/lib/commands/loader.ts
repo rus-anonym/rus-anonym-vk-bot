@@ -25,6 +25,7 @@ import "./user/vk/whatis";
 import "./user/vk/extendsInfo";
 import "./user/vk/update";
 import "./user/vk/friend";
+import "./user/vk/audio";
 
 import "./user/graphics/invert";
 import "./user/graphics/sepia";
