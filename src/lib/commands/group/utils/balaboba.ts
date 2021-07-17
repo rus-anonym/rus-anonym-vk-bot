@@ -1,4 +1,4 @@
-import axios from "axios";
+import utils from "rus-anonym-utils";
 
 import { GroupCommand } from "../../../utils/lib/commands";
 
@@ -7,12 +7,11 @@ import InternalUtils from "../../../utils/core";
 
 new GroupCommand(/(?:^\/ии)(\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {
-		await message.loadMessagePayload();
 		let userID;
 		try {
 			userID = await InternalUtils.groupCommands.getUserId(message);
 		} catch (error) {
-			return await message.editMessage({
+			return await message.sendMessage({
 				message: error.message,
 			});
 		}
@@ -22,23 +21,15 @@ new GroupCommand(/(?:^\/ии)(\s(.*))?$/i, async function (message) {
 		message.args[1] = `${user.first_name} ${user.last_name} это`;
 	}
 	try {
-		const response = await axios({
-			url: "https://yandex.ru/lab/api/yalm/text3",
-			method: "POST",
-			data: {
-				query: message.args[1],
-				intro: 0,
-				filter: 1,
-			},
-		});
-		return await message.editMessage({
-			message: response.data.query + response.data.text,
+		const response = await utils.yandex.balaboba.generate(message.args[1]);
+		return await message.sendMessage({
+			message: response.text + `\n\nMS: ${response.ms}`,
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
 	} catch (err) {
-		return await message.editMessage({
-			message: `Balaboba API Error`,
+		return await message.sendMessage({
+			message: `Balaboba API Error (${err.message})`,
 		});
 	}
 });
