@@ -1,5 +1,6 @@
-import { MessageContext } from "vk-io";
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
+import { MessageContext } from "vk-io";
 
 import { UserCommand } from "../../../utils/lib/commands";
 import VK from "../../../VK/core";
