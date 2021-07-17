@@ -2,6 +2,7 @@ import moment from "moment";
 
 import { UserCommand } from "../../../utils/lib/commands";
 import InternalUtils from "../../../utils/core";
+import VK from "../../../VK/core";
 
 new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 	if (!message.isChat) {
@@ -20,19 +21,46 @@ new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 		});
 	}
 
-	try {
-		await vk.api.messages.addChatUser({
-			chat_id: message.chatId as number,
-			user_id: userID,
-		});
+	if (userID > 0) {
+		try {
+			await vk.api.messages.addChatUser({
+				chat_id: message.chatId as number,
+				user_id: userID,
+			});
+			await message.editMessage({
+				message: `https://vk.com/id${userID} добавлен в беседу в ${moment().format(
+					"HH:mm:ss",
+				)}`,
+			});
+		} catch (error) {
+			return message.editMessage({
+				message: `Не могу пригласить https://vk.com/id${userID} в беседу\n${error.message}`,
+			});
+		}
+	} else {
 		await message.editMessage({
-			message: `https://vk.com/id${userID} добавлен в беседу в ${moment().format(
-				"HH:mm:ss",
-			)}`,
+			message: "Проверяю токен от BotPod",
 		});
-	} catch (error) {
-		return message.editMessage({
-			message: `Не могу пригласить https://vk.com/id${userID} в беседу\n${error.message}`,
-		});
+		const isValid = await VK.user.botpod.isValid();
+		if (!isValid) {
+			await message.editMessage({
+				message: "Обновляю токен от BotPod",
+			});
+			await VK.user.botpod.updateToken();
+		}
+		try {
+			await VK.user.botpod.addBotToChat(message.peerId, userID);
+			return message.editMessage({
+				message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
+					"HH:mm:ss",
+				)}`,
+			});
+		} catch (error) {
+			return message.editMessage({
+				message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
+					error.message
+				}`,
+			});
+		}
 	}
 });

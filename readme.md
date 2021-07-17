@@ -22,6 +22,8 @@ $ yarn
 	"VK": {
 		"user": {
 			"id": 0, // User ID
+			"login": "", // User Login
+			"password": "", // User Password
 			"tokens": [], // Array with user tokens
 			"vkme": "", // User VK Me token
 			"friends": {
