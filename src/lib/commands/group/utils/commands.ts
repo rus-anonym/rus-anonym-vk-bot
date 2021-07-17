@@ -1,6 +1,6 @@
 import { GroupCommand } from "../../../utils/lib/commands";
 
-new GroupCommand(/(?:^!команды|\/help|!help|помощь)$/i, async function (
+new GroupCommand(/(?:^!команды|\/help|!help|помощь|начать)$/i, async function (
 	message,
 ) {
 	return message.sendMessage({

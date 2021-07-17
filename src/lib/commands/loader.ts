@@ -11,6 +11,7 @@ import "./user/utils/track";
 import "./user/utils/sync";
 import "./user/utils/moonToSun";
 import "./user/utils/newChild";
+import "./user/utils/balaboba";
 
 import "./user/vk/apiStatus";
 import "./user/vk/article";
@@ -25,6 +26,8 @@ import "./user/vk/whatis";
 import "./user/vk/extendsInfo";
 import "./user/vk/update";
 import "./user/vk/friend";
+import "./user/vk/audio";
+import "./user/vk/add";
 
 import "./user/graphics/invert";
 import "./user/graphics/sepia";
@@ -44,6 +47,7 @@ import "./group/utils/eval";
 import "./group/utils/nick";
 import "./group/utils/commands";
 import "./group/utils/about";
+import "./group/utils/balaboba";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";

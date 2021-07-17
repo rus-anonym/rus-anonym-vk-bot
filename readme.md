@@ -24,8 +24,10 @@ $ yarn
 			"id": 0, // User ID
 			"login": "", // User Login
 			"password": "", // User Password
-			"tokens": [], // Array with user tokens
-			"vkme": "", // User VK Me token
+			"tokens": {
+				"main": "", // User token for polling
+				"additional": [] // Array with user tokens (minimum 1)
+			}, // User Tokens
 			"friends": {
 				"list": {
 					"viewOnline": [] // array with the IDs of the lists of friends who can see online
@@ -40,7 +42,10 @@ $ yarn
 		], // Array with fake users
 		"group": {
 			"id": 0, // Group ID
-			"tokens": [], // Array with group tokens
+			"tokens": {
+				"main": "", // Group token for polling
+				"additional": [] // Array with group tokens (minimum 1)
+			}, // Group Tokens
 			"logs": {
 				"conversations": {
 					"messages": 0,

@@ -27,7 +27,7 @@ abstract class Worker {
 
 class UserVK extends Worker {
 	public main = new VK({
-		token: DB.config.VK.user.tokens[0],
+		token: DB.config.VK.user.tokens.main,
 		callbackService: userCallbackService,
 		apiVersion: "5.157",
 		apiHeaders: {
@@ -35,7 +35,7 @@ class UserVK extends Worker {
 		},
 	});
 
-	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
+	public additional = DB.config.VK.user.tokens.additional.map((token) => {
 		return new VK({
 			token,
 			callbackService: userCallbackService,
@@ -94,10 +94,10 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 
 class GroupVK extends Worker {
 	public main = new VK({
-		token: DB.config.VK.group.tokens[0],
+		token: DB.config.VK.group.tokens.main,
 	});
 
-	public additional = DB.config.VK.group.tokens.splice(1).map((token) => {
+	public additional = DB.config.VK.group.tokens.additional.map((token) => {
 		return new VK({ token });
 	});
 

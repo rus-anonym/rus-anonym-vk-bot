@@ -4,7 +4,7 @@ import { UserCommand } from "../../../utils/lib/commands";
 import InternalUtils from "../../../utils/core";
 import VK from "../../../VK/core";
 
-new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!invite|!inv)(?:\s(.*))?$/i, async function (message, vk) {
 	if (!message.isChat) {
 		return message.editMessage({
 			message: "Работает только в беседах",

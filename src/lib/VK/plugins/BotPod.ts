@@ -8,6 +8,7 @@ import {
 } from "vk-io";
 import { ImplicitFlowUser } from "@vk-io/authorization";
 
+import captchaHandler from "./captchaHandler";
 import DB from "../../DB/core";
 import InternalUtils from "../../utils/core";
 
@@ -24,6 +25,7 @@ class BotPodVK {
 		});
 		this.callbackService = new CallbackService();
 		this.callbackService.onTwoFactor(this.twoFactorHandler.bind(this));
+		this.callbackService.onCaptcha(captchaHandler);
 	}
 
 	public addBotToChat(peer_id: number, bot_id: number): Promise<1> {
