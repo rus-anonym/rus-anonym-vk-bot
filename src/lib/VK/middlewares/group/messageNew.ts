@@ -58,6 +58,18 @@ async function groupMessageNew(
 					"error",
 				);
 			});
+			return;
+		} else {
+			await message.send({
+				message: `Команды:`,
+				attachment: "article-194686664_60597_e899de91872d46979d",
+				forward: JSON.stringify({
+					peer_id: message.peerId,
+					conversation_message_ids: message.conversationMessageId,
+					is_reply: 1,
+				}),
+			});
+			return;
 		}
 	}
 }
