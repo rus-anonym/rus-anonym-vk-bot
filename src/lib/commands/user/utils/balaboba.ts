@@ -30,7 +30,7 @@ new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 		});
 	} catch (err) {
 		return await message.editMessage({
-			message: `Balaboba API Error`,
+			message: `Balaboba API Error (${err.message})`,
 		});
 	}
 });

@@ -22,14 +22,14 @@ new GroupCommand(/(?:^\/ии)(\s(.*))?$/i, async function (message) {
 	}
 	try {
 		const response = await utils.yandex.balaboba.generate(message.args[1]);
-		return await message.editMessage({
+		return await message.sendMessage({
 			message: response.text + `\n\nMS: ${response.ms}`,
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
 	} catch (err) {
-		return await message.editMessage({
-			message: `Balaboba API Error`,
+		return await message.sendMessage({
+			message: `Balaboba API Error (${err.message})`,
 		});
 	}
 });
