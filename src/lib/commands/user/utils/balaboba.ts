@@ -1,4 +1,4 @@
-import axios from "axios";
+import utils from "rus-anonym-utils";
 
 import { UserCommand } from "../../../utils/lib/commands";
 
@@ -22,17 +22,9 @@ new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 		message.args[1] = `${user.first_name} ${user.last_name} это`;
 	}
 	try {
-		const response = await axios({
-			url: "https://yandex.ru/lab/api/yalm/text3",
-			method: "POST",
-			data: {
-				query: message.args[1],
-				intro: 0,
-				filter: 1,
-			},
-		});
+		const response = await utils.yandex.balaboba.generate(message.args[1]);
 		return await message.editMessage({
-			message: response.data.query + response.data.text,
+			message: response.text + `\n\nMS: ${response.ms}`,
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
