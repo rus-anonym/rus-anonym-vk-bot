@@ -93,7 +93,13 @@ export class UtilsUserCommands extends UtilsCommands {
 					resource: message.args[1],
 					api: UtilsVK.group.getVK().api,
 				});
-				return linkData.id;
+				if (linkData.type === "group") {
+					return -linkData.id;
+				} else if (linkData.type === "user") {
+					return linkData.id;
+				} else {
+					throw new Error("Не смог распознать ссылку");
+				}
 			} catch (error) {
 				throw new Error("Не смог распознать ссылку");
 			}
