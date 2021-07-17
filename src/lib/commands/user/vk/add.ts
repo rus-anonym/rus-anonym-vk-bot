@@ -13,7 +13,7 @@ const add = async (message: MessageContext): Promise<string> => {
 		});
 		log += `Добавил трек ${audio.title} - ${audio.artist}\n`;
 	}
-	return log;
+	return log === "" ? `Не нашёл что нужно добавить` : log;
 };
 
 new UserCommand(/(?:^!add)$/i, async function (context) {
