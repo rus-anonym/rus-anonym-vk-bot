@@ -46,13 +46,15 @@ new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 			try {
 				await VK.user.botpod.addBotToChat(message.peerId, userID);
 				return message.editMessage({
-					message: `https://vk.com/club${userID} добавлен в беседу в ${moment().format(
+					message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
 						"HH:mm:ss",
 					)}`,
 				});
 			} catch (error) {
 				return message.editMessage({
-					message: `Не могу пригласить https://vk.com/club${userID} в беседу\n${error.message}`,
+					message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
+						error.message
+					}`,
 				});
 			}
 		} else {
@@ -63,13 +65,15 @@ new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 			try {
 				await VK.user.botpod.addBotToChat(message.peerId, userID);
 				return message.editMessage({
-					message: `https://vk.com/club${userID} добавлен в беседу в ${moment().format(
+					message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
 						"HH:mm:ss",
 					)}`,
 				});
 			} catch (error) {
 				return message.editMessage({
-					message: `Не могу пригласить https://vk.com/club${userID} в беседу\n${error.message}`,
+					message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
+						error.message
+					}`,
 				});
 			}
 		}
