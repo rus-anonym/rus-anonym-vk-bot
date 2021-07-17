@@ -10,6 +10,7 @@ import "./user/utils/tele2Monday";
 import "./user/utils/track";
 import "./user/utils/sync";
 import "./user/utils/moonToSun";
+import "./user/utils/newChild";
 
 import "./user/vk/apiStatus";
 import "./user/vk/article";
