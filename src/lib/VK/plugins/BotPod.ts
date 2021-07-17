@@ -33,6 +33,13 @@ class BotPodVK {
 		});
 	}
 
+	public kickBot(peer_id: number, bot_id: number): Promise<1> {
+		return this.api.call("bot.kickBot", {
+			peer_id,
+			bot_id,
+		});
+	}
+
 	public async isValid(): Promise<boolean> {
 		try {
 			await utils.vk.api.checkToken(this.token);
