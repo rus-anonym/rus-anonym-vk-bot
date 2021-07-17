@@ -1,135 +1,33 @@
-import { VK, API, CallbackService } from "vk-io";
+import { VK, CallbackService } from "vk-io";
 import utils from "rus-anonym-utils";
-import { Captcha, Solver } from "rucaptcha-io";
 
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 
+import FakesAlpha from "./plugins/Fakes";
+import captchaHandler from "./plugins/captchaHandler";
+
 import userMiddlewares from "./middlewares/user";
 import groupMiddlewares from "./middlewares/group";
 
-const solver = new Solver({
-	token: DB.config.rucaptcha.token,
-});
-
-const callbackService = new CallbackService();
-
-callbackService.onCaptcha(async (payload, retry) => {
-	const captcha = new Captcha(payload.src, solver);
-	const key = await captcha.auto();
-	try {
-		await retry(key);
-		captcha.markAnswerAsGood();
-		InternalUtils.logger.send(
-			`Captcha solve report
-SID: ${payload.sid}
-Type: ${payload.type}
-${
-	payload.request
-		? `
-Method: ${payload.request.method}
-Params: ${JSON.stringify(payload.request.params, null, "\t")}
-Attempt: ${payload.request.retries}`
-		: ""
-}
-Status: Good`,
-			"captcha",
-		);
-	} catch (error) {
-		// captcha.markAnswerAsBad();
-		InternalUtils.logger.send(
-			`Captcha solve report
-SID: ${payload.sid}
-Type: ${payload.type}
-${
-	payload.request
-		? `
-Method: ${payload.request.method}
-Params: ${JSON.stringify(payload.request.params, null, "\t")}
-Attempt: ${payload.request.retries}`
-		: ""
-}
-Status: Bad`,
-			"captcha",
-		);
-	}
-});
+const userCallbackService = new CallbackService();
+userCallbackService.onCaptcha(captchaHandler);
 
 abstract class Worker {
-	/**
-	 * Основной инстанс вк ио который юзается для поллинга
-	 */
 	abstract main: VK;
-
-	/**
-	 * Дополнительные инстансы вк ио
-	 */
 	abstract additional: VK[];
 
 	abstract configure(): this;
 
-	/**
-	 * Получение рандомного дополнительного инстанса
-	 */
 	public getVK(): VK {
 		return utils.array.random(this.additional);
-	}
-}
-
-abstract class FakeWorker {
-	abstract additional: API[];
-	public getAPI(): API {
-		return utils.array.random(this.additional);
-	}
-}
-
-interface FakeUserData {
-	id: number;
-	tokens: string[];
-}
-
-class FakeUserVK extends FakeWorker {
-	public additional: API[] = [];
-	constructor(data: FakeUserData) {
-		super();
-		for (const token of data.tokens) {
-			this.additional.push(
-				new API({
-					token,
-					callbackService,
-					apiVersion: "5.157",
-					apiHeaders: {
-						"User-Agent":
-							"VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
-					},
-				}),
-			);
-		}
-	}
-}
-
-class FakesAlpha {
-	public user: FakeUserVK[] = [];
-
-	constructor() {
-		for (const fakeUser of DB.config.VK.userFakes) {
-			this.user.push(new FakeUserVK(fakeUser));
-		}
-	}
-
-	public getUserFake(): FakeUserVK {
-		return utils.array.random(this.user);
-	}
-
-	public getUserFakeAPI(): API {
-		return utils.array.random(this.user).getAPI();
 	}
 }
 
 class UserVK extends Worker {
 	public main = new VK({
 		token: DB.config.VK.user.tokens[0],
-		callbackService,
+		callbackService: userCallbackService,
 		apiVersion: "5.157",
 		apiHeaders: {
 			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
@@ -139,7 +37,7 @@ class UserVK extends Worker {
 	public additional = DB.config.VK.user.tokens.splice(1).map((token) => {
 		return new VK({
 			token,
-			callbackService,
+			callbackService: userCallbackService,
 			apiVersion: "5.157",
 			apiHeaders: {
 				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
@@ -190,11 +88,10 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 class GroupVK extends Worker {
 	public main = new VK({
 		token: DB.config.VK.group.tokens[0],
-		callbackService,
 	});
 
 	public additional = DB.config.VK.group.tokens.splice(1).map((token) => {
-		return new VK({ token, callbackService });
+		return new VK({ token });
 	});
 
 	public configure() {
