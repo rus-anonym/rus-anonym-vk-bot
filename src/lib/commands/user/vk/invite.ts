@@ -42,40 +42,25 @@ new UserCommand(/(?:^!invite|!add)(?:\s(.*))?$/i, async function (message, vk) {
 			message: "Проверяю токен от BotPod",
 		});
 		const isValid = await VK.user.botpod.isValid();
-		if (isValid) {
-			try {
-				await VK.user.botpod.addBotToChat(message.peerId, userID);
-				return message.editMessage({
-					message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
-						"HH:mm:ss",
-					)}`,
-				});
-			} catch (error) {
-				return message.editMessage({
-					message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
-						error.message
-					}`,
-				});
-			}
-		} else {
+		if (!isValid) {
 			await message.editMessage({
 				message: "Обновляю токен от BotPod",
 			});
 			await VK.user.botpod.updateToken();
-			try {
-				await VK.user.botpod.addBotToChat(message.peerId, userID);
-				return message.editMessage({
-					message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
-						"HH:mm:ss",
-					)}`,
-				});
-			} catch (error) {
-				return message.editMessage({
-					message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
-						error.message
-					}`,
-				});
-			}
+		}
+		try {
+			await VK.user.botpod.addBotToChat(message.peerId, userID);
+			return message.editMessage({
+				message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
+					"HH:mm:ss",
+				)}`,
+			});
+		} catch (error) {
+			return message.editMessage({
+				message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
+					error.message
+				}`,
+			});
 		}
 	}
 });

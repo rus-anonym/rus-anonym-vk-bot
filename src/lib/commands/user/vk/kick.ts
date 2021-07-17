@@ -42,40 +42,25 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 			message: "Проверяю токен от BotPod",
 		});
 		const isValid = await VK.user.botpod.isValid();
-		if (isValid) {
-			try {
-				await VK.user.botpod.kickBot(message.peerId, userID);
-				return message.editMessage({
-					message: `https://vk.com/club${-userID} исключён из беседы в ${moment().format(
-						"HH:mm:ss",
-					)}`,
-				});
-			} catch (error) {
-				return message.editMessage({
-					message: `Не могу исключить https://vk.com/club${-userID} из беседу\n${
-						error.message
-					}`,
-				});
-			}
-		} else {
+		if (!isValid) {
 			await message.editMessage({
 				message: "Обновляю токен от BotPod",
 			});
 			await VK.user.botpod.updateToken();
-			try {
-				await VK.user.botpod.kickBot(message.peerId, userID);
-				return message.editMessage({
-					message: `https://vk.com/club${-userID} исключён из беседы в ${moment().format(
-						"HH:mm:ss",
-					)}`,
-				});
-			} catch (error) {
-				return message.editMessage({
-					message: `Не могу исключить https://vk.com/club${-userID} из беседу\n${
-						error.message
-					}`,
-				});
-			}
+		}
+		try {
+			await VK.user.botpod.kickBot(message.peerId, userID);
+			return message.editMessage({
+				message: `https://vk.com/club${-userID} исключён из беседы в ${moment().format(
+					"HH:mm:ss",
+				)}`,
+			});
+		} catch (error) {
+			return message.editMessage({
+				message: `Не могу исключить https://vk.com/club${-userID} из беседу\n${
+					error.message
+				}`,
+			});
 		}
 	}
 });
