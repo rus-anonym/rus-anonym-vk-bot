@@ -60,15 +60,17 @@ async function groupMessageNew(
 			});
 			return;
 		} else {
-			await message.send({
-				message: `Команды:`,
-				attachment: "article-194686664_60597_e899de91872d46979d",
-				forward: JSON.stringify({
-					peer_id: message.peerId,
-					conversation_message_ids: message.conversationMessageId,
-					is_reply: 1,
-				}),
-			});
+			if (!message.isChat) {
+				await message.send({
+					message: `Команды:`,
+					attachment: "article-194686664_60597_e899de91872d46979d",
+					forward: JSON.stringify({
+						peer_id: message.peerId,
+						conversation_message_ids: message.conversationMessageId,
+						is_reply: 1,
+					}),
+				});
+			}
 			return;
 		}
 	}
