@@ -145,15 +145,18 @@ export default class UtilsUser {
 			await VK.user.getVK().api.messages.restore({
 				message_id: event.id,
 			});
-			await VK.user.getVK().api.messages.edit({
-				message_id: event.id,
-				message: this.getRandomMessage(),
-				peer_id: event.peerId,
-				attachment: "null",
-				keep_forward_messages: 0,
-				keep_snippets: 0,
-				dont_parse_links: 0,
-			});
+			await VK.user
+				.getVK()
+				.api.messages.edit({
+					message_id: event.id,
+					message: this.getRandomMessage(),
+					peer_id: event.peerId,
+					attachment: "null",
+					keep_forward_messages: 0,
+					keep_snippets: 0,
+					dont_parse_links: 0,
+				})
+				.catch(() => null);
 			await VK.user.getVK().api.messages.delete({
 				message_ids: event.id,
 				delete_for_all: true,
