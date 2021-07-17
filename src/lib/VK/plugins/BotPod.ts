@@ -26,6 +26,13 @@ class BotPodVK {
 		this.callbackService.onTwoFactor(this.twoFactorHandler.bind(this));
 	}
 
+	public addBotToChat(peer_id: number, bot_id: number): Promise<1> {
+		return this.api.call("bot.addBotToChat", {
+			peer_id,
+			bot_id,
+		});
+	}
+
 	public async isValid(): Promise<boolean> {
 		try {
 			await utils.vk.api.checkToken(this.token);
