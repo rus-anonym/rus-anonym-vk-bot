@@ -53,6 +53,10 @@ class UserVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
+		this.main.updates.on(
+			"message_new",
+			this.botpod.messageHandler.bind(this.botpod),
+		);
 		this.main.updates.on("message_new", userMiddlewares.messageNew);
 		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
 		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
