@@ -4,6 +4,7 @@ import utils from "rus-anonym-utils";
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 
+import BotPodVK from "./plugins/BotPod";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
 
@@ -44,6 +45,8 @@ class UserVK extends Worker {
 			},
 		});
 	});
+
+	public botpod = new BotPodVK();
 
 	public configure() {
 		// this.main.updates.use((event, next) => {
