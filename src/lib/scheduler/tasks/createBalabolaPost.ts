@@ -16,11 +16,18 @@ async function createBalabolaPost() {
 	const balaboba = await utils.yandex.balaboba.generate(
 		text || "Привет, я RusAnonym Bot",
 	);
-	await VK.user.getVK().api.wall.post({
+	const { post_id } = await VK.user.getVK().api.wall.post({
 		owner_id: -DB.config.VK.group.id,
 		from_group: true,
 		message: balaboba.response,
 	});
+	for (const fake of VK.fakes.user) {
+		await fake.getAPI().likes.add({
+			type: "post",
+			owner_id: -DB.config.VK.group.id,
+			item_id: post_id,
+		});
+	}
 }
 
 export default new Interval({
