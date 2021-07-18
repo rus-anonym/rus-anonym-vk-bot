@@ -12,6 +12,7 @@ import "./user/utils/sync";
 import "./user/utils/moonToSun";
 import "./user/utils/newChild";
 import "./user/utils/balaboba";
+import "./user/utils/convertLayout";
 
 import "./user/vk/attachments/article";
 import "./user/vk/attachments/whatis";
