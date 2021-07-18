@@ -13,21 +13,24 @@ import "./user/utils/moonToSun";
 import "./user/utils/newChild";
 import "./user/utils/balaboba";
 
-import "./user/vk/utils/apiStatus";
 import "./user/vk/attachments/article";
+import "./user/vk/attachments/whatis";
+import "./user/vk/attachments/audio";
+import "./user/vk/attachments/add";
+import "./user/vk/attachments/document";
+
+import "./user/vk/utils/apiStatus";
 import "./user/vk/utils/stickers";
 import "./user/vk/utils/isTester";
-import "./user/vk/conversations/deleteMessages";
-import "./user/vk/conversations/kick";
-import "./user/vk/conversations/invite";
 import "./user/vk/utils/reserveScreenName";
 import "./user/vk/utils/info";
-import "./user/vk/attachments/whatis";
 import "./user/vk/utils/extendsInfo";
 import "./user/vk/utils/update";
 import "./user/vk/utils/friend";
-import "./user/vk/attachments/audio";
-import "./user/vk/attachments/add";
+
+import "./user/vk/conversations/deleteMessages";
+import "./user/vk/conversations/kick";
+import "./user/vk/conversations/invite";
 
 import "./user/graphics/invert";
 import "./user/graphics/sepia";

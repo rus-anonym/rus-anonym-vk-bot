@@ -6,7 +6,7 @@ import VK from "../../../../VK/core";
 new UserCommand(/(?:^!audio)(?:\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {
 		return await message.editMessage({
-			message: "Отсутствует аргумент",
+			message: "Отсутствует запрос",
 		});
 	}
 
