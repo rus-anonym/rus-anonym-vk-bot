@@ -15,11 +15,15 @@ type Log =
 	| "user_track"
 	| "captcha";
 export default class UtilsLogger {
-	public async send(
-		message: string,
-		type: Log = "rest",
-		params: MessagesSendParams = {},
-	): Promise<void> {
+	public async send({
+		message,
+		type = "rest",
+		params = {},
+	}: {
+		message: string;
+		type?: Log;
+		params?: MessagesSendParams;
+	}): Promise<void> {
 		let selectedChat;
 		let prefix;
 

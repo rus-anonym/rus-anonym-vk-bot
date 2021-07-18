@@ -16,6 +16,6 @@ export default new Interval({
 	source: getBirthdays,
 	cron: "0 0 * * *",
 	onDone: (log) => {
-		InternalUtils.logger.send(`${log.response}`, "info");
+		InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
 	},
 });

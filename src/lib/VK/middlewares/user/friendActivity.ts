@@ -11,23 +11,18 @@ async function userFriendActivity(
 	if (userData.info.last_seen) {
 		if (!(userData.info.last_seen.isOnline && event.isOnline)) {
 			InternalUtils.logger.send(
-				`@id${userData.id} (${userData.info.name} ${userData.info.surname}) ${
-					event.isOnline
-						? `${userData.info.gender === 1 ? "зашла" : "зашёл"} в ВК`
-						: `${userData.info.gender === 1 ? "вышла" : "вышел"} из ВК`
-				} в ${moment(event.eventAt * 1000).format("HH:mm:ss")}
-${
-	event.isOffline
-		? `Время входа: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`
-		: `Время выхода: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`
-}
-${userData.info.gender === 1 ? "Была" : "Был"} ${
-					event.isOnline ? "оффлайн" : "онлайн"
-				} ${utils.time.precizeDiff(
-					moment(userData.info.last_seen.date),
-					moment(),
-				)}`,
-				"friend_activity",
+				{
+					message: `@id${userData.id} (${userData.info.name} ${userData.info.surname}) ${event.isOnline
+							? `${userData.info.gender === 1 ? "зашла" : "зашёл"} в ВК`
+							: `${userData.info.gender === 1 ? "вышла" : "вышел"} из ВК`} в ${moment(event.eventAt * 1000).format("HH:mm:ss")}
+${event.isOffline
+							? `Время входа: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`
+							: `Время выхода: ${moment(userData.info.last_seen.date).format("HH:mm:ss")}`}
+${userData.info.gender === 1 ? "Была" : "Был"} ${event.isOnline ? "оффлайн" : "онлайн"} ${utils.time.precizeDiff(
+								moment(userData.info.last_seen.date),
+								moment()
+							)}`, type: "friend_activity"
+				},
 			);
 			userData.info.last_seen.date = new Date(event.eventAt * 1000);
 			userData.info.last_seen.isOnline = event.isOnline;

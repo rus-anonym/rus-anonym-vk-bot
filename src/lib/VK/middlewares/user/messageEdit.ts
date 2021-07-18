@@ -7,11 +7,10 @@ import VK from "../../core";
 function userMessageEdit(message: MessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
 		InternalUtils.logger.send(
-			`Error on save message #${message.id}\n
-https://vk.com/im?sel=${
-				message.isChat ? `c${message.chatId}` : message.peerId
-			}&msgid=${message.id}\n\n${err.toString()}`,
-			"error",
+			{
+				message: `Error on save message #${message.id}\n
+https://vk.com/im?sel=${message.isChat ? `c${message.chatId}` : message.peerId}&msgid=${message.id}\n\n${err.toString()}`, type: "error"
+			},
 		);
 	});
 
@@ -30,8 +29,7 @@ https://vk.com/im?sel=${
 				.process(message as UserModernMessageContext, TempVK)
 				.catch((err) => {
 					InternalUtils.logger.send(
-						`Error on execute command\nError: ${err.toString()}`,
-						"error",
+						{ message: `Error on execute command\nError: ${err.toString()}`, type: "error" },
 					);
 				});
 		}

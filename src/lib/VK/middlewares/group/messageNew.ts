@@ -54,8 +54,7 @@ async function groupMessageNew(
 			};
 			selectedCommand.process(message, TempVK).catch((err) => {
 				InternalUtils.logger.send(
-					`Error on execute command\nError: ${err.toString()}`,
-					"error",
+					{ message: `Error on execute command\nError: ${err.toString()}`, type: "error" },
 				);
 			});
 			return;

@@ -5,14 +5,15 @@
 	"license": "MIT",
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc -p tsconfig.json",
 		"start": "npm run build && cd dist && node main",
-		"lint": "eslint ./src --ext .ts"
+		"lint": "eslint ./src"
 	},
 	"dependencies": {
 		"@vk-io/authorization": "^1.2.1",
 		"axios": "^0.21.1",
 		"cheerio": "^1.0.0-rc.10",
+		"convert-layout": "^0.9.0",
 		"jimp": "^0.16.1",
 		"moment": "^2.29.1",
 		"mongoose": "^5.13.2",
@@ -23,6 +24,7 @@
 		"vk-io": "^4.3.2"
 	},
 	"devDependencies": {
+		"@types/convert-layout": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "^4.28.3",
 		"@typescript-eslint/parser": "^4.28.3",
 		"eslint": "^7.30.0",

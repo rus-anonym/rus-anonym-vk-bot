@@ -11,40 +11,44 @@ import "./commands/loader";
 
 DB.user.connection.once("open", () => {
 	InternalUtils.logger.send(
-		`Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+		{ message: `Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}` },
 	);
 	VK.user.main.updates.start().then(() => {
 		InternalUtils.logger.send(
-			`VK User polling start at ${moment().format(
-				"HH:mm:ss.SSS | DD.MM.YYYY",
-			)}`,
+			{
+				message: `VK User polling start at ${moment().format(
+					"HH:mm:ss.SSS | DD.MM.YYYY"
+				)}`
+			},
 		);
 	});
 });
 
 DB.group.connection.once("open", () => {
 	InternalUtils.logger.send(
-		`Connect to GroupBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}`,
+		{ message: `Connect to GroupBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}` },
 	);
 	VK.group.main.updates.start().then(() => {
 		InternalUtils.logger.send(
-			`VK Group polling start at ${moment().format(
-				"HH:mm:ss.SSS | DD.MM.YYYY",
-			)}`,
+			{
+				message: `VK Group polling start at ${moment().format(
+					"HH:mm:ss.SSS | DD.MM.YYYY"
+				)}`
+			},
 		);
 	});
 });
 
 process.on("warning", async (warning) => {
 	InternalUtils.logger
-		.send(`Unhandled warning\n${warning.toString()}`, "error")
+		.send({ message: `Unhandled warning\n${warning.toString()}`, type: "error" })
 		.catch(() => {
 			console.log(warning);
 		});
 });
 process.on("uncaughtException", async (error) => {
 	InternalUtils.logger
-		.send(`Unhandled uncaughtException\n${error.toString()}`, "error")
+		.send({ message: `Unhandled uncaughtException\n${error.toString()}`, type: "error" })
 		.catch(() => {
 			console.log(error);
 		});

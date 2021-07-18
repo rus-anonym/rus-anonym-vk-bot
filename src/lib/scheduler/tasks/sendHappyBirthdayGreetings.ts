@@ -21,7 +21,7 @@ async function sendHappyBirthdayGreetings() {
 		});
 		for (const user of chunkInfo) {
 			if (moment(user.bdate, "D.M.YYYY").format("D.M") === currentDate) {
-				for (const fake of VK.fakes.user) {
+				for (const fake of VK.fakes.list) {
 					try {
 						const greeting = (
 							await utils.yandex.balaboba.generate(
@@ -60,6 +60,6 @@ export default new Interval({
 	source: sendHappyBirthdayGreetings,
 	cron: "0 0 * * *",
 	onDone: (log) => {
-		InternalUtils.logger.send(`${log.response}`, "info");
+		InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
 	},
 });

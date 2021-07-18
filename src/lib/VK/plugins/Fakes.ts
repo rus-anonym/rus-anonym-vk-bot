@@ -42,20 +42,20 @@ class FakeUserVK extends FakeWorker {
 }
 
 class FakesAlpha {
-	public user: FakeUserVK[] = [];
+	public list: FakeUserVK[] = [];
 
 	constructor() {
 		for (const fakeUser of DB.config.VK.userFakes) {
-			this.user.push(new FakeUserVK(fakeUser));
+			this.list.push(new FakeUserVK(fakeUser));
 		}
 	}
 
 	public getUserFake(): FakeUserVK {
-		return utils.array.random(this.user);
+		return utils.array.random(this.list);
 	}
 
 	public getUserFakeAPI(): API {
-		return utils.array.random(this.user).getAPI();
+		return utils.array.random(this.list).getAPI();
 	}
 }
 

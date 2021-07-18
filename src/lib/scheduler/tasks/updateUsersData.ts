@@ -166,7 +166,7 @@ export default new Interval({
 	cron: "*/30 * * * *",
 	onDone: (log) => {
 		if (log.response) {
-			InternalUtils.logger.send(`${log.response}`, "info");
+			InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
 		}
 	},
 });

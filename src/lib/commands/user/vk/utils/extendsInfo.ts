@@ -125,8 +125,7 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 	});
 
 	InternalUtils.logger.send(
-		`Report @id${userData.id}: Начинаю загрузку друзей`,
-		"info",
+		{ message: `Report @id${userData.id}: Начинаю загрузку друзей`, type: "info" },
 	);
 
 	const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
@@ -175,9 +174,10 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 	);
 
 	InternalUtils.logger.send(
-		`Report @id${userData.id}: Загрузка друзей завершена
-Начинаю загрузку групп`,
-		"info",
+		{
+			message: `Report @id${userData.id}: Загрузка друзей завершена
+Начинаю загрузку групп`, type: "info"
+		},
 	);
 
 	let userGroups: {
@@ -207,9 +207,10 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	InternalUtils.logger.send(
-		`Report @id${userData.id}: Загрузка групп завершена
-Начинаю проверку друзей в группах`,
-		"info",
+		{
+			message: `Report @id${userData.id}: Загрузка групп завершена
+Начинаю проверку друзей в группах`, type: "info"
+		},
 	);
 
 	for (const group of userGroups) {
@@ -229,9 +230,10 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	InternalUtils.logger.send(
-		`Report @id${userData.id}: Проверка друзей закончена
-Генерирую отчёт...`,
-		"info",
+		{
+			message: `Report @id${userData.id}: Проверка друзей закончена
+Генерирую отчёт...`, type: "info"
+		},
 	);
 
 	userGroups.sort((a, b) => {
@@ -343,18 +345,18 @@ ${userStickers.items
 	.join(`\n`)}`;
 
 	InternalUtils.logger.send(
-		`Готов отчёт по пользователю @id${userData.id} (${userData.first_name_dat} ${userData.last_name_dat})`,
-		"info",
 		{
-			attachment: (
-				await VK.group.getVK().upload.messageDocument({
-					source: {
-						value: Buffer.from(reportText, "utf-8"),
-						filename: `report#${userData.id}.txt`,
-					},
-					peer_id: 2e9 + DB.config.VK.group.logs.conversations.errors,
-				})
-			).toString(),
+			message: `Готов отчёт по пользователю @id${userData.id} (${userData.first_name_dat} ${userData.last_name_dat})`, type: "info", params: {
+				attachment: (
+					await VK.group.getVK().upload.messageDocument({
+						source: {
+							value: Buffer.from(reportText, "utf-8"),
+							filename: `report#${userData.id}.txt`,
+						},
+						peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
+					})
+				).toString(),
+			}
 		},
 	);
 });
