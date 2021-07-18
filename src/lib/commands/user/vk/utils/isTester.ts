@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/^(?:!tester)$/i, async function (message) {
 	await message.loadMessagePayload();

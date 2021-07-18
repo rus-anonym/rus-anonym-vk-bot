@@ -1,12 +1,12 @@
 import utils from "rus-anonym-utils";
 
-import { UserCommand } from "../../../utils/lib/commands";
-import VK from "../../../VK/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import VK from "../../../../VK/core";
 
 new UserCommand(/(?:^!audio)(?:\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {
 		return await message.editMessage({
-			message: "Отсутствует аргумент",
+			message: "Отсутствует запрос",
 		});
 	}
 

@@ -1,10 +1,10 @@
 import moment from "moment";
 
-import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
-import VK from "../../../VK/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import InternalUtils from "../../../../utils/core";
+import VK from "../../../../VK/core";
 
-new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
+new UserCommand(/(?:^!invite|!inv)(?:\s(.*))?$/i, async function (message, vk) {
 	if (!message.isChat) {
 		return message.editMessage({
 			message: "Работает только в беседах",
@@ -23,18 +23,18 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 
 	if (userID > 0) {
 		try {
-			await vk.api.messages.removeChatUser({
+			await vk.api.messages.addChatUser({
 				chat_id: message.chatId as number,
 				user_id: userID,
 			});
 			await message.editMessage({
-				message: `https://vk.com/id${userID} исключён из беседы в ${moment().format(
+				message: `https://vk.com/id${userID} добавлен в беседу в ${moment().format(
 					"HH:mm:ss",
 				)}`,
 			});
 		} catch (error) {
 			return message.editMessage({
-				message: `Не могу исключить пользователя https://vk.com/id${userID} из беседы\n${error.message}`,
+				message: `Не могу пригласить https://vk.com/id${userID} в беседу\n${error.message}`,
 			});
 		}
 	} else {
@@ -49,15 +49,15 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 			await VK.user.botpod.updateToken();
 		}
 		try {
-			await VK.user.botpod.kickBot(message.peerId, userID);
+			await VK.user.botpod.addBotToChat(message.peerId, userID);
 			return message.editMessage({
-				message: `https://vk.com/club${-userID} исключён из беседы в ${moment().format(
+				message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
 					"HH:mm:ss",
 				)}`,
 			});
 		} catch (error) {
 			return message.editMessage({
-				message: `Не могу исключить https://vk.com/club${-userID} из беседу\n${
+				message: `Не могу пригласить https://vk.com/club${-userID} в беседу\n${
 					error.message
 				}`,
 			});

@@ -1,5 +1,5 @@
-import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/(?:^!reserve)(?:\s(.*))$/i, async function (message) {
 	try {

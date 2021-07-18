@@ -5,14 +5,16 @@ import VK from "../../VK/core";
 import DB from "../../DB/core";
 
 async function createBalabolaPost() {
-	const [oldPost] = (
-		await VK.user.getVK().api.wall.get({
-			owner_id: -DB.config.VK.group.id,
-			count: 1,
-		})
-	).items;
+	const oldPosts = await VK.user.getVK().api.wall.get({
+		owner_id: -DB.config.VK.group.id,
+		count: 3,
+	});
+	let text = ``;
+	for (const post of oldPosts.items) {
+		text += post.text || "";
+	}
 	const balaboba = await utils.yandex.balaboba.generate(
-		oldPost.text || "Привет, я RusAnonym Bot",
+		text || "Привет, я RusAnonym Bot",
 	);
 	await VK.user.getVK().api.wall.post({
 		owner_id: -DB.config.VK.group.id,
