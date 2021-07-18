@@ -1,8 +1,8 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
 
-import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/(?:^!инфо|!info)(?:\s(.*))?$/i, async function (message) {
 	await message.loadMessagePayload();

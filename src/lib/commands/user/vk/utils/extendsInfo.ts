@@ -2,10 +2,10 @@ import utils from "rus-anonym-utils";
 import { createCollectIterator, Objects } from "vk-io";
 import { UsersFields } from "vk-io/lib/api/schemas/objects";
 
-import { UserCommand } from "../../../utils/lib/commands";
-import VK from "../../../VK/core";
-import InternalUtils from "../../../utils/core";
-import DB from "../../../DB/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import VK from "../../../../VK/core";
+import InternalUtils from "../../../../utils/core";
+import DB from "../../../../DB/core";
 import moment from "moment";
 
 const UsersGetFields: UsersFields[] = [

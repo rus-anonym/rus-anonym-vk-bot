@@ -1,10 +1,10 @@
 import utils from "rus-anonym-utils";
 import moment from "moment";
 
-import DB from "../../../DB/core";
-import VK from "../../../VK/core";
+import DB from "../../../../DB/core";
+import VK from "../../../../VK/core";
 
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands";
 
 new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 	const messagesForDelete = (await DB.user.models.message.aggregate([

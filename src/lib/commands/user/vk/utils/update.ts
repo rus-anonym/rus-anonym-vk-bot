@@ -1,6 +1,6 @@
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands";
 
-import InternalUtils from "../../../utils/core";
+import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/^(?:!update)$/i, async function (message) {
 	await message.loadMessagePayload();

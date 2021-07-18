@@ -1,6 +1,6 @@
-import { UserCommand } from "../../../utils/lib/commands";
-import InternalUtils from "../../../utils/core";
-import VK from "../../../VK/core";
+import { UserCommand } from "../../../../utils/lib/commands";
+import InternalUtils from "../../../../utils/core";
+import VK from "../../../../VK/core";
 
 new UserCommand(/(?:^(\+|-)др)(?:\s(.*))?$/i, async function (message) {
 	await message.loadMessagePayload();
