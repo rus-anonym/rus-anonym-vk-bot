@@ -4,6 +4,7 @@ import getBirthdays from "./tasks/getBirthdays";
 import updateOnlinePrivacySettings from "./tasks/updateOnlinePrivacySettings";
 import deleteSameAudios from "./tasks/deleteSameAudios";
 import createBalabolaPost from "./tasks/createBalabolaPost";
+import sendHappyBirthdayGreetings from "./tasks/sendHappyBirthdayGreetings";
 
 export default {
 	updateUserData,
@@ -12,4 +13,5 @@ export default {
 	deleteSameAudios,
 	updateOnlinePrivacySettings,
 	createBalabolaPost,
+	sendHappyBirthdayGreetings,
 };
