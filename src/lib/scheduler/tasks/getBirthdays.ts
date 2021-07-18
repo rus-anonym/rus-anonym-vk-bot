@@ -12,6 +12,7 @@ ${users.map((user, index) => {
 }
 
 export default new Interval({
+	type: "getBirthdays",
 	source: getBirthdays,
 	cron: "0 0 * * *",
 	onDone: (log) => {

@@ -160,6 +160,7 @@ async function updateUsersData(): Promise<string | null> {
 }
 
 export default new Interval({
+	type: "updateUsersData",
 	source: updateUsersData,
 	plannedTime: Date.now(),
 	cron: "*/30 * * * *",
