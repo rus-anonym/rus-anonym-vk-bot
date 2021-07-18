@@ -65,7 +65,7 @@ class BotPodVK {
 		this.api = new API({
 			token: data.token,
 		});
-		InternalUtils.logger.send(`Токен для BotPod обновлён`, "info");
+		InternalUtils.logger.send({ message: `Токен для BotPod обновлён`, type: "info" });
 	}
 
 	public async messageHandler(

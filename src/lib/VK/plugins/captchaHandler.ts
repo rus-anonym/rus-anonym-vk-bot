@@ -19,36 +19,34 @@ async function captchaHandler(
 		await retry(key);
 		captcha.markAnswerAsGood();
 		InternalUtils.logger.send(
-			`Captcha solve report
+			{
+				message: `Captcha solve report
 SID: ${payload.sid}
 Type: ${payload.type}
-${
-	payload.request
-		? `
+${payload.request
+						? `
 Method: ${payload.request.method}
 Params: ${JSON.stringify(payload.request.params, null, "\t")}
 Attempt: ${payload.request.retries}`
-		: ""
-}
-Status: Good`,
-			"captcha",
+						: ""}
+Status: Good`, type: "captcha"
+			},
 		);
 	} catch (error) {
 		// captcha.markAnswerAsBad();
 		InternalUtils.logger.send(
-			`Captcha solve report
+			{
+				message: `Captcha solve report
 SID: ${payload.sid}
 Type: ${payload.type}
-${
-	payload.request
-		? `
+${payload.request
+						? `
 Method: ${payload.request.method}
 Params: ${JSON.stringify(payload.request.params, null, "\t")}
 Attempt: ${payload.request.retries}`
-		: ""
-}
-Status: Bad`,
-			"captcha",
+						: ""}
+Status: Bad`, type: "captcha"
+			},
 		);
 	}
 }

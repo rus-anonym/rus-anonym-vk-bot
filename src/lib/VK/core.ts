@@ -68,23 +68,23 @@ class UserVK extends Worker {
 		this.main.updates.on("friend_activity", userMiddlewares.friendActivity);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
-				`Необработанное событие пользователя:
-Type: ${event.type}
-SubTypes: ${JSON.stringify(event.subTypes)}`,
-				"error",
 				{
-					attachment: (
-						await vk.group.getVK().upload.messageDocument({
-							source: {
-								value: Buffer.from(
-									JSON.stringify(event.toJSON(), null, "\t"),
-									"utf-8",
-								),
-								filename: "event.txt",
-							},
-							peer_id: 2e9 + DB.config.VK.group.logs.conversations.errors,
-						})
-					).toString(),
+					message: `Необработанное событие пользователя:
+Type: ${event.type}
+SubTypes: ${JSON.stringify(event.subTypes)}`, type: "error", params: {
+						attachment: (
+							await vk.group.getVK().upload.messageDocument({
+								source: {
+									value: Buffer.from(
+										JSON.stringify(event.toJSON(), null, "\t"),
+										"utf-8"
+									),
+									filename: "event.txt",
+								},
+								peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
+							})
+						).toString(),
+					}
 				},
 			);
 		});
@@ -121,23 +121,23 @@ class GroupVK extends Worker {
 		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send(
-				`Необработанное событие группы:
-Type: ${event.type}
-SubTypes: ${JSON.stringify(event.subTypes)}`,
-				"error",
 				{
-					attachment: (
-						await vk.group.getVK().upload.messageDocument({
-							source: {
-								value: Buffer.from(
-									JSON.stringify(event.toJSON(), null, "\t"),
-									"utf-8",
-								),
-								filename: "event.txt",
-							},
-							peer_id: 2e9 + DB.config.VK.group.logs.conversations.errors,
-						})
-					).toString(),
+					message: `Необработанное событие группы:
+Type: ${event.type}
+SubTypes: ${JSON.stringify(event.subTypes)}`, type: "error", params: {
+						attachment: (
+							await vk.group.getVK().upload.messageDocument({
+								source: {
+									value: Buffer.from(
+										JSON.stringify(event.toJSON(), null, "\t"),
+										"utf-8"
+									),
+									filename: "event.txt",
+								},
+								peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
+							})
+						).toString(),
+					}
 				},
 			);
 		});

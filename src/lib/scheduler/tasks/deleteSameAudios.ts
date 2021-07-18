@@ -88,9 +88,10 @@ export default new Interval({
 	onDone: (log) => {
 		if (log.response) {
 			InternalUtils.logger.send(
-				`deleteSameAudios:
-${log.response} за ${log.executionTime}ms`,
-				"info",
+				{
+					message: `deleteSameAudios:
+${log.response} за ${log.executionTime}ms`, type: "info"
+				},
 			);
 		}
 	},

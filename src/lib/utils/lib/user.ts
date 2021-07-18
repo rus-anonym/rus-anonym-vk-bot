@@ -173,8 +173,7 @@ export default class UtilsUser {
 
 		if (!deletedMessageData) {
 			InternalUtils.logger.send(
-				`Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`,
-				"error",
+				{ message: `Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`, type: "error" },
 			);
 			return;
 		}
@@ -726,7 +725,7 @@ export default class UtilsUser {
 			log !==
 			`Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`
 		) {
-			InternalUtils.logger.send(log, "user_track");
+			InternalUtils.logger.send({ message: log, type: "user_track" });
 		}
 	}
 

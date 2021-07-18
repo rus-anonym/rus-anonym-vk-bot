@@ -84,9 +84,10 @@ export default new Interval({
 	onDone: (log) => {
 		if (log.response) {
 			InternalUtils.logger.send(
-				`deleteSameDocuments:
-${log.response} за ${log.executionTime}ms`,
-				"info",
+				{
+					message: `deleteSameDocuments:
+${log.response} за ${log.executionTime}ms`, type: "info"
+				},
 			);
 		}
 	},

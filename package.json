@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
-		"build": "npm run lint && tsc -p tsconfig.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "npm run build && cd dist && node main",
 		"lint": "eslint ./src"
 	},

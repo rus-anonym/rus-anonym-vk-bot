@@ -64,8 +64,7 @@ export default new Interval({
 	cron: "0 0 * * *",
 	onDone: (log) => {
 		InternalUtils.logger.send(
-			`${log.response} за ${log.executionTime}ms`,
-			"info",
+			{ message: `${log.response} за ${log.executionTime}ms`, type: "info" },
 		);
 	},
 });
