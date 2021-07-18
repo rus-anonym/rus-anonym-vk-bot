@@ -21,7 +21,7 @@ async function sendHappyBirthdayGreetings() {
 		});
 		for (const user of chunkInfo) {
 			if (moment(user.bdate, "D.M.YYYY").format("D.M") === currentDate) {
-				for (const fake of VK.fakes.user) {
+				for (const fake of VK.fakes.list) {
 					try {
 						const greeting = (
 							await utils.yandex.balaboba.generate(

@@ -21,7 +21,7 @@ async function createBalabolaPost() {
 		from_group: true,
 		message: balaboba.response,
 	});
-	for (const fake of VK.fakes.user) {
+	for (const fake of VK.fakes.list) {
 		await fake.getAPI().likes.add({
 			type: "post",
 			owner_id: -DB.config.VK.group.id,
