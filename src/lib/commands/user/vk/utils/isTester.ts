@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/^(?:!tester)$/i, async function (message) {

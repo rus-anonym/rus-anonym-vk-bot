@@ -1,4 +1,4 @@
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import InternalUtls from "../../../../utils/core";
 
 new UserCommand(/(?:^!whatis)$/i, async function (message) {
@@ -9,7 +9,7 @@ new UserCommand(/(?:^!whatis)$/i, async function (message) {
 			disable_mentions: true,
 			message: `
 Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message.forwards[0])}`,
+${await InternalUtls.userCommands.attachmentsToString(message.forwards[0])}`,
 		});
 	}
 
@@ -18,7 +18,7 @@ ${await InternalUtls.commands.attachmentsToString(message.forwards[0])}`,
 			disable_mentions: true,
 			message: `
 Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message.replyMessage)}`,
+${await InternalUtls.userCommands.attachmentsToString(message.replyMessage)}`,
 		});
 	}
 
@@ -27,7 +27,7 @@ ${await InternalUtls.commands.attachmentsToString(message.replyMessage)}`,
 			disable_mentions: true,
 			message: `
 Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message)}`,
+${await InternalUtls.userCommands.attachmentsToString(message)}`,
 		});
 	}
 

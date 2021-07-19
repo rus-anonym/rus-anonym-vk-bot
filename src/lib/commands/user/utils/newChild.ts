@@ -1,6 +1,6 @@
 import utils from "rus-anonym-utils";
 
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!newChild)$/i, async function (message) {
 	const man = `🙍‍♂`;

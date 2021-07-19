@@ -1,7 +1,7 @@
 import utils from "rus-anonym-utils";
 import JIMP from "jimp";
 
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 import VK from "../../../VK/core";
 import DB from "../../../DB/core";
 

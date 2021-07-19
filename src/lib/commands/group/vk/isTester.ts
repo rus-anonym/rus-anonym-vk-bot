@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 import InternalUtils from "../../../utils/core";
 
 new GroupCommand(/^(?:\/tester)(?:\s(.*))?$/i, async function (message) {

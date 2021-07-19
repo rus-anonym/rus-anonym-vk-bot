@@ -1,6 +1,6 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^апи|api)$/i, async function (message) {
 	const VK_API_STATUS = await utils.vk.api.status();

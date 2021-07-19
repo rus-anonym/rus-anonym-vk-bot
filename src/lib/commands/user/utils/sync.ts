@@ -1,4 +1,4 @@
-// import { UserCommand } from "../../../utils/lib/commands";
+// import { UserCommand } from "../../../utils/lib/commands/core";
 
 // import DB from "../../../DB/core";
 

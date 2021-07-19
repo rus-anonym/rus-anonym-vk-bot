@@ -1,4 +1,4 @@
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^!команды|\/help|!help|помощь|начать)$/i, async function (
 	message,

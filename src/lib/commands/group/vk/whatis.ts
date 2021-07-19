@@ -1,4 +1,4 @@
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 import InternalUtls from "../../../utils/core";
 
 new GroupCommand(/(?:^\/whatis)$/i, async function (message) {
@@ -6,7 +6,7 @@ new GroupCommand(/(?:^\/whatis)$/i, async function (message) {
 		return message.sendMessage({
 			disable_mentions: true,
 			message: `Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message.forwards[0])}`,
+${await InternalUtls.groupCommands.attachmentsToString(message.forwards[0])}`,
 		});
 	}
 
@@ -14,7 +14,7 @@ ${await InternalUtls.commands.attachmentsToString(message.forwards[0])}`,
 		return message.sendMessage({
 			disable_mentions: true,
 			message: `Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message.replyMessage)}`,
+${await InternalUtls.groupCommands.attachmentsToString(message.replyMessage)}`,
 		});
 	}
 
@@ -22,7 +22,7 @@ ${await InternalUtls.commands.attachmentsToString(message.replyMessage)}`,
 		return message.reply({
 			disable_mentions: true,
 			message: `Прикрепления:
-${await InternalUtls.commands.attachmentsToString(message)}`,
+${await InternalUtls.groupCommands.attachmentsToString(message)}`,
 		});
 	}
 

@@ -1,6 +1,6 @@
 import utils from "rus-anonym-utils";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import VK from "../../../../VK/core";
 
 new UserCommand(/(?:^!doc)(?:\s(.*))?$/i, async function (message) {

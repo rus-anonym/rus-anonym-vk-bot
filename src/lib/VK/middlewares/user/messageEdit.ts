@@ -1,4 +1,4 @@
-import { UserModernMessageContext } from "../../../utils/lib/commands";
+import { UserModernMessageContext } from "../../../utils/lib/commands/core";
 import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
@@ -6,12 +6,13 @@ import VK from "../../core";
 
 function userMessageEdit(message: MessageContext): void {
 	InternalUtils.user.saveMessage(message).catch((err) => {
-		InternalUtils.logger.send(
-			{
-				message: `Error on save message #${message.id}\n
-https://vk.com/im?sel=${message.isChat ? `c${message.chatId}` : message.peerId}&msgid=${message.id}\n\n${err.toString()}`, type: "error"
-			},
-		);
+		InternalUtils.logger.send({
+			message: `Error on save message #${message.id}\n
+https://vk.com/im?sel=${
+				message.isChat ? `c${message.chatId}` : message.peerId
+			}&msgid=${message.id}\n\n${err.toString()}`,
+			type: "error",
+		});
 	});
 
 	if (message.isOutbox && message.text) {
@@ -28,9 +29,10 @@ https://vk.com/im?sel=${message.isChat ? `c${message.chatId}` : message.peerId}&
 			selectedCommand
 				.process(message as UserModernMessageContext, TempVK)
 				.catch((err) => {
-					InternalUtils.logger.send(
-						{ message: `Error on execute command\nError: ${err.toString()}`, type: "error" },
-					);
+					InternalUtils.logger.send({
+						message: `Error on execute command\nError: ${err.toString()}`,
+						type: "error",
+					});
 				});
 		}
 	}

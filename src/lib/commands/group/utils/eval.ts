@@ -1,4 +1,4 @@
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^!eval)(\s(.*))?$/i, async function (message) {
 	if (message.senderId !== 266982306 || !message.args[1]) {

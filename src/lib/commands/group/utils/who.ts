@@ -1,7 +1,7 @@
 import utils from "rus-anonym-utils";
 
 import VK from "../../../VK/core";
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^кто\s)(.*)$/i, async function (message) {
 	if (!message.isChat) {

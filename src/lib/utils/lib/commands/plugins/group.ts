@@ -2,41 +2,43 @@
 
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import { ExtractDoc } from "ts-mongoose";
-import { getRandomId, MessageContext } from "vk-io";
+import { resolveResource, MessageContext } from "vk-io";
 import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
-import VK from "../../VK/core";
-import DB from "../../DB/core";
-import InternalUtils from "../core";
+import {
+	UtilsCommands,
+	GroupCommand,
+	GroupModernMessageContext,
+} from "../core";
+import InternalUtils from "../../../core";
+import VK from "../../../../VK/core";
 
-export default class UtilsGroup {
-	public async getUserData(
-		id: number,
-	): Promise<ExtractDoc<typeof DB.group.schemes.user>> {
-		const userData = await DB.group.models.user.findOne({
-			id,
-		});
-		if (!userData) {
-			const [VK_USER_DATA] = await VK.group.getVK().api.users.get({
-				user_id: id,
-				fields: ["status", "last_seen", "sex"],
-			});
-			const newUserData = new DB.group.models.user({
-				id,
-				nickname: `User #${id}`,
-				regDate: new Date(),
-			});
-			await newUserData.save();
-			VK.group.getVK().api.messages.send({
-				peer_id: 2e9 + 6,
-				random_id: getRandomId(),
-				message: `@id${id} (${VK_USER_DATA.first_name} ${VK_USER_DATA.last_name}) добавлен в БД`,
-				disable_mentions: true,
-			});
-			return newUserData;
+export default class UtilsGroupCommands extends UtilsCommands {
+	public list: GroupCommand[] = [];
+	public addCommand(command: GroupCommand): void {
+		this.list.push(command);
+	}
+	public findCommand(input: string): GroupCommand | undefined {
+		return this.list.find((x) => x.check(input));
+	}
+	public async getUserId(message: GroupModernMessageContext): Promise<number> {
+		if (message.forwards[0]) {
+			return message.forwards[0].senderId;
+		} else if (message.replyMessage) {
+			return message.replyMessage.senderId;
+		} else if (message.args[1]) {
+			try {
+				const linkData = await resolveResource({
+					resource: message.args[1],
+					api: VK.group.getVK().api,
+				});
+				return linkData.id;
+			} catch (error) {
+				throw new Error("Не смог распознать ссылку");
+			}
+		} else {
+			throw new Error("Не смог распознать ссылку");
 		}
-		return userData;
 	}
 
 	public async attachmentsToString(message: MessageContext): Promise<string> {

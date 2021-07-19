@@ -2,7 +2,7 @@
 
 import { MessageContext } from "vk-io";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import VK from "../../../../VK/core";
 
 const add = async (message: MessageContext): Promise<string> => {

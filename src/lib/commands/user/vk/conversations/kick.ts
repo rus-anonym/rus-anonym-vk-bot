@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import InternalUtils from "../../../../utils/core";
 import VK from "../../../../VK/core";
 
