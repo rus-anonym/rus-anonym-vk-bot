@@ -1,34 +1,74 @@
 import { UserCommand } from "../../../../utils/lib/commands/core";
 import InternalUtls from "../../../../utils/core";
+import VK from "../../../../VK/core";
 
 new UserCommand(/(?:^!whatis)$/i, async function (message) {
 	await message.loadMessagePayload();
 
-	if (message.forwards[0] && message.forwards[0].hasAttachments()) {
-		return message.reply({
-			disable_mentions: true,
-			message: `
+	if (message.forwards[0]) {
+		const [forwardMessageInfo] = (
+			await VK.user.getVK().api.messages.getById({
+				message_ids: message.forwards[0].id,
+			})
+		).items;
+		if (
+			forwardMessageInfo.attachments &&
+			forwardMessageInfo.attachments.length > 0
+		) {
+			return message.reply({
+				disable_mentions: true,
+				dont_parse_links: true,
+				message: `
 Прикрепления:
-${await InternalUtls.userCommands.attachmentsToString(message.forwards[0])}`,
-		});
+${await InternalUtls.userCommands.attachmentsToString(
+	forwardMessageInfo.attachments,
+	forwardMessageInfo.from_id,
+)}`,
+			});
+		}
 	}
 
-	if (message.replyMessage?.hasAttachments()) {
-		return message.reply({
-			disable_mentions: true,
-			message: `
+	if (message.replyMessage) {
+		const [replyMessageInfo] = (
+			await VK.user.getVK().api.messages.getById({
+				message_ids: message.replyMessage.id,
+			})
+		).items;
+		if (
+			replyMessageInfo.attachments &&
+			replyMessageInfo.attachments.length > 0
+		) {
+			return message.reply({
+				disable_mentions: true,
+				dont_parse_links: true,
+				message: `
 Прикрепления:
-${await InternalUtls.userCommands.attachmentsToString(message.replyMessage)}`,
-		});
+${await InternalUtls.userCommands.attachmentsToString(
+	replyMessageInfo.attachments,
+	replyMessageInfo.from_id,
+)}`,
+			});
+		}
 	}
 
 	if (message.hasAttachments()) {
-		return message.reply({
-			disable_mentions: true,
-			message: `
+		const [messageInfo] = (
+			await VK.user.getVK().api.messages.getById({
+				message_ids: message.id,
+			})
+		).items;
+		if (messageInfo.attachments && messageInfo.attachments.length > 0) {
+			return message.reply({
+				disable_mentions: true,
+				dont_parse_links: true,
+				message: `
 Прикрепления:
-${await InternalUtls.userCommands.attachmentsToString(message)}`,
-		});
+${await InternalUtls.userCommands.attachmentsToString(
+	messageInfo.attachments,
+	messageInfo.from_id,
+)}`,
+			});
+		}
 	}
 
 	return message.editMessage({
