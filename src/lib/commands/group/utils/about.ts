@@ -1,4 +1,4 @@
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 import DB from "../../../DB/core";
 
 new GroupCommand(/(?:^!бот)$/i, async function (message) {

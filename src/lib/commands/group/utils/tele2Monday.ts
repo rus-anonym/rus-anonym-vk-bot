@@ -2,7 +2,7 @@ import moment from "moment";
 import axios from "axios";
 import cheerio from "cheerio";
 
-import { GroupCommand } from "./../../../utils/lib/commands";
+import { GroupCommand } from "./../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^подарки теле2)$/i, async function (message) {
 	const tele2Monday = await (

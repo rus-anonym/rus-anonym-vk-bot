@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import moment from "moment";
 import utils from "rus-anonym-utils";
+
+import { ExtractDoc } from "ts-mongoose";
+
 import {
 	ContextDefaultState,
 	getRandomId,
@@ -11,17 +14,16 @@ import {
 	ResourceError,
 	Objects,
 } from "vk-io";
-import { ExtractDoc } from "ts-mongoose";
-
-import VK from "../../VK/core";
-import InternalUtils from "../core";
-import DB from "../../DB/core";
 import {
 	FriendsUserXtrLists,
 	UsersFields,
 	UsersUserFull,
 } from "vk-io/lib/api/schemas/objects";
 import { GroupsGetByIdLegacyResponse } from "vk-io/lib/api/schemas/responses";
+
+import VK from "../../VK/core";
+import DB from "../../DB/core";
+import InternalUtils from "../core";
 
 interface BirthdayUser {
 	name: string;
@@ -172,9 +174,10 @@ export default class UtilsUser {
 		});
 
 		if (!deletedMessageData) {
-			InternalUtils.logger.send(
-				{ message: `Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`, type: "error" },
-			);
+			InternalUtils.logger.send({
+				message: `Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`,
+				type: "error",
+			});
 			return;
 		}
 

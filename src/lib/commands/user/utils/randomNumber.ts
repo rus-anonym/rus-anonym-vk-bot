@@ -1,5 +1,5 @@
 import utils from "rus-anonym-utils";
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(
 	/(?:^!выбери число)(?:\sот(?:\s?)(\d+)(?:\s?)(?:(?:до)?)(?:\s?)(?:(\d+)?))?$/i,

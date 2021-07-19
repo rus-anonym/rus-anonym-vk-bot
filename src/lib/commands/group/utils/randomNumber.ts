@@ -1,5 +1,5 @@
 import utils from "rus-anonym-utils";
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(
 	/(?:^выбери число)(?:\sот(?:\s?)(\d+)(?:\s?)(?:(?:до)?)(?:\s?)(?:(\d+)?))?$/i,

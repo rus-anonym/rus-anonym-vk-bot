@@ -1,7 +1,7 @@
 import utils from "rus-anonym-utils";
 
 import VK from "../../../VK/core";
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!кто\s)(.*)$/i, async function (message) {
 	if (!message.isChat) {

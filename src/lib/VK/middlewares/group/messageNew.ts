@@ -1,4 +1,4 @@
-import { GroupModernMessageContext } from "../../../utils/lib/commands";
+import { GroupModernMessageContext } from "../../../utils/lib/commands/core";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
@@ -53,9 +53,10 @@ async function groupMessageNew(
 				}
 			};
 			selectedCommand.process(message, TempVK).catch((err) => {
-				InternalUtils.logger.send(
-					{ message: `Error on execute command\nError: ${err.toString()}`, type: "error" },
-				);
+				InternalUtils.logger.send({
+					message: `Error on execute command\nError: ${err.toString()}`,
+					type: "error",
+				});
 			});
 			return;
 		} else {

@@ -2,7 +2,7 @@ import utils from "rus-anonym-utils";
 
 import VK from "../../../VK/core";
 import InternalUtils from "../../../utils/core";
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) {
 	await message.loadMessagePayload();

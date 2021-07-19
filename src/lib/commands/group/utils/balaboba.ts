@@ -1,6 +1,6 @@
 import utils from "rus-anonym-utils";
 
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 import VK from "../../../VK/core";
 import InternalUtils from "../../../utils/core";

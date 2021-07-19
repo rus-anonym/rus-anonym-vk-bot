@@ -4,7 +4,7 @@ import moment from "moment";
 import DB from "../../../../DB/core";
 import VK from "../../../../VK/core";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 
 new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 	const messagesForDelete = (await DB.user.models.message.aggregate([

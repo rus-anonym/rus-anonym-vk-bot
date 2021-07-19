@@ -1,7 +1,7 @@
 import utils from "rus-anonym-utils";
 import JIMP from "jimp";
 
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!sepia)$/i, async function (message, vk) {
 	await message.loadMessagePayload();

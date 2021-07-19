@@ -2,7 +2,7 @@ import moment from "moment";
 import axios from "axios";
 import cheerio from "cheerio";
 
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!tele2|!теле2)$/i, async function (message) {
 	const tele2Monday = await (

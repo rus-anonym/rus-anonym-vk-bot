@@ -1,8 +1,8 @@
 import { ExtractDoc } from "ts-mongoose";
 import { getRandomId } from "vk-io";
 
-import DB from "../../DB/core";
 import VK from "../../VK/core";
+import DB from "../../DB/core";
 
 export default class UtilsGroup {
 	public async getUserData(

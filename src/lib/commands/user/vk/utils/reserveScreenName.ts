@@ -1,4 +1,4 @@
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import InternalUtils from "../../../../utils/core";
 
 new UserCommand(/(?:^!reserve)(?:\s(.*))$/i, async function (message) {
@@ -8,8 +8,15 @@ new UserCommand(/(?:^!reserve)(?:\s(.*))$/i, async function (message) {
 			message: `@${message.args[1]} зарезервирован`,
 		});
 	} catch (error) {
-		return await message.editMessage({
-			message: `Ошибка: ${error.toString()}`,
-		});
+		if (error.code === 17) {
+			return await message.editMessage({
+				message: `Ошибка: ${error.toString()}
+URL: ${error.redirectUri}`,
+			});
+		} else {
+			return await message.editMessage({
+				message: `Ошибка: ${error.toString()}`,
+			});
+		}
 	}
 });

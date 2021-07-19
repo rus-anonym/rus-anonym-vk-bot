@@ -1,4 +1,4 @@
-import { GroupCommand } from "../../../utils/lib/commands";
+import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand(/(?:^!ник)(\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {

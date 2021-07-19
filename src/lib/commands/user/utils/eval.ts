@@ -1,4 +1,4 @@
-import { UserCommand } from "../../../utils/lib/commands";
+import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
 	if (!message.args[1]) {

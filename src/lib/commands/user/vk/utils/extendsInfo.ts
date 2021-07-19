@@ -2,7 +2,7 @@ import utils from "rus-anonym-utils";
 import { createCollectIterator, Objects } from "vk-io";
 import { UsersFields } from "vk-io/lib/api/schemas/objects";
 
-import { UserCommand } from "../../../../utils/lib/commands";
+import { UserCommand } from "../../../../utils/lib/commands/core";
 import VK from "../../../../VK/core";
 import InternalUtils from "../../../../utils/core";
 import DB from "../../../../DB/core";
@@ -124,9 +124,10 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 		message: `Готовлю отчёт на @id${userData.id} (${userData.first_name_acc} ${userData.last_name_acc})`,
 	});
 
-	InternalUtils.logger.send(
-		{ message: `Report @id${userData.id}: Начинаю загрузку друзей`, type: "info" },
-	);
+	InternalUtils.logger.send({
+		message: `Report @id${userData.id}: Начинаю загрузку друзей`,
+		type: "info",
+	});
 
 	const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
 		api: VK.fakes.getUserFakeAPI(),
@@ -173,12 +174,11 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 		possibleRelatives.concat(sameCity, sameSchools),
 	);
 
-	InternalUtils.logger.send(
-		{
-			message: `Report @id${userData.id}: Загрузка друзей завершена
-Начинаю загрузку групп`, type: "info"
-		},
-	);
+	InternalUtils.logger.send({
+		message: `Report @id${userData.id}: Загрузка друзей завершена
+Начинаю загрузку групп`,
+		type: "info",
+	});
 
 	let userGroups: {
 		id: number;
@@ -206,12 +206,11 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 		);
 	}
 
-	InternalUtils.logger.send(
-		{
-			message: `Report @id${userData.id}: Загрузка групп завершена
-Начинаю проверку друзей в группах`, type: "info"
-		},
-	);
+	InternalUtils.logger.send({
+		message: `Report @id${userData.id}: Загрузка групп завершена
+Начинаю проверку друзей в группах`,
+		type: "info",
+	});
 
 	for (const group of userGroups) {
 		for (const friendsChunk of utils.array.splitTo(possibleRightPeople, 500)) {
@@ -229,12 +228,11 @@ new UserCommand(/(?:^!отчёт)(?:\s(.*))?$/i, async function (message) {
 		}
 	}
 
-	InternalUtils.logger.send(
-		{
-			message: `Report @id${userData.id}: Проверка друзей закончена
-Генерирую отчёт...`, type: "info"
-		},
-	);
+	InternalUtils.logger.send({
+		message: `Report @id${userData.id}: Проверка друзей закончена
+Генерирую отчёт...`,
+		type: "info",
+	});
 
 	userGroups.sort((a, b) => {
 		if (a.friends.length > b.friends.length) {
@@ -344,19 +342,19 @@ ${userStickers.items
 	})
 	.join(`\n`)}`;
 
-	InternalUtils.logger.send(
-		{
-			message: `Готов отчёт по пользователю @id${userData.id} (${userData.first_name_dat} ${userData.last_name_dat})`, type: "info", params: {
-				attachment: (
-					await VK.group.getVK().upload.messageDocument({
-						source: {
-							value: Buffer.from(reportText, "utf-8"),
-							filename: `report#${userData.id}.txt`,
-						},
-						peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
-					})
-				).toString(),
-			}
+	InternalUtils.logger.send({
+		message: `Готов отчёт по пользователю @id${userData.id} (${userData.first_name_dat} ${userData.last_name_dat})`,
+		type: "info",
+		params: {
+			attachment: (
+				await VK.group.getVK().upload.messageDocument({
+					source: {
+						value: Buffer.from(reportText, "utf-8"),
+						filename: `report#${userData.id}.txt`,
+					},
+					peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
+				})
+			).toString(),
 		},
-	);
+	});
 });

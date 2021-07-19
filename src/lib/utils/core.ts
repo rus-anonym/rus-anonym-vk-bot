@@ -1,4 +1,5 @@
-import { UtilsUserCommands, UtilsGroupCommands } from "./lib/commands";
+import UtilsUserCommands from "./lib/commands/plugins/user";
+import UtilsGroupCommands from "./lib/commands/plugins/group";
 import UtilsLogger from "./lib/logger";
 import UtilsUser from "./lib/user";
 import UtilsGroup from "./lib/group";
