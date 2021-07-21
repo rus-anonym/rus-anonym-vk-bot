@@ -4,7 +4,6 @@ import getBirthdays from "./tasks/getBirthdays";
 import updateOnlinePrivacySettings from "./tasks/updateOnlinePrivacySettings";
 import deleteSameAudios from "./tasks/deleteSameAudios";
 import deleteSameDocuments from "./tasks/deleteSameDocuments";
-import createBalabolaPost from "./tasks/createBalabolaPost";
 import sendHappyBirthdayGreetings from "./tasks/sendHappyBirthdayGreetings";
 
 export default {
@@ -13,7 +12,6 @@ export default {
 	getBirthdays,
 	deleteSameAudios,
 	updateOnlinePrivacySettings,
-	createBalabolaPost,
 	sendHappyBirthdayGreetings,
 	deleteSameDocuments,
 };
