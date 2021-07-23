@@ -30,11 +30,7 @@ class FakeUserVK extends FakeWorker {
 				new API({
 					token,
 					callbackService,
-					apiVersion: "5.157",
-					apiHeaders: {
-						"User-Agent":
-							"VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
-					},
+					...DB.constants.vk.fake.defaultParams,
 				}),
 			);
 		}

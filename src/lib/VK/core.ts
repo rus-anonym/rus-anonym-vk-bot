@@ -29,20 +29,14 @@ class UserVK extends Worker {
 	public main = new VK({
 		token: DB.config.VK.user.tokens.main,
 		callbackService: userCallbackService,
-		apiVersion: "5.157",
-		apiHeaders: {
-			"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
-		},
+		...DB.constants.vk.user.defaultParams,
 	});
 
 	public additional = DB.config.VK.user.tokens.additional.map((token) => {
 		return new VK({
 			token,
 			callbackService: userCallbackService,
-			apiVersion: "5.157",
-			apiHeaders: {
-				"User-Agent": "VKAndroidApp/1.00-0000 (Linux; RusAnonym; BOT; ru; 0x0)",
-			},
+			...DB.constants.vk.user.defaultParams,
 		});
 	});
 
