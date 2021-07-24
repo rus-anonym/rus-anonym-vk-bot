@@ -6,7 +6,14 @@
 // 	ICallbackServiceTwoFactorPayload,
 // 	CallbackServiceRetry,
 // } from "vk-io";
-// import { ImplicitFlowUser, officialAppCredentials } from "@vk-io/authorization";
+// import {
+// 	ImplicitFlowUser,
+// 	AccountVerification,
+// 	ImplicitFlow,
+// 	DirectAuthorization,
+// 	ImplicitFlowGroups,
+// 	officialAppCredentials,
+// } from "@vk-io/authorization";
 
 // import captchaHandler from "./captchaHandler";
 // import DB from "../../DB/core";
@@ -17,17 +24,39 @@
 // 	date: number;
 // }
 
-// interface ICallbackService {
-// 	app: number;
-// 	created: Date;
-// 	service: CallbackService;
+// class TempAuthorize {
+// 	public readonly app: number;
+// 	public readonly created: number;
+// 	public readonly service: CallbackService;
+
+// 	constructor({
+// 		app,
+// 		created,
+// 		service,
+// 	}: {
+// 		app: number;
+// 		created: number | Date;
+// 		service: CallbackService;
+// 	}) {
+// 		this.app = app;
+// 		this.created = Math.ceil(Number(created) / 1000);
+// 		this.service = service;
+// 	}
 // }
 
 // class Authorization {
-// 	private codes: IAuthorizationCode[] = [];
-// 	private callbackServices: ICallbackService[] = [];
+// 	private readonly codes: IAuthorizationCode[] = [];
+// 	private readonly authorizations: TempAuthorize[] = [];
 
-// 	public async authorize(id = officialAppCredentials.android.id);
+// 	public async authorize(id: number, secret = ""): Promise<void> {
+// 		const tempCallbackService = new CallbackService();
+// 		const tempAuthorization = new TempAuthorize({
+// 			app: id,
+// 			created: new Date(),
+// 			service: tempCallbackService,
+// 		});
+// 		this.authorizations.push(tempAuthorization);
+// 	}
 
 // 	public async messageHandler(
 // 		context: MessageContext,

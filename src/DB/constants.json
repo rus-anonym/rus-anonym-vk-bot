@@ -1,0 +1,26 @@
+{
+	"vk": {
+		"user": {
+			"defaultParams": {
+				"apiVersion": "5.157",
+				"headers": {
+					"X-Get-Processing-Time": "1",
+					"X-Fork-Disabled": "1",
+					"User-Agent": "VKAndroidApp/1.0",
+					"X-VK-Android-Client": "new"
+				}
+			}
+		},
+		"fake": {
+			"defaultParams": {
+				"apiVersion": "5.157",
+				"headers": {
+					"X-Get-Processing-Time": "1",
+					"X-Fork-Disabled": "1",
+					"User-Agent": "VKAndroidApp/1.0",
+					"X-VK-Android-Client": "new"
+				}
+			}
+		}
+	}
+}

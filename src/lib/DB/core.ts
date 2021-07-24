@@ -2,6 +2,7 @@ import { typedModel } from "ts-mongoose";
 import mongoose from "mongoose";
 
 import config from "../../DB/config.json";
+import constants from "../../DB/constants.json";
 import userSchemes from "./userSchemes";
 import groupSchemes from "./groupSchemes";
 
@@ -79,6 +80,7 @@ class GroupDB extends DB {
 
 class CoreDB {
 	public config = config;
+	public constants = constants;
 
 	public user = new UserDB();
 	public group = new GroupDB();
