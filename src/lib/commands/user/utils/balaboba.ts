@@ -7,7 +7,6 @@ import InternalUtils from "../../../utils/core";
 
 new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 	let oldText;
-	let isContinue = false;
 	if (!message.args[1]) {
 		await message.loadMessagePayload();
 		if (message.replyMessage && message.replyMessage.text) {
@@ -15,7 +14,6 @@ new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 				/(?:\n\nMS: (?:\d+.\d+))/,
 				"",
 			);
-			isContinue = true;
 		} else {
 			let userID;
 			try {
@@ -32,14 +30,11 @@ new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 		}
 	} else {
 		oldText = message.args[1];
-		isContinue = true;
 	}
 	try {
-		const { response, text, ms } = await utils.yandex.balaboba.generate(
-			oldText.trim(),
-		);
+		const { text, ms } = await utils.yandex.balaboba.generate(oldText.trim());
 		return await message.editMessage({
-			message: isContinue ? response : text + `\n\nMS: ${ms}`,
+			message: text + `\n\nMS: ${ms}`,
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
