@@ -14,6 +14,7 @@ import "./user/utils/newChild";
 import "./user/utils/balaboba";
 import "./user/utils/convertLayout";
 import "./user/utils/communication";
+import "./user/utils/tiktok";
 
 import "./user/vk/attachments/article";
 import "./user/vk/attachments/whatis";
@@ -53,6 +54,7 @@ import "./group/utils/nick";
 import "./group/utils/commands";
 import "./group/utils/about";
 import "./group/utils/balaboba";
+import "./group/utils/tiktok";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
