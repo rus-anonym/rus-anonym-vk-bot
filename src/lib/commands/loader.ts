@@ -30,6 +30,7 @@ import "./user/vk/utils/info";
 import "./user/vk/utils/extendsInfo";
 import "./user/vk/utils/update";
 import "./user/vk/utils/friend";
+import "./user/vk/utils/syncFriends";
 
 import "./user/vk/conversations/deleteMessages";
 import "./user/vk/conversations/kick";
