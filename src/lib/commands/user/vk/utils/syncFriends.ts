@@ -17,7 +17,7 @@ new UserCommand(/^(?:!syncFriends)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	await message.editMessage({
-		message: `Получаю друзей https://vk.com/userID`,
+		message: `Получаю друзей https://vk.com/id${userID}`,
 	});
 
 	const iterator = createCollectIterator<Objects.FriendsUserXtrLists>({
@@ -25,10 +25,9 @@ new UserCommand(/^(?:!syncFriends)(?:\s(.*))?$/i, async function (message) {
 		method: "friends.get",
 		params: {
 			user_id: userID,
-			fields: InternalUtils.user.usersGetFields,
+			fields: InternalUtils.user.mainUsersGetFields,
 		},
 		countPerRequest: 500,
-		parallelRequests: 4,
 	});
 
 	for await (const chunk of iterator) {
