@@ -1,5 +1,3 @@
-import { createCollectIterator, Objects } from "vk-io";
-
 import { UserCommand } from "../../../../utils/lib/commands/core";
 
 import VK from "../../../../VK/core";
@@ -17,27 +15,31 @@ new UserCommand(/^(?:!syncFriends)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	await message.editMessage({
-		message: `Получаю друзей https://vk.com/userID`,
+		message: `Получаю друзей https://vk.com/id${userID}`,
 	});
 
-	const iterator = createCollectIterator<Objects.FriendsUserXtrLists>({
-		api: VK.user.getVK().api,
-		method: "friends.get",
-		params: {
-			user_id: userID,
-			fields: InternalUtils.user.usersGetFields,
-		},
-		countPerRequest: 500,
-		parallelRequests: 4,
+	const { items: userFriends } = await VK.user.getVK().api.friends.get({
+		user_id: userID,
+		count: 10000,
 	});
 
-	for await (const chunk of iterator) {
-		await message.editMessage({
-			message: `Получаю друзей https://vk.com/id${userID}
-Received: ${chunk.received}
-Total: ${chunk.total}`,
+	await message.editMessage({
+		message: `Друзья (${userFriends.length}) получены https://vk.com/id${userID}`,
+	});
+
+	while (userFriends.length) {
+		const usersInfo = await VK.user.getVK().api.users.get({
+			user_ids: userFriends
+				.splice(userFriends.length - 500, 500)
+				.map((x) => String(x)),
+			fields: InternalUtils.user.mainUsersGetFields,
 		});
-		for (const user of chunk.items) {
+
+		await message.editMessage({
+			message: `Осталось: ${userFriends.length}`,
+		});
+
+		for (const user of usersInfo) {
 			await InternalUtils.user.getUserData(userID, user);
 		}
 	}

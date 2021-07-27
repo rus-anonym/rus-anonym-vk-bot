@@ -30,7 +30,8 @@ https://vk.com/im?sel=${
 				.process(message as UserModernMessageContext, TempVK)
 				.catch((err) => {
 					InternalUtils.logger.send({
-						message: `Error on execute command\nError: ${err.toString()}`,
+						message: `Error on execute command\nError: ${err.toString()}
+JSON Stringify: ${JSON.stringify(err.toJSON(), null, "\t")}`,
 						type: "error",
 					});
 				});

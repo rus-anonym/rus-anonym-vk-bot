@@ -34,7 +34,7 @@ interface BirthdayUser {
 export default class UtilsUser {
 	private splittedWord = `defbca1234567890`.split("");
 
-	public usersGetFields: UsersFields[] = [
+	public allUsersGetFields: UsersFields[] = [
 		"first_name_nom",
 		"first_name_gen",
 		"first_name_dat",
@@ -124,6 +124,26 @@ export default class UtilsUser {
 		"clips_count",
 		"service_description",
 		"is_dead",
+	];
+
+	public mainUsersGetFields: UsersFields[] = [
+		"sex",
+		"last_seen",
+		"first_name_nom",
+		"first_name_gen",
+		"first_name_dat",
+		"first_name_acc",
+		"first_name_ins",
+		"first_name_abl",
+		"last_name_nom",
+		"last_name_gen",
+		"last_name_dat",
+		"last_name_acc",
+		"last_name_ins",
+		"last_name_abl",
+		"domain",
+		"photo_max_orig",
+
 	];
 
 	public async processDeletedMessage(
@@ -432,7 +452,7 @@ export default class UtilsUser {
 			if (!vkUserData) {
 				[vkUserData] = await VK.user
 					.getVK()
-					.api.users.get({ user_id: id, fields: this.usersGetFields });
+					.api.users.get({ user_id: id, fields: this.allUsersGetFields });
 			}
 			const newUserData = new DB.user.models.user({
 				id,
@@ -519,7 +539,7 @@ export default class UtilsUser {
 		if (!userInfo) {
 			[userInfo] = await VK.user.getVK().api.users.get({
 				user_ids: id.toString(),
-				fields: this.usersGetFields,
+				fields: this.allUsersGetFields,
 			});
 		}
 
