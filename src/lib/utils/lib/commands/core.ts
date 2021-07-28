@@ -59,13 +59,13 @@ export class GroupCommand extends Command {
 	) => Promise<unknown>;
 
 	constructor({
-		regexp,
+		regexp = /null/,
 		process,
 		isSelf = false,
 		type = "regexp",
 		callbackTrigger = "null",
 	}: {
-		regexp: RegExp;
+		regexp?: RegExp;
 		process: (
 			message: MessageContext<GroupModernMessageContextState>,
 			vk: VK,
