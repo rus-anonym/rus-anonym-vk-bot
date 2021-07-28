@@ -1,9 +1,10 @@
 import utils from "rus-anonym-utils";
 import { GroupCommand } from "../../../utils/lib/commands/core";
 
-new GroupCommand(
-	/(?:^выбери число)(?:\sот(?:\s?)(\d+)(?:\s?)(?:(?:до)?)(?:\s?)(?:(\d+)?))?$/i,
-	async function (message) {
+new GroupCommand({
+	regexp:
+		/(?:^выбери число)(?:\sот(?:\s?)(\d+)(?:\s?)(?:(?:до)?)(?:\s?)(?:(\d+)?))?$/i,
+	process: async function (message) {
 		if (!message.state.args[1]) {
 			const firstNum = utils.number.getRandomInt(0, 50);
 			const secondNum = utils.number.getRandomInt(50, 100);
@@ -37,4 +38,4 @@ new GroupCommand(
 			)}`,
 		});
 	},
-);
+});
