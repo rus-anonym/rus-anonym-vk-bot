@@ -7,7 +7,7 @@ import InternalUtils from "../../../utils/core";
 
 new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 	let oldText;
-	if (!message.args[1]) {
+	if (!message.state.args[1]) {
 		await message.loadMessagePayload();
 		if (message.replyMessage && message.replyMessage.text) {
 			oldText = message.replyMessage.text.replace(
@@ -29,7 +29,7 @@ new UserCommand(/(?:^!ии)(\s(.*))?$/i, async function (message) {
 			oldText = `${user.first_name} ${user.last_name} это`;
 		}
 	} else {
-		oldText = message.args[1];
+		oldText = message.state.args[1];
 	}
 	try {
 		const { text, ms } = await utils.yandex.balaboba.generate(oldText.trim());

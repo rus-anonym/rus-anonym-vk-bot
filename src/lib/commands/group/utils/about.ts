@@ -2,7 +2,7 @@ import { GroupCommand } from "../../../utils/lib/commands/core";
 import DB from "../../../DB/core";
 
 new GroupCommand(/(?:^!бот)$/i, async function (message) {
-	return message.sendMessage({
+	return message.state.sendMessage({
 		message: `Group DB Stats:
 Users: ${await DB.group.models.user.countDocuments()}
 

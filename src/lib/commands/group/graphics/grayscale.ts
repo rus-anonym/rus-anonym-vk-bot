@@ -22,7 +22,7 @@ new GroupCommand(/(?:^\/grayscale)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Серый стикер:`,
 			attachment: graffiti.toString(),
 		});
@@ -42,7 +42,7 @@ new GroupCommand(/(?:^\/grayscale)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Серое фото:`,
 			attachment: photo.toString(),
 		});
@@ -62,13 +62,13 @@ new GroupCommand(/(?:^\/grayscale)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Серое фото:`,
 			attachment: photo.toString(),
 		});
 	}
 
-	return await message.sendMessage({
+	return await message.state.sendMessage({
 		message: `Не найдено изображение или стикер`,
 	});
 });

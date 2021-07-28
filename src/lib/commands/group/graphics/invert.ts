@@ -22,7 +22,7 @@ new GroupCommand(/(?:^\/invert)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Инвертированный стикер:`,
 			attachment: graffiti.toString(),
 		});
@@ -42,7 +42,7 @@ new GroupCommand(/(?:^\/invert)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Инвертированное фото:`,
 			attachment: photo.toString(),
 		});
@@ -62,13 +62,13 @@ new GroupCommand(/(?:^\/invert)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Инвертированное фото:`,
 			attachment: photo.toString(),
 		});
 	}
 
-	return await message.sendMessage({
+	return await message.state.sendMessage({
 		message: `Не найдено изображение или стикер`,
 	});
 });

@@ -1,19 +1,13 @@
-import { UserModernMessageContext } from "../../../utils/lib/commands/core";
+import { UserModernMessageContextState } from "../../../utils/lib/commands/core";
 import { MessageContext } from "vk-io";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
 
-function userMessageNew(message: MessageContext): void {
-	InternalUtils.user.saveMessage(message).catch((err) => {
-		InternalUtils.logger.send({
-			message: `Error on save message #${message.id}\n
-https://vk.com/im?sel=${
-				message.isChat ? `c${message.chatId}` : message.peerId
-			}&msgid=${message.id}\n\n${err.toString()}`,
-			type: "error",
-		});
-	});
+function userMessageNew(
+	message: MessageContext<UserModernMessageContextState>,
+): void {
+	InternalUtils.user.saveMessage(message).catch(() => null);
 
 	if (message.isOutbox && message.text) {
 		const selectedCommand = InternalUtils.userCommands.findCommand(
@@ -23,18 +17,16 @@ https://vk.com/im?sel=${
 
 		if (selectedCommand) {
 			const TempVK = VK.user.getVK();
-			message.args = selectedCommand.regexp.exec(
+			message.state.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;
-			selectedCommand
-				.process(message as UserModernMessageContext, TempVK)
-				.catch((err) => {
-					InternalUtils.logger.send({
-						message: `Error on execute command\nError: ${err.toString()}
+			selectedCommand.process(message, TempVK).catch((err) => {
+				InternalUtils.logger.send({
+					message: `Error on execute command\nError: ${err.toString()}
 JSON Stringify: ${JSON.stringify(err.toJSON(), null, "\t")}`,
-						type: "error",
-					});
+					type: "error",
 				});
+			});
 		}
 	}
 }

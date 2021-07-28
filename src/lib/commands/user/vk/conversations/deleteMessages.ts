@@ -28,7 +28,7 @@ new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 			},
 		},
 		{
-			$limit: Number(context.args[1] || 10),
+			$limit: Number(context.state.args[1] || 10),
 		},
 		{
 			$group: {

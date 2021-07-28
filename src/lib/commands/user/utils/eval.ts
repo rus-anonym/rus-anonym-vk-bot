@@ -1,11 +1,11 @@
 import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
-	if (!message.args[1]) {
+	if (!message.state.args[1]) {
 		return message.reply(`нет кода`);
 	}
 	try {
-		const answer: string | number | JSON = await eval(message.args[1]);
+		const answer: string | number | JSON = await eval(message.state.args[1]);
 		if (typeof answer === "string") {
 			return await message.reply(`Результат: ${answer}`, {
 				disable_mentions: true,

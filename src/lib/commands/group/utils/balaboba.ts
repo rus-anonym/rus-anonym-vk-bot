@@ -7,7 +7,7 @@ import InternalUtils from "../../../utils/core";
 
 new GroupCommand(/(?:^\/ии)(\s(.*))?$/i, async function (message) {
 	let oldText;
-	if (!message.args[1]) {
+	if (!message.state.args[1]) {
 		if (message.replyMessage && message.replyMessage.text) {
 			oldText = message.replyMessage.text.replace(
 				/(?:\n\nMS: (?:\d+.\d+))/,
@@ -28,17 +28,17 @@ new GroupCommand(/(?:^\/ии)(\s(.*))?$/i, async function (message) {
 			oldText = `${user.first_name} ${user.last_name} это`;
 		}
 	} else {
-		oldText = message.args[1];
+		oldText = message.state.args[1];
 	}
 	try {
 		const { text, ms } = await utils.yandex.balaboba.generate(oldText.trim());
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: text + `\n\nMS: ${ms}`,
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
 	} catch (err) {
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Balaboba API Error (${err.message})`,
 		});
 	}

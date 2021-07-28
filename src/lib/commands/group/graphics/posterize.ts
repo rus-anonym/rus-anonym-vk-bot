@@ -6,13 +6,15 @@ import VK from "../../../VK/core";
 import DB from "../../../DB/core";
 
 new GroupCommand(/(?:^\/posterize)(?:\s(.*))?$/i, async function (message, vk) {
-	if (message.args[1] && !Number(message.args[1])) {
+	if (message.state.args[1] && !Number(message.state.args[1])) {
 		return await message.editMessage({
-			message: `${message.args[1]} не является числом`,
+			message: `${message.state.args[1]} не является числом`,
 		});
 	}
 
-	const posterizeEffect = message.args[1] ? Number(message.args[1]) : 3;
+	const posterizeEffect = message.state.args[1]
+		? Number(message.state.args[1])
+		: 3;
 
 	if (message.replyMessage?.hasAttachments("sticker")) {
 		const source = utils.array.last(

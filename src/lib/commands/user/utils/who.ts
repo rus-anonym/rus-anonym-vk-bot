@@ -18,7 +18,7 @@ new UserCommand(/(?:^!кто\s)(.*)$/i, async function (message) {
 			utils.array.random(users.items.filter((x) => x.member_id > 0)).member_id,
 	);
 	return await message.reply({
-		message: `Мне кажется что ${message.args[1]} это @id${randomUser?.id} (${randomUser?.first_name} ${randomUser?.last_name})`,
+		message: `Мне кажется что ${message.state.args[1]} это @id${randomUser?.id} (${randomUser?.first_name} ${randomUser?.last_name})`,
 		disable_mentions: true,
 	});
 });

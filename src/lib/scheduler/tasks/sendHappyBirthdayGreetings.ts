@@ -1,6 +1,6 @@
 import utils from "rus-anonym-utils";
 import moment from "moment";
-import { Interval } from "simple-scheduler-task";
+import { Interval, Timeout } from "simple-scheduler-task";
 import { getRandomId, API } from "vk-io";
 
 import VK from "../../VK/core";
@@ -45,9 +45,9 @@ async function generateGreetingAndSend({
 async function sendHappyBirthdayGreetings() {
 	const usersIDs = (await DB.user.models.user.distinct(`id`)) as number[];
 
-	const currentDate = moment().format("D.M");
+	const currentDate = moment().add(1, "day").format("D.M");
 
-	let log = "";
+	let log = "Запланированы поздравления для:\n";
 
 	for (const chunk of utils.array.splitTo(usersIDs, 750)) {
 		const chunkInfo = await VK.fakes.getUserFakeAPI().users.get({
@@ -56,28 +56,34 @@ async function sendHappyBirthdayGreetings() {
 		});
 		for (const user of chunkInfo) {
 			if (moment(user.bdate, "D.M.YYYY").format("D.M") === currentDate) {
-				await Promise.all(
-					VK.fakes.list.map((fake) =>
-						generateGreetingAndSend({
-							api: fake.getAPI(),
-							user_id: user.id,
-							first_name: user.first_name,
-							last_name: user.last_name,
-						}),
-					),
-				);
-				log += `Поздравил @id${user.id} (${user.first_name} ${user.last_name})\n`;
+				new Timeout({
+					source: async () => {
+						await Promise.all(
+							VK.fakes.list.map((fake) =>
+								generateGreetingAndSend({
+									api: fake.getAPI(),
+									user_id: user.id,
+									first_name: user.first_name,
+									last_name: user.last_name,
+								}),
+							),
+						);
+					},
+					cron: "0 0 * * *",
+				});
+
+				log += `@id${user.id} (${user.first_name} ${user.last_name})\n`;
 			}
 		}
 	}
 
-	return log === "" ? null : log;
+	return log === "Запланированы поздравления для:\n" ? null : log;
 }
 
 export default new Interval({
 	type: "sendHappyBirthdayGreetings",
 	source: sendHappyBirthdayGreetings,
-	cron: "0 0 * * *",
+	cron: "50 23 * * *",
 	onDone: (log) => {
 		InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
 	},

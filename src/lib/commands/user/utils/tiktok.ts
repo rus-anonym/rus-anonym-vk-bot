@@ -8,7 +8,7 @@ new UserCommand(/(?:^!tiktok)(\s(.*))$/i, async function (message) {
 			await axios({
 				url: "https://godownloader.com/api/tiktok-no-watermark-free",
 				params: {
-					url: message.args[1],
+					url: message.state.args[1],
 					key: "godownloader.com",
 				},
 			})

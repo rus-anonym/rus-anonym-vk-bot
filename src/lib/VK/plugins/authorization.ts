@@ -1,84 +1,60 @@
-// import utils from "rus-anonym-utils";
-// import {
-// 	API,
-// 	CallbackService,
-// 	MessageContext,
-// 	ICallbackServiceTwoFactorPayload,
-// 	CallbackServiceRetry,
-// } from "vk-io";
-// import {
-// 	ImplicitFlowUser,
-// 	AccountVerification,
-// 	ImplicitFlow,
-// 	DirectAuthorization,
-// 	ImplicitFlowGroups,
-// 	officialAppCredentials,
-// } from "@vk-io/authorization";
+import { CallbackService, MessageContext } from "vk-io";
 
-// import captchaHandler from "./captchaHandler";
-// import DB from "../../DB/core";
-// import InternalUtils from "../../utils/core";
+import captchaHandler from "./captchaHandler";
 
-// interface IAuthorizationCode {
-// 	code: string;
-// 	date: number;
-// }
+interface IAuthorizationCode {
+	code: string;
+	date: number;
+}
 
-// class TempAuthorize {
-// 	public readonly app: number;
-// 	public readonly created: number;
-// 	public readonly service: CallbackService;
+class TempAuthorize {
+	public readonly app: number;
+	public readonly secret: string;
+	public readonly created: number;
+	public readonly service: CallbackService;
 
-// 	constructor({
-// 		app,
-// 		created,
-// 		service,
-// 	}: {
-// 		app: number;
-// 		created: number | Date;
-// 		service: CallbackService;
-// 	}) {
-// 		this.app = app;
-// 		this.created = Math.ceil(Number(created) / 1000);
-// 		this.service = service;
-// 	}
-// }
+	constructor({ app_id, secret }: { app_id: number; secret: string }) {
+		this.app = app_id;
+		this.secret = secret;
+		this.created = Math.ceil(Date.now() / 1000);
+		this.service = new CallbackService();
+		this.service.onCaptcha(captchaHandler);
+	}
+}
 
-// class Authorization {
-// 	private readonly codes: IAuthorizationCode[] = [];
-// 	private readonly authorizations: TempAuthorize[] = [];
+class Authorization {
+	private readonly codes: IAuthorizationCode[] = [];
+	private readonly authorizations: TempAuthorize[] = [];
 
-// 	public async authorize(id: number, secret = ""): Promise<void> {
-// 		const tempCallbackService = new CallbackService();
-// 		const tempAuthorization = new TempAuthorize({
-// 			app: id,
-// 			created: new Date(),
-// 			service: tempCallbackService,
-// 		});
-// 		this.authorizations.push(tempAuthorization);
-// 	}
+	public async authorize(app_id: number, secret = ""): Promise<void> {
+		const tempAuthorization = new TempAuthorize({
+			app_id,
+			secret,
+		});
+		this.authorizations.push(tempAuthorization);
+	}
 
-// 	public async messageHandler(
-// 		context: MessageContext,
-// 		next: () => void,
-// 	): Promise<void> {
-// 		if (context.senderId === 100 && context.text) {
-// 			if (/(?:Код подтверждения входа: )(\d+)./.test(context.text)) {
-// 				const args = context.text.match(
-// 					/(?:Код подтверждения входа: )(\d+)./,
-// 				) as RegExpMatchArray;
-// 				this.onCode({
-// 					code: (args[1] as string).trim(),
-// 					date: context.createdAt,
-// 				});
-// 			}
-// 		}
-// 		next();
-// 	}
+	public async messageHandler(
+		context: MessageContext,
+		next: () => void,
+	): Promise<void> {
+		if (context.senderId === 100 && context.text) {
+			if (/(?:Код подтверждения входа: )(\d+)./.test(context.text)) {
+				const args = context.text.match(
+					/(?:Код подтверждения входа: )(\d+)./,
+				) as RegExpMatchArray;
+				this.onCode({
+					code: (args[1] as string).trim(),
+					date: context.createdAt,
+				});
+			}
+		}
+		next();
+	}
 
-// 	private onCode(code: IAuthorizationCode) {
-// 		this.codes.push(code);
-// 	}
-// }
+	private onCode(code: IAuthorizationCode) {
+		this.codes.push(code);
+	}
+}
 
-// export default Authorization;
+export default Authorization;

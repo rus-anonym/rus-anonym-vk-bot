@@ -10,8 +10,11 @@ new GroupCommand(/(?:^кто\s)(.*)$/i, async function (message) {
 		});
 	}
 
-	if (message.args[1].endsWith("?")) {
-		message.args[1] = message.args[1].substring(0, message.args[1].length - 1);
+	if (message.state.args[1].endsWith("?")) {
+		message.state.args[1] = message.state.args[1].substring(
+			0,
+			message.state.args[1].length - 1,
+		);
 	}
 
 	const users = await VK.group.getVK().api.messages.getConversationMembers({
@@ -26,8 +29,8 @@ new GroupCommand(/(?:^кто\s)(.*)$/i, async function (message) {
 		.getVK()
 		.api.users.get({ user_ids: randomUser.toString() });
 
-	return await message.sendMessage({
-		message: `Мне кажется что ${message.args[1]} это @id${userData?.id} (${userData?.first_name} ${userData?.last_name})`,
+	return await message.state.sendMessage({
+		message: `Мне кажется что ${message.state.args[1]} это @id${userData?.id} (${userData?.first_name} ${userData?.last_name})`,
 		disable_mentions: true,
 	});
 });
