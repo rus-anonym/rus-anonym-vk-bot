@@ -13,11 +13,19 @@ async function groupMessageNew(
 	}
 
 	if (context.text && context.isInbox) {
-		const selectedCommand = InternalUtils.groupCommands.findCommand(
+		let selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
 			context.senderId === DB.config.VK.user.id,
 		);
+
+		if (!selectedCommand && context.hasMessagePayload) {
+			selectedCommand = InternalUtils.groupCommands.findCommand(
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				context.messagePayload.cmd || "null",
+				context.senderId === DB.config.VK.user.id,
+			);
+		}
 
 		if (selectedCommand) {
 			const TempVK = VK.group.getVK();
