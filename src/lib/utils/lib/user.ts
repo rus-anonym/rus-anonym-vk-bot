@@ -206,7 +206,7 @@ export default class UtilsUser {
 		deletedMessageData.markModified("isDeletedForAll");
 		deletedMessageData.save();
 
-		if (deletedMessageData.isOutbox) {
+		if (deletedMessageData.isOutbox || deletedMessageData.peerType === "chat") {
 			return;
 		}
 
