@@ -29,39 +29,39 @@ export default class UtilsLogger {
 
 		switch (type) {
 			case "message":
-				selectedChat = DB.config.VK.group.logs.conversations.messages;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.messages;
 				prefix = "🆗";
 				break;
 			case "conversation":
-				selectedChat = DB.config.VK.group.logs.conversations.conversations;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.conversations;
 				prefix = "🆗";
 				break;
 			case "rest":
-				selectedChat = DB.config.VK.group.logs.conversations.rest;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.rest;
 				prefix = "⚠";
 				break;
 			case "info":
-				selectedChat = DB.config.VK.group.logs.conversations.info;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.info;
 				prefix = "ℹ";
 				break;
 			case "user_track":
-				selectedChat = DB.config.VK.group.logs.conversations.userTrack;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.userTrack;
 				prefix = "ℹ";
 				break;
 			case "captcha":
-				selectedChat = DB.config.VK.group.logs.conversations.captcha;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.captcha;
 				prefix = "ℹ";
 				break;
 			case "friend_activity":
-				selectedChat = DB.config.VK.group.logs.conversations.friends_activity;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.friends_activity;
 				prefix = "⚠";
 				break;
 			case "error":
-				selectedChat = DB.config.VK.group.logs.conversations.errors;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.errors;
 				prefix = "⛔";
 				break;
 			default:
-				selectedChat = DB.config.VK.group.logs.conversations.errors;
+				selectedChat = DB.staticConfig.VK.group.logs.conversations.errors;
 				prefix = "⛔";
 				break;
 		}

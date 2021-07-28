@@ -13,7 +13,7 @@ new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 				id: {
 					$ne: context.id,
 				},
-				senderId: DB.config.VK.user.id,
+				senderId: DB.staticConfig.VK.user.id,
 				peerId: context.peerId,
 				isDeleted: false,
 				isDeletedForAll: false,

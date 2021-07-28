@@ -6,7 +6,7 @@ import DB from "../../DB/core";
 import InternalUtils from "../../utils/core";
 
 const solver = new Solver({
-	token: DB.config.rucaptcha.token,
+	token: DB.staticConfig.rucaptcha.token,
 });
 
 async function captchaHandler(

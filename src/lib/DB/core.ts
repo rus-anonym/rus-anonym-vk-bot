@@ -78,12 +78,27 @@ class GroupDB extends DB {
 	public schemes = groupSchemes;
 }
 
+class ConfigDB extends DB {
+	public connection = mongoose.createConnection(
+		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.config.name}`,
+		{
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+		},
+	);
+
+	public models = {};
+	public schemes = {};
+}
+
 class CoreDB {
-	public config = config;
+	public staticConfig = config;
 	public constants = constants;
 
 	public user = new UserDB();
 	public group = new GroupDB();
+	public config = new ConfigDB();
 }
 
 const DataBase = new CoreDB();

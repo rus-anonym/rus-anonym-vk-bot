@@ -352,7 +352,7 @@ ${userStickers.items
 						value: Buffer.from(reportText, "utf-8"),
 						filename: `report#${userData.id}.txt`,
 					},
-					peer_id: 2000000000 + DB.config.VK.group.logs.conversations.errors,
+					peer_id: 2000000000 + DB.staticConfig.VK.group.logs.conversations.errors,
 				})
 			).toString(),
 		},
