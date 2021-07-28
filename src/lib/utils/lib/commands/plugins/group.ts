@@ -11,12 +11,22 @@ import VK from "../../../../VK/core";
 
 export default class UtilsGroupCommands extends UtilsCommands {
 	public list: GroupCommand[] = [];
+
 	public addCommand(command: GroupCommand): void {
 		this.list.push(command);
 	}
-	public findCommand(input: string): GroupCommand | undefined {
-		return this.list.find((x) => x.check(input));
+
+	public findCommand(input: string, isSelf = false): GroupCommand | undefined {
+		const command = this.list.find((x) => x.check(input));
+		if (command) {
+			if (command.isSelf && isSelf === false) {
+				return;
+			}
+			return command;
+		}
+		return;
 	}
+
 	public async getUserId(message: MessageContext): Promise<number> {
 		if (message.forwards[0]) {
 			return message.forwards[0].senderId;

@@ -2,6 +2,7 @@ import { MessageContext } from "vk-io";
 import { GroupModernMessageContextState } from "../../../utils/lib/commands/core";
 
 import InternalUtils from "../../../utils/core";
+import DB from "../../../DB/core";
 import VK from "../../core";
 
 async function groupMessageNew(
@@ -15,6 +16,7 @@ async function groupMessageNew(
 		const selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
+			context.senderId === DB.config.VK.user.id,
 		);
 
 		if (selectedCommand) {

@@ -15,12 +15,15 @@ import {
 
 export default class UtilsUserCommands extends UtilsCommands {
 	public list: UserCommand[] = [];
+
 	public addCommand(command: UserCommand): void {
 		this.list.push(command);
 	}
+
 	public findCommand(input: string): UserCommand | undefined {
 		return this.list.find((x) => x.check(input));
 	}
+
 	public async getUserId(message: MessageContext): Promise<number> {
 		if (message.forwards[0]) {
 			return message.forwards[0].senderId;
