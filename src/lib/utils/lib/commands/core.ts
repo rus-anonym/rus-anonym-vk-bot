@@ -50,8 +50,6 @@ export class UserCommand extends Command {
 
 export class GroupCommand extends Command {
 	public isSelf: boolean;
-	public type: "callback" | "regexp";
-	public callbackTrigger: string;
 
 	public process: (
 		message: MessageContext<GroupModernMessageContextState>,
@@ -59,13 +57,11 @@ export class GroupCommand extends Command {
 	) => Promise<unknown>;
 
 	constructor({
-		regexp = /null/,
+		regexp,
 		process,
 		isSelf = false,
-		type = "regexp",
-		callbackTrigger = "null",
 	}: {
-		regexp?: RegExp;
+		regexp: RegExp;
 		process: (
 			message: MessageContext<GroupModernMessageContextState>,
 			vk: VK,
@@ -76,18 +72,12 @@ export class GroupCommand extends Command {
 	}) {
 		super(regexp);
 		this.isSelf = isSelf;
-		this.type = type;
-		this.callbackTrigger = callbackTrigger;
 		this.process = process;
 		InternalUtils.groupCommands.addCommand(this);
 	}
 
 	public check(input: string): boolean {
-		if (this.type === "callback") {
-			return this.callbackTrigger === input;
-		} else {
-			return this.regexp.test(input);
-		}
+		return this.regexp.test(input);
 	}
 }
 
