@@ -1,7 +1,9 @@
 import { UserCommand } from "../../../utils/lib/commands/core";
 import DB from "../../../DB/core";
+import InternalUtils from "../../../utils/core";
 
-new UserCommand(/(?:^!about)$/i, async function (message) {
+new UserCommand(/(?:^!about|!stats)$/i, async function (message) {
+	const memoryData = process.memoryUsage();
 	return message.editMessage({
 		message: `User DB Stats:
 Messages: ${await DB.user.models.message.countDocuments()}
@@ -10,6 +12,12 @@ Chats: ${await DB.user.models.chat.countDocuments()}
 
 Group DB Stats:
 Users: ${await DB.group.models.user.countDocuments()}
+
+Process:
+RSS: ${InternalUtils.commands.bytesToSize(memoryData.rss)}
+Heap Total: ${InternalUtils.commands.bytesToSize(memoryData.heapTotal)}
+Heap Used: ${InternalUtils.commands.bytesToSize(memoryData.heapUsed)}
+V8 External Memory: ${InternalUtils.commands.bytesToSize(memoryData.external)}
 
 Author: https://vk.com/rus_anonym
 Source Code: https://github.com/RusAnonym/rus-anonym-vk-bot`,
