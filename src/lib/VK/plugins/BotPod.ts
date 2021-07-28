@@ -54,8 +54,8 @@ class BotPodVK {
 	public async updateToken(): Promise<void> {
 		const implicit = new ImplicitFlowUser({
 			apiVersion: "5.157",
-			login: DB.staticConfig.VK.user.login,
-			password: DB.staticConfig.VK.user.password,
+			login: DB.config.VK.user.login,
+			password: DB.config.VK.user.password,
 			clientId: "6441755",
 			clientSecret: "",
 			scope: "",

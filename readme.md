@@ -72,8 +72,8 @@ $ yarn
 				"group": {
 					"name": "" // GroupBot database name
 				},
-				"config": {
-					"name": "" // Dynamic config database name
+				"main": {
+					"name": "" // Main database name
 				}
 			}
 		}

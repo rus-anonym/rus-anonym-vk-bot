@@ -41,7 +41,7 @@ class FakesAlpha {
 	public list: FakeUserVK[] = [];
 
 	constructor() {
-		for (const fakeUser of DB.staticConfig.VK.userFakes) {
+		for (const fakeUser of DB.config.VK.userFakes) {
 			this.list.push(new FakeUserVK(fakeUser));
 		}
 	}

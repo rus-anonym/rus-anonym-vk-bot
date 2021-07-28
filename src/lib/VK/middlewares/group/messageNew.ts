@@ -16,7 +16,7 @@ async function groupMessageNew(
 		const selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
-			context.senderId === DB.staticConfig.VK.user.id,
+			context.senderId === DB.config.VK.user.id,
 		);
 
 		if (selectedCommand) {

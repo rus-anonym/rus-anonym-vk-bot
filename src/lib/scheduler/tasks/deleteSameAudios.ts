@@ -17,7 +17,7 @@ async function deleteSameAudios() {
 		api: VK.user.getVK().api,
 		method: "audio.get",
 		params: {
-			user_id: DB.staticConfig.VK.user.id,
+			user_id: DB.config.VK.user.id,
 		},
 		countPerRequest: 5000,
 	});
@@ -68,7 +68,7 @@ async function deleteSameAudios() {
 		});
 		for (let i = 1; i < audios.length; i++) {
 			await VK.user.getVK().api.call("audio.delete", {
-				owner_id: DB.staticConfig.VK.user.id,
+				owner_id: DB.config.VK.user.id,
 				audio_id: audios[i].id,
 			});
 		}

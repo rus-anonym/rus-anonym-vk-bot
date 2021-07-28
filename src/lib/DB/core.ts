@@ -78,9 +78,9 @@ class GroupDB extends DB {
 	public schemes = groupSchemes;
 }
 
-class ConfigDB extends DB {
+class MainDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.config.name}`,
+		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.main.name}`,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -93,12 +93,12 @@ class ConfigDB extends DB {
 }
 
 class CoreDB {
-	public staticConfig = config;
+	public config = config;
 	public constants = constants;
 
 	public user = new UserDB();
 	public group = new GroupDB();
-	public config = new ConfigDB();
+	public main = new MainDB();
 }
 
 const DataBase = new CoreDB();

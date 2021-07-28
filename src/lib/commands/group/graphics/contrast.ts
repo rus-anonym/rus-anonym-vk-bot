@@ -36,7 +36,7 @@ new GroupCommand({
 			image.posterize(contrastEffect);
 
 			const graffiti = await VK.user.getVK().upload.documentGraffiti({
-				group_id: DB.staticConfig.VK.group.id,
+				group_id: DB.config.VK.group.id,
 				source: {
 					value: await image.getBufferAsync(JIMP.MIME_PNG),
 					filename: "sticker.png",

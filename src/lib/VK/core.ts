@@ -27,12 +27,12 @@ abstract class Worker {
 
 class UserVK extends Worker {
 	public main = new VK({
-		token: DB.staticConfig.VK.user.tokens.main,
+		token: DB.config.VK.user.tokens.main,
 		callbackService: userCallbackService,
 		...DB.constants.vk.user.defaultParams,
 	});
 
-	public additional = DB.staticConfig.VK.user.tokens.additional.map((token) => {
+	public additional = DB.config.VK.user.tokens.additional.map((token) => {
 		return new VK({
 			token,
 			callbackService: userCallbackService,
@@ -77,7 +77,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 								filename: "event.txt",
 							},
 							peer_id:
-								2000000000 + DB.staticConfig.VK.group.logs.conversations.errors,
+								2000000000 + DB.config.VK.group.logs.conversations.errors,
 						})
 					).toString(),
 				},
@@ -89,10 +89,10 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 
 class GroupVK extends Worker {
 	public main = new VK({
-		token: DB.staticConfig.VK.group.tokens.main,
+		token: DB.config.VK.group.tokens.main,
 	});
 
-	public additional = DB.staticConfig.VK.group.tokens.additional.map((token) => {
+	public additional = DB.config.VK.group.tokens.additional.map((token) => {
 		return new VK({ token });
 	});
 
@@ -131,7 +131,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 								filename: "event.txt",
 							},
 							peer_id:
-								2000000000 + DB.staticConfig.VK.group.logs.conversations.errors,
+								2000000000 + DB.config.VK.group.logs.conversations.errors,
 						})
 					).toString(),
 				},
