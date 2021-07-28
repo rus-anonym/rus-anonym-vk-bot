@@ -12,7 +12,7 @@ async function updateUsersData(): Promise<string | null> {
 		const chunkInfo = await VK.user.getVK().api.users.get({
 			user_ids: chunk,
 			fields: InternalUtils.user.mainUsersGetFields,
-		});	
+		});
 		for (const userInfo of chunkInfo) {
 			const user = await DB.user.models.user.findOne({ id: userInfo.id });
 			if (!user || user.info.isBot) {
@@ -68,7 +68,10 @@ export default new Interval({
 	cron: "*/30 * * * *",
 	onDone: (log) => {
 		if (log.response) {
-			InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
+			InternalUtils.logger.send({
+				message: `${log.response} за ${log.executionTime}`,
+				type: "info",
+			});
 		}
 	},
 });

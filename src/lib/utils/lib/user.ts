@@ -143,7 +143,6 @@ export default class UtilsUser {
 		"last_name_abl",
 		"domain",
 		"photo_max_orig",
-
 	];
 
 	public async processDeletedMessage(
@@ -194,10 +193,10 @@ export default class UtilsUser {
 		});
 
 		if (!deletedMessageData) {
-			InternalUtils.logger.send({
-				message: `Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`,
-				type: "error",
-			});
+			// InternalUtils.logger.send({
+			// 	message: `Удалено сообщение #${event.id}, но в БД нет данных об этом сообщении(`,
+			// 	type: "error",
+			// });
 			return;
 		}
 
