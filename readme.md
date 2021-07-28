@@ -71,6 +71,9 @@ $ yarn
 				},
 				"group": {
 					"name": "" // GroupBot database name
+				},
+				"main": {
+					"name": "" // Main database name
 				}
 			}
 		}

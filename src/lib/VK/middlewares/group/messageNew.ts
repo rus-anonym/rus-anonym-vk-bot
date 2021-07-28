@@ -2,6 +2,7 @@ import { MessageContext } from "vk-io";
 import { GroupModernMessageContextState } from "../../../utils/lib/commands/core";
 
 import InternalUtils from "../../../utils/core";
+import DB from "../../../DB/core";
 import VK from "../../core";
 
 async function groupMessageNew(
@@ -12,10 +13,19 @@ async function groupMessageNew(
 	}
 
 	if (context.text && context.isInbox) {
-		const selectedCommand = InternalUtils.groupCommands.findCommand(
+		let selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
+			context.senderId === DB.config.VK.user.id,
 		);
+
+		if (!selectedCommand && context.hasMessagePayload) {
+			selectedCommand = InternalUtils.groupCommands.findCommand(
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				context.messagePayload.cmd || "null",
+				context.senderId === DB.config.VK.user.id,
+			);
+		}
 
 		if (selectedCommand) {
 			const TempVK = VK.group.getVK();

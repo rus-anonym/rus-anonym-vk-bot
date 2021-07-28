@@ -1,8 +1,7 @@
 import { ExtractDoc } from "ts-mongoose";
 import { IMessageContextSendOptions, MessageContext, VK } from "vk-io";
-
-import InternalUtils from "../../core";
 import DB from "../../../DB/core";
+import InternalUtils from "../../core";
 
 interface MessageContextState {
 	args: RegExpExecArray;
@@ -50,21 +49,35 @@ export class UserCommand extends Command {
 }
 
 export class GroupCommand extends Command {
+	public isSelf: boolean;
+
 	public process: (
 		message: MessageContext<GroupModernMessageContextState>,
 		vk: VK,
 	) => Promise<unknown>;
 
-	constructor(
-		regexp: RegExp,
+	constructor({
+		regexp,
+		process,
+		isSelf = false,
+	}: {
+		regexp: RegExp;
 		process: (
 			message: MessageContext<GroupModernMessageContextState>,
 			vk: VK,
-		) => Promise<unknown>,
-	) {
+		) => Promise<unknown>;
+		isSelf?: boolean;
+		type?: "callback" | "regexp";
+		callbackTrigger?: string;
+	}) {
 		super(regexp);
+		this.isSelf = isSelf;
 		this.process = process;
 		InternalUtils.groupCommands.addCommand(this);
+	}
+
+	public check(input: string): boolean {
+		return this.regexp.test(input);
 	}
 }
 
