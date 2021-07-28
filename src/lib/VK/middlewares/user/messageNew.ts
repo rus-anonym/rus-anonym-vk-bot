@@ -7,15 +7,7 @@ import VK from "../../core";
 function userMessageNew(
 	message: MessageContext<UserModernMessageContextState>,
 ): void {
-	InternalUtils.user.saveMessage(message).catch((err) => {
-		InternalUtils.logger.send({
-			message: `Error on save message #${message.id}\n
-https://vk.com/im?sel=${
-				message.isChat ? `c${message.chatId}` : message.peerId
-			}&msgid=${message.id}\n\n${err.toString()}`,
-			type: "error",
-		});
-	});
+	InternalUtils.user.saveMessage(message).catch(() => null);
 
 	if (message.isOutbox && message.text) {
 		const selectedCommand = InternalUtils.userCommands.findCommand(
