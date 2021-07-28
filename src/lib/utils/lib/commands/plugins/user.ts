@@ -2,10 +2,10 @@
 
 import moment from "moment";
 import utils from "rus-anonym-utils";
-import { resolveResource } from "vk-io";
+import { resolveResource, MessageContext } from "vk-io";
 import { StoreGetProductsResponse } from "vk-io/lib/api/schemas/responses";
 
-import { UtilsCommands, UserCommand, UserModernMessageContext } from "../core";
+import { UtilsCommands, UserCommand } from "../core";
 import InternalUtils from "../../../core";
 import VK from "../../../../VK/core";
 import {
@@ -21,15 +21,15 @@ export default class UtilsUserCommands extends UtilsCommands {
 	public findCommand(input: string): UserCommand | undefined {
 		return this.list.find((x) => x.check(input));
 	}
-	public async getUserId(message: UserModernMessageContext): Promise<number> {
+	public async getUserId(message: MessageContext): Promise<number> {
 		if (message.forwards[0]) {
 			return message.forwards[0].senderId;
 		} else if (message.replyMessage) {
 			return message.replyMessage.senderId;
-		} else if (message.args[1]) {
+		} else if (message.state.args[1]) {
 			try {
 				const linkData = await resolveResource({
-					resource: message.args[1],
+					resource: message.state.args[1],
 					api: VK.group.getVK().api,
 				});
 				if (linkData.type === "group") {

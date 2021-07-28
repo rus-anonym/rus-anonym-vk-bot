@@ -22,7 +22,7 @@ new GroupCommand(/(?:^\/sepia)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Стикер в сепии:`,
 			attachment: graffiti.toString(),
 		});
@@ -42,7 +42,7 @@ new GroupCommand(/(?:^\/sepia)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Фото в сепии:`,
 			attachment: photo.toString(),
 		});
@@ -62,13 +62,13 @@ new GroupCommand(/(?:^\/sepia)$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Фото в сепии:`,
 			attachment: photo.toString(),
 		});
 	}
 
-	return await message.sendMessage({
+	return await message.state.sendMessage({
 		message: `Не найдено изображение или стикер`,
 	});
 });

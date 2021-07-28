@@ -29,7 +29,7 @@ new GroupCommand(/(?:^подарки теле2)$/i, async function (message) {
 		text += `${Number(i) + 1}. ${mondayGifts[i]}\n`;
 	}
 
-	return message.sendMessage({
+	return message.state.sendMessage({
 		message: `На ${moment().format("DD.MM.YYYY")} следующие подарки:
 ${text}`,
 	});

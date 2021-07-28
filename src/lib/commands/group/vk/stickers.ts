@@ -10,7 +10,7 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 	try {
 		userID = await InternalUtils.groupCommands.getUserId(message);
 	} catch (error) {
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: error.message,
 		});
 	}
@@ -21,7 +21,7 @@ new GroupCommand(/^(?:\/стикеры)(?:\s(.*))?$/i, async function (message) 
 		true,
 	);
 
-	return message.sendMessage({
+	return message.state.sendMessage({
 		message: `У @id${userID} ${utils.string.declOfNum(
 			userStickers.items.length,
 			["найден", "найдено", "найдено"],

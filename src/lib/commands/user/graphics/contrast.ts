@@ -4,22 +4,24 @@ import JIMP from "jimp";
 import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!contrast)(?:\s(.*))?$/i, async function (message, vk) {
-	if (message.args[1] && !Number(message.args[1])) {
+	if (message.state.args[1] && !Number(message.state.args[1])) {
 		return await message.editMessage({
-			message: `${message.args[1]} не является числом`,
+			message: `${message.state.args[1]} не является числом`,
 		});
 	}
 
 	if (
-		message.args[1] &&
-		(Number(message.args[1]) > 1 || Number(message.args[1]) < -1)
+		message.state.args[1] &&
+		(Number(message.state.args[1]) > 1 || Number(message.state.args[1]) < -1)
 	) {
 		return await message.editMessage({
 			message: `Число должно быть в диапазоне между -1 и 1`,
 		});
 	}
 
-	const posterizeEffect = message.args[1] ? Number(message.args[1]) : 3;
+	const posterizeEffect = message.state.args[1]
+		? Number(message.state.args[1])
+		: 3;
 
 	await message.loadMessagePayload();
 

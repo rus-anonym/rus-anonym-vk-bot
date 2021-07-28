@@ -8,7 +8,7 @@ new GroupCommand(/^(?:\/tester)(?:\s(.*))?$/i, async function (message) {
 	try {
 		userID = await InternalUtils.groupCommands.getUserId(message);
 	} catch (error) {
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: error.message,
 		});
 	}
@@ -21,7 +21,7 @@ new GroupCommand(/^(?:\/tester)(?:\s(.*))?$/i, async function (message) {
 			)
 		).data;
 
-		return message.sendMessage({
+		return message.state.sendMessage({
 			message: `Пользователь @id${userData.response.reporter.id}
 Статус: ${userData.response.reporter.status_text}
 

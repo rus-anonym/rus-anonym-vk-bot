@@ -4,7 +4,9 @@ import { UserCommand } from "../../../../utils/lib/commands/core";
 
 new UserCommand(/^(?:!article|!статья)(?:\s(.*))$/i, async function (message) {
 	try {
-		const article = await utils.vk.article.getByURL(message.args[1].trim());
+		const article = await utils.vk.article.getByURL(
+			message.state.args[1].trim(),
+		);
 
 		return await message.editMessage({
 			message: `Данные по статье #${article.id}

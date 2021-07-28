@@ -3,7 +3,7 @@ import { GroupCommand } from "../../../utils/lib/commands/core";
 new GroupCommand(/(?:^!команды|\/help|!help|помощь|начать)$/i, async function (
 	message,
 ) {
-	return message.sendMessage({
+	return message.state.sendMessage({
 		message: `Команды:`,
 		attachment: "article-194686664_60597_e899de91872d46979d",
 	});

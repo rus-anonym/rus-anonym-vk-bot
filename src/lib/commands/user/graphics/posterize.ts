@@ -4,13 +4,15 @@ import JIMP from "jimp";
 import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand(/(?:^!posterize)(?:\s(.*))?$/i, async function (message, vk) {
-	if (message.args[1] && !Number(message.args[1])) {
+	if (message.state.args[1] && !Number(message.state.args[1])) {
 		return await message.editMessage({
-			message: `${message.args[1]} не является числом`,
+			message: `${message.state.args[1]} не является числом`,
 		});
 	}
 
-	const posterizeEffect = message.args[1] ? Number(message.args[1]) : 3;
+	const posterizeEffect = message.state.args[1]
+		? Number(message.state.args[1])
+		: 3;
 
 	await message.loadMessagePayload();
 

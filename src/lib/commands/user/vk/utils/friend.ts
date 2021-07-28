@@ -18,7 +18,7 @@ new UserCommand(/(?:^(\+|-)др)(?:\s(.*))?$/i, async function (message) {
 			user_ids: userID,
 		});
 
-		if (message.args[1] === "+") {
+		if (message.state.args[1] === "+") {
 			if (userStatus.friend_status === 1) {
 				return message.reply({
 					disable_mentions: true,

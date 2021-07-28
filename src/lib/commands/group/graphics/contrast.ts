@@ -6,22 +6,24 @@ import VK from "../../../VK/core";
 import DB from "../../../DB/core";
 
 new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
-	if (message.args[1] && !Number(message.args[1])) {
-		return await message.sendMessage({
-			message: `${message.args[1]} не является числом`,
+	if (message.state.args[1] && !Number(message.state.args[1])) {
+		return await message.state.sendMessage({
+			message: `${message.state.args[1]} не является числом`,
 		});
 	}
 
 	if (
-		message.args[1] &&
-		(Number(message.args[1]) > 1 || Number(message.args[1]) < -1)
+		message.state.args[1] &&
+		(Number(message.state.args[1]) > 1 || Number(message.state.args[1]) < -1)
 	) {
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Число должно быть в диапазоне между -1 и 1`,
 		});
 	}
 
-	const contrastEffect = message.args[1] ? Number(message.args[1]) : 0.5;
+	const contrastEffect = message.state.args[1]
+		? Number(message.state.args[1])
+		: 0.5;
 
 	if (message.replyMessage?.hasAttachments("sticker")) {
 		const source = utils.array.last(
@@ -39,7 +41,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Стикер в контрасте:`,
 			attachment: graffiti.toString(),
 		});
@@ -59,7 +61,7 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Фото в контрасте:`,
 			attachment: photo.toString(),
 		});
@@ -79,13 +81,13 @@ new GroupCommand(/(?:^\/contrast)(?:\s(.*))?$/i, async function (message, vk) {
 			},
 		});
 
-		return await message.sendMessage({
+		return await message.state.sendMessage({
 			message: `Фото в контрасте:`,
 			attachment: photo.toString(),
 		});
 	}
 
-	return await message.sendMessage({
+	return await message.state.sendMessage({
 		message: `Не найдено изображение или стикер`,
 	});
 });

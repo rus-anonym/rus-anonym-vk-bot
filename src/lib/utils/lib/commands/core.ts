@@ -4,12 +4,12 @@ import { IMessageContextSendOptions, MessageContext, VK } from "vk-io";
 import InternalUtils from "../../core";
 import DB from "../../../DB/core";
 
-interface ModernMessageContext extends MessageContext {
+interface MessageContextState {
 	args: RegExpExecArray;
 }
 
-export type UserModernMessageContext = ModernMessageContext;
-export interface GroupModernMessageContext extends ModernMessageContext {
+export type UserModernMessageContextState = MessageContextState;
+export interface GroupModernMessageContextState extends MessageContextState {
 	user: ExtractDoc<typeof DB.group.schemes.user>;
 	sendMessage(
 		text: string | IMessageContextSendOptions,
@@ -32,13 +32,16 @@ abstract class Command {
 
 export class UserCommand extends Command {
 	public process: (
-		message: UserModernMessageContext,
+		message: MessageContext<UserModernMessageContextState>,
 		vk: VK,
 	) => Promise<unknown>;
 
 	constructor(
 		regexp: RegExp,
-		process: (message: UserModernMessageContext, vk: VK) => Promise<unknown>,
+		process: (
+			message: MessageContext<UserModernMessageContextState>,
+			vk: VK,
+		) => Promise<unknown>,
 	) {
 		super(regexp);
 		this.process = process;
@@ -48,13 +51,16 @@ export class UserCommand extends Command {
 
 export class GroupCommand extends Command {
 	public process: (
-		message: GroupModernMessageContext,
+		message: MessageContext<GroupModernMessageContextState>,
 		vk: VK,
 	) => Promise<unknown>;
 
 	constructor(
 		regexp: RegExp,
-		process: (message: GroupModernMessageContext, vk: VK) => Promise<unknown>,
+		process: (
+			message: MessageContext<GroupModernMessageContextState>,
+			vk: VK,
+		) => Promise<unknown>,
 	) {
 		super(regexp);
 		this.process = process;
