@@ -67,3 +67,6 @@ import "./group/graphics/sepia";
 import "./group/graphics/posterize";
 import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
+
+import "./group/private/main";
+import "./group/private/tasks/tasks";
