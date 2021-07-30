@@ -16,13 +16,9 @@ userCallbackService.onCaptcha(captchaHandler);
 
 abstract class Worker {
 	abstract main: VK;
-	abstract additional: VK[];
+	abstract additional: string[];
 
-	abstract configure(): this;
-
-	public getVK(): VK {
-		return utils.array.random(this.additional);
-	}
+	abstract getVK(): VK;
 }
 
 class UserVK extends Worker {
@@ -33,16 +29,11 @@ class UserVK extends Worker {
 	});
 
 	public additional = DB.config.VK.user.tokens.additional.map((token) => {
-		return new VK({
-			token,
-			callbackService: userCallbackService,
-			...DB.constants.vk.user.defaultParams,
-		});
+		return token;
 	});
 
-	public botpod = new BotPodVK();
-
-	public configure() {
+	constructor() {
+		super();
 		// this.main.updates.use((event, next) => {
 		// 	console.log(event);
 		// 	next();
@@ -83,7 +74,16 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 				},
 			});
 		});
-		return this;
+	}
+
+	public botpod = new BotPodVK();
+
+	public getVK() {
+		return new VK({
+			token: utils.array.random(this.additional),
+			callbackService: userCallbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
 	}
 }
 
@@ -93,10 +93,11 @@ class GroupVK extends Worker {
 	});
 
 	public additional = DB.config.VK.group.tokens.additional.map((token) => {
-		return new VK({ token });
+		return token;
 	});
 
-	public configure() {
+	constructor() {
+		super();
 		this.main.updates.on("group_join", () => null);
 		this.main.updates.on("group_leave", () => null);
 		this.main.updates.on("like_add", () => null);
@@ -137,13 +138,18 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 				},
 			});
 		});
-		return this;
+	}
+
+	public getVK() {
+		return new VK({
+			token: utils.array.random(this.additional),
+		});
 	}
 }
 
 class CoreVK {
-	public user = new UserVK().configure();
-	public group = new GroupVK().configure();
+	public user = new UserVK();
+	public group = new GroupVK();
 	public fakes = new FakesAlpha();
 }
 

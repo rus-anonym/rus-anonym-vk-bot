@@ -10,9 +10,13 @@ const callbackService = new CallbackService();
 callbackService.onCaptcha(captchaHandler);
 
 abstract class FakeWorker {
-	abstract additional: API[];
+	abstract additional: string[];
 	public getAPI(): API {
-		return utils.array.random(this.additional);
+		return new API({
+			token: utils.array.random(this.additional),
+			callbackService,
+			...DB.constants.vk.fake.defaultParams,
+		});
 	}
 }
 
@@ -22,17 +26,11 @@ interface FakeUserData {
 }
 
 class FakeUserVK extends FakeWorker {
-	public additional: API[] = [];
+	public additional: string[] = [];
 	constructor(data: FakeUserData) {
 		super();
 		for (const token of data.tokens) {
-			this.additional.push(
-				new API({
-					token,
-					callbackService,
-					...DB.constants.vk.fake.defaultParams,
-				}),
-			);
+			this.additional.push(token);
 		}
 	}
 }
