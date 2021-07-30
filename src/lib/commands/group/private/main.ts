@@ -25,7 +25,9 @@ new GroupCommand({
 	regexp: /(?:^main)$/i,
 	process: async function (message) {
 		return await message.state.sendMessage({
-			message: generateMainText(),
+			message:
+				generateMainText() +
+				`\nЗадержка: ${Date.now() - message.createdAt * 1000}ms`,
 			keyboard: Keyboard.builder()
 				.textButton({
 					label: "Список задач",
