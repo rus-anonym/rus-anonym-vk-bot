@@ -2,7 +2,7 @@ import scheduler from "simple-scheduler-task";
 
 import InternalUtils from "../utils/core";
 
-import updateUserData from "./tasks/updateUsersData";
+// import updateUserData from "./tasks/updateUsersData";
 import cleanOldMessages from "./tasks/cleanOldMessages";
 import getBirthdays from "./tasks/getBirthdays";
 import updateOnlinePrivacySettings from "./tasks/updateOnlinePrivacySettings";
@@ -20,7 +20,7 @@ Error: ${error.error.toString()}`,
 });
 
 export default {
-	updateUserData,
+	// updateUserData,
 	cleanOldMessages,
 	getBirthdays,
 	deleteSameAudios,
