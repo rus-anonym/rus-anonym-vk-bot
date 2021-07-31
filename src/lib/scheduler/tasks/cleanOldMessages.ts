@@ -8,13 +8,15 @@ import InternalUtils from "../../utils/core";
 async function cleanOldMessages(): Promise<string> {
 	const minimalDate = moment().subtract(1, "day").toDate();
 
-	const oldMessages = (await DB.user.models.message
-		.find({
-			created: {
-				$lt: minimalDate,
-			},
-		})
-		.distinct("id")) as number[];
+	const oldMessagesCount = (
+		await DB.user.models.message
+			.find({
+				created: {
+					$lt: minimalDate,
+				},
+			})
+			.distinct("id")
+	).length;
 
 	const upToDateMessages = (await DB.user.models.message
 		.find({
@@ -49,9 +51,9 @@ async function cleanOldMessages(): Promise<string> {
 		},
 	});
 
-	return `Удалено ${oldMessages.length} ${utils.string.declOfNum(
+	return `Удалено ${oldMessagesCount} ${utils.string.declOfNum(
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		oldMessages.length,
+		oldMessagesCount,
 		["старое сообщение", "старых сообщения", "старых сообщений"],
 	)}
 Актуальных сообщений: ${upToDateMessages.length}
@@ -62,9 +64,11 @@ export default new Interval({
 	source: cleanOldMessages,
 	type: "cleanOldMessages",
 	cron: "0 0 * * *",
+	plannedTime: Date.now(),
 	onDone: (log) => {
-		InternalUtils.logger.send(
-			{ message: `${log.response} за ${log.executionTime}ms`, type: "info" },
-		);
+		InternalUtils.logger.send({
+			message: `${log.response} за ${log.executionTime}ms`,
+			type: "info",
+		});
 	},
 });
