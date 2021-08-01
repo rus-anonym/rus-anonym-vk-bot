@@ -62,6 +62,7 @@ async function updateUsersData(): Promise<string | null> {
 }
 
 export default new Interval({
+	isInform: true,
 	type: "updateUsersData",
 	source: updateUsersData,
 	plannedTime: Date.now(),

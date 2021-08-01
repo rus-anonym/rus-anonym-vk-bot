@@ -74,6 +74,7 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 }
 
 export default new Interval({
+	isInform: true,
 	type: "updateOnlinePrivacySettings",
 	source: updateOnlinePrivacySettings,
 	cron: "*/30 * * * *",
