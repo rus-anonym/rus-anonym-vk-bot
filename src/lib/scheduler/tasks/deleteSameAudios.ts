@@ -82,17 +82,17 @@ async function deleteSameAudios() {
 }
 
 export default new Interval({
+	isInform: true,
 	source: deleteSameAudios,
 	type: "deleteSameAudios",
 	cron: "0 0 * * *",
 	onDone: (log) => {
 		if (log.response) {
-			InternalUtils.logger.send(
-				{
-					message: `deleteSameAudios:
-${log.response} за ${log.executionTime}ms`, type: "info"
-				},
-			);
+			InternalUtils.logger.send({
+				message: `deleteSameAudios:
+${log.response} за ${log.executionTime}ms`,
+				type: "info",
+			});
 		}
 	},
 });

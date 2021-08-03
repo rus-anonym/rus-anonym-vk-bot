@@ -28,19 +28,16 @@ new UserCommand(/^(?:!syncFriends)(?:\s(.*))?$/i, async function (message) {
 	});
 
 	while (userFriends.length) {
-		const usersInfo = await VK.user.getVK().api.users.get({
-			user_ids: userFriends
-				.splice(userFriends.length - 500, 500)
-				.map((x) => String(x)),
+		const usersInfo = await VK.group.getVK().api.users.get({
+			user_ids: userFriends.splice(
+				userFriends.length - 500,
+				500,
+			) as unknown as string[],
 			fields: InternalUtils.user.mainUsersGetFields,
 		});
 
-		await message.editMessage({
-			message: `Осталось: ${userFriends.length}`,
-		});
-
 		for (const user of usersInfo) {
-			await InternalUtils.user.getUserData(userID, user);
+			await InternalUtils.user.getUserData(user.id, user);
 		}
 	}
 

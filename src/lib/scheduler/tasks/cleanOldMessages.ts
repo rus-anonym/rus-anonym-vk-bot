@@ -61,6 +61,7 @@ async function cleanOldMessages(): Promise<string> {
 }
 
 export default new Interval({
+	isInform: true,
 	source: cleanOldMessages,
 	type: "cleanOldMessages",
 	cron: "0 0 * * *",

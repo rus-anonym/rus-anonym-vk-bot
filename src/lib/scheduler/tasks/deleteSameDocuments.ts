@@ -78,6 +78,7 @@ async function deleteSameDocuments() {
 }
 
 export default new Interval({
+	isInform: true,
 	source: deleteSameDocuments,
 	type: "deleteSameDocuments",
 	cron: "0 0 * * *",

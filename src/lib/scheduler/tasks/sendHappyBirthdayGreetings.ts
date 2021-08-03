@@ -81,6 +81,7 @@ async function sendHappyBirthdayGreetings() {
 }
 
 export default new Interval({
+	isInform: true,
 	type: "sendHappyBirthdayGreetings",
 	source: sendHappyBirthdayGreetings,
 	cron: "50 23 * * *",
