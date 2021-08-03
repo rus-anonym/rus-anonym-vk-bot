@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
+import VK from "../../../VK/core";
+import DB from "../../../DB/core";
 
 new GroupCommand({
 	regexp: /(?:^\/tiktok)(\s(.*))$/i,
@@ -20,11 +22,35 @@ new GroupCommand({
 				})
 			).data;
 
-			return await context.state.sendMessage({
-				message: `TikTok video:
+			if (!response.video_no_watermark) {
+				throw new Error(`Непредвиденная ошибка, повторите запрос.`);
+			}
+
+			const message = `TikTok video:
 Video URL: ${response.video_no_watermark}
-Music URL: ${response.music_url}`,
+Music URL: ${response.music_url}`;
+
+			const userResponse = await context.state.sendMessage({
+				message,
 				dont_parse_links: true,
+			});
+
+			const attachment = await VK.user.main.upload.video({
+				source: {
+					value: response.video_no_watermark,
+				},
+				group_id: DB.config.VK.group.id,
+				name: response.aweme_id,
+				is_private: 1,
+				compression: 0,
+				repeat: 1,
+			});
+
+			return await VK.group.getVK().api.messages.edit({
+				peer_id: context.peerId,
+				conversation_message_id: userResponse.conversationMessageId,
+				message,
+				attachment: attachment.toString(),
 			});
 		} catch (error) {
 			return await context.state.sendMessage({
