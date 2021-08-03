@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Keyboard } from "vk-io";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
 import VK from "../../../VK/core";
@@ -26,13 +27,26 @@ new GroupCommand({
 				throw new Error(`Непредвиденная ошибка, повторите запрос.`);
 			}
 
-			const message = `TikTok video:
-Video URL: ${response.video_no_watermark}
-Music URL: ${response.music_url}`;
+			const message = `TikTok video:`;
+
+			const builder = Keyboard.builder();
+
+			builder.urlButton({
+				label: `Скачать видео`,
+				url: response.video_no_watermark,
+			});
+			builder.row();
+			builder.urlButton({
+				label: `Скачать звук`,
+				url: response.music_url,
+			});
+
+			builder.inline();
 
 			const userResponse = await context.state.sendMessage({
 				message,
 				dont_parse_links: true,
+				keyboard: builder,
 			});
 
 			const attachment = await VK.user.main.upload.video({
@@ -51,6 +65,7 @@ Music URL: ${response.music_url}`;
 				conversation_message_id: userResponse.conversationMessageId,
 				message,
 				attachment: attachment.toString(),
+				keyboard: builder,
 			});
 		} catch (error) {
 			return await context.state.sendMessage({
