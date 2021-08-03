@@ -44,7 +44,7 @@ Music URL: ${response.music_url}`;
 	});
 });
 
-new UserCommand(/^(https:\/\/(vm|www).tiktok.com\/(?:.*))$/, async function (
+new UserCommand(/^(https:\/\/(vm|www).tiktok.com\/(?:.*))/, async function (
 	context,
 	vk,
 ) {
