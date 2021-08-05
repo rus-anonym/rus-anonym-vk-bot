@@ -15,6 +15,7 @@ import "./user/utils/balaboba";
 import "./user/utils/convertLayout";
 import "./user/utils/communication";
 import "./user/utils/tiktok";
+import "./user/utils/repeat";
 
 import "./user/vk/attachments/article";
 import "./user/vk/attachments/whatis";

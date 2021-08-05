@@ -38,8 +38,13 @@ class UserVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
+		this.main.updates.on("chat_create", () => null);
+		this.main.updates.on("chat_title_update", () => null);
+		this.main.updates.on("chat_pin_message", () => null);
+		this.main.updates.on("chat_unpin_message", () => null);
 		this.main.updates.on("chat_kick_user", () => null);
 		this.main.updates.on("chat_invite_user", () => null);
+		this.main.updates.on("chat_invite_user_by_link", () => null);
 		this.main.updates.on("messages_read", () => null);
 		this.main.updates.on("typing", () => null);
 		this.main.updates.on("dialog_flags", () => null);
@@ -107,6 +112,9 @@ class GroupVK extends Worker {
 		this.main.updates.on("typing_group", () => null);
 		this.main.updates.on("chat_kick_user", () => null);
 		this.main.updates.on("chat_invite_user", () => null);
+		this.main.updates.on("wall_reply", () => null);
+		this.main.updates.on("message_edit", () => null);
+		this.main.updates.on("video_comment", () => null);
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
 		this.main.updates.on("user_block", groupMiddlewares.userBlock);

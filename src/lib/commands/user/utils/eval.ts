@@ -4,6 +4,7 @@ new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
 	if (!message.state.args[1]) {
 		return message.reply(`нет кода`);
 	}
+	await message.loadMessagePayload();
 	try {
 		const answer: string | number | JSON = await eval(message.state.args[1]);
 		if (typeof answer === "string") {

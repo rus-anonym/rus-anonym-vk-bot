@@ -1,8 +1,8 @@
 # User VK bot
 
-# Bot for VK on [**Node.JS**](https://nodejs.org/en/download/)
+# Bot for VK on [Node.JS](https://nodejs.org/en/download/)
 
-## The bot is made to simplify the work in the VK dialogues.
+## The bot is made to simplify the work in the VK dialogues
 
 ## Installation
 
@@ -89,9 +89,9 @@ $ yarn
 To assemble a project, use
 
 ```bash
-$ yarn build
+yarn build
 # Or
-$ npm run build
+npm run build
 ```
 
 ## Project launch
@@ -99,5 +99,5 @@ $ npm run build
 To start a project, use
 
 ```bash
-$ node ./dist/main.js
+node ./dist/main.js
 ```

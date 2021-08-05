@@ -18,6 +18,9 @@ new UserCommand(/(?:^!tr)$/i, async function (message) {
 				keep_forward_messages: true,
 				keep_snippets: true,
 				dont_parse_links: true,
+				attachment: message.replyMessage.attachments
+					.map((x) => x.toString())
+					.join(),
 				message: ru.fromEn(message.replyMessage.text || "Нет текста"),
 			});
 		} else {
