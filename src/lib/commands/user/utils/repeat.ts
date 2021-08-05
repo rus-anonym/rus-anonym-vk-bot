@@ -6,9 +6,9 @@ import { UserCommand } from "../../../utils/lib/commands/core";
 new UserCommand(/(?:^!repeat)(?:\s(\d+))?(\strue)?$/i, async function (
 	message,
 ) {
-	message.state.args[1] = message.state.args[1] || "10";
+	message.state.args[1] = message.state.args[1] || "3";
 	if (!Number(message.state.args[1])) {
-		message.state.args[1] = "10";
+		message.state.args[1] = "3";
 	}
 	if (Number(message.state.args[1]) > 100) {
 		return await message.editMessage({
