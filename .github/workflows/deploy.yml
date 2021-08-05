@@ -35,7 +35,7 @@ jobs:
             rm -rf ./node_modules/
             rm -rf ./dist/
             npm install --legacy-peer-deps
-            npm run build
+            npm run build:prod
       - name: Start
         uses: appleboy/ssh-action@master
         with:
