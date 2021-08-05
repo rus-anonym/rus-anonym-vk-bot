@@ -5,8 +5,8 @@
 	"license": "MIT",
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
-		"build": "tsc -p tsconfig.json",
-		"start": "npm run build && cd dist && node main",
+		"build:prod": "rollup -c rollup.config.prod.ts",
+		"build:dev": "rollup -c rollup.config.dev.ts",
 		"lint": "eslint ./src"
 	},
 	"dependencies": {
@@ -24,6 +24,12 @@
 		"vk-io": "^4.3.2"
 	},
 	"devDependencies": {
+		"rollup": "^2.56.0",
+		"rollup-plugin-uglify": "^6.0.4",
+		"@rollup/plugin-commonjs": "^20.0.0",
+		"@rollup/plugin-json": "^4.1.0",
+		"@rollup/plugin-node-resolve": "^13.0.4",
+		"@rollup/plugin-typescript": "^8.2.5",
 		"@types/convert-layout": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "^4.28.3",
 		"@typescript-eslint/parser": "^4.28.3",
