@@ -24,7 +24,9 @@ new UserCommand(/(?:^!repeat)(?:\s(\d+))?(\strue)?$/i, async function (
 		if (message.replyMessage.hasAttachments("sticker")) {
 			params.sticker_id = message.replyMessage.getAttachments("sticker")[0].id;
 		} else {
-			params.attachment = message.attachments.map((x) => x.toString()).join();
+			params.attachment = message.replyMessage.attachments
+				.map((x) => x.toString())
+				.join();
 		}
 	}
 	if (Object.keys(params).length === 0) {
