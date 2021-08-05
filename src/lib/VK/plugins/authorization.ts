@@ -1,4 +1,10 @@
 import { CallbackService, MessageContext } from "vk-io";
+import {
+	ImplicitFlowUser,
+	ImplicitFlowGroups,
+	DirectAuthorization,
+	ImplicitFlow,
+} from "@vk-io/authorization";
 
 import captchaHandler from "./captchaHandler";
 
@@ -6,6 +12,12 @@ interface IAuthorizationCode {
 	code: string;
 	date: number;
 }
+
+type TAuthorize =
+	| "ImplicitFlow"
+	| "ImplicitFlowUser"
+	| "ImplicitFlowGroups"
+	| "DirectAuthorization";
 
 class TempAuthorize {
 	public readonly app: number;
