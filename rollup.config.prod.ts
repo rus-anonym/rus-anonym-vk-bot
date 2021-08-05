@@ -22,13 +22,13 @@ if (process.version >= "v14.4") {
 export default {
 	input: "./src/main.ts",
 	output: {
-		file: "./dist/bundle.js",
+		file: "./dist/main.js",
 		format: "cjs",
 	},
 	plugins: [
 		json(),
 		typescript({ tsconfig: "./tsconfig.json" }),
 		commonjs({ extensions: [".js", ".ts"] }),
-		uglify()
+		uglify(),
 	],
 };
