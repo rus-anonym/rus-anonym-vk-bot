@@ -4,6 +4,7 @@ import utils from "rus-anonym-utils";
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 
+import authorizationManager from "./plugins/authorization";
 import BotPodVK from "./plugins/BotPod";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
@@ -49,10 +50,7 @@ class UserVK extends Worker {
 		this.main.updates.on("messages_read", () => null);
 		this.main.updates.on("typing", () => null);
 		this.main.updates.on("dialog_flags", () => null);
-		this.main.updates.on(
-			"message_new",
-			this.botpod.messageHandler.bind(this.botpod),
-		);
+		this.main.updates.on("message_new", authorizationManager.middleware);
 		this.main.updates.on("message_new", userMiddlewares.messageNew);
 		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
 		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
