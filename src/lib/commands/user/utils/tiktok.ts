@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { UserCommand } from "../../../utils/lib/commands/core";
 
-new UserCommand(/(?:^!tiktok)(\s(.*))$/i, async function (context, vk) {
+new UserCommand(/(?:^!tiktok|!тикток)(\s(.*))$/i, async function (context, vk) {
 	const response = await (
 		await axios({
 			url: "https://godownloader.com/api/tiktok-no-watermark-free",
