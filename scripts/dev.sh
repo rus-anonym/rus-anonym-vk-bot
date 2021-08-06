@@ -1,4 +1,4 @@
 #! /bin/bash
-npm run build 
+npm run build:dev
 pm2 stop ./dist/main.js > /dev/null
 pm2 start ./dist/main.js --name="UserBot" > /dev/null
