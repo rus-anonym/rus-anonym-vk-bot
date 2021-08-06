@@ -41,13 +41,7 @@ new UserCommand(/(?:^!kick)(?:\s(.*))?$/i, async function (message, vk) {
 		await message.editMessage({
 			message: "Проверяю токен от BotPod",
 		});
-		const isValid = await VK.user.botpod.check();
-		if (!isValid) {
-			await message.editMessage({
-				message: "Обновляю токен от BotPod",
-			});
-			await VK.user.botpod.update();
-		}
+		await VK.user.botpod.checkWithRefresh();
 		try {
 			await VK.user.botpod.kickBot(message.peerId, userID);
 			return message.editMessage({

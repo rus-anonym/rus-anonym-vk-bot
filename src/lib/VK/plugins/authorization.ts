@@ -27,7 +27,7 @@ type TAuthorize =
 	| "DirectAuthorization";
 
 class Authorization {
-	public readonly app: number;
+	public readonly app: string | number;
 	public readonly secret: string;
 	public readonly scope: string;
 	public readonly service: CallbackService;
@@ -44,7 +44,7 @@ class Authorization {
 		type,
 		scope,
 	}: {
-		app_id: number;
+		app_id: string | number;
 		secret: string;
 		scope: string;
 		type: TAuthorize;
@@ -65,7 +65,7 @@ class Authorization {
 		manager.add(this);
 	}
 
-	public async update(): Promise<void> {
+	public async refresh(): Promise<void> {
 		switch (this.type) {
 			case "ImplicitFlowUser":
 				await this.implicitFlowUser();
@@ -85,6 +85,13 @@ class Authorization {
 			return true;
 		} catch (error) {
 			return false;
+		}
+	}
+
+	public async checkWithRefresh(): Promise<void> {
+		const isValid = await this.check();
+		if (!isValid) {
+			await this.refresh();
 		}
 	}
 
