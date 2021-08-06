@@ -1,49 +1,145 @@
-import { CallbackService, MessageContext } from "vk-io";
+import {
+	API,
+	CallbackService,
+	CallbackServiceRetry,
+	MessageContext,
+} from "vk-io";
 import {
 	ImplicitFlowUser,
 	ImplicitFlowGroups,
 	DirectAuthorization,
-	ImplicitFlow,
 } from "@vk-io/authorization";
 
+import DB from "../../DB/core";
+import VK from "../../VK/core";
 import captchaHandler from "./captchaHandler";
 
 interface IAuthorizationCode {
+	id: number;
 	code: string;
 	date: number;
 }
 
 type TAuthorize =
-	| "ImplicitFlow"
 	| "ImplicitFlowUser"
 	| "ImplicitFlowGroups"
 	| "DirectAuthorization";
 
-class TempAuthorize {
+class Authorization {
 	public readonly app: number;
 	public readonly secret: string;
-	public readonly created: number;
+	public readonly scope: string;
 	public readonly service: CallbackService;
+	public readonly type: TAuthorize;
+	public created: number;
+	public expires: number | undefined;
+	public api: API;
 
-	constructor({ app_id, secret }: { app_id: number; secret: string }) {
+	public retry: CallbackServiceRetry | null = null;
+
+	constructor({
+		app_id,
+		secret,
+		type,
+		scope,
+	}: {
+		app_id: number;
+		secret: string;
+		scope: string;
+		type: TAuthorize;
+	}) {
 		this.app = app_id;
 		this.secret = secret;
 		this.created = Math.ceil(Date.now() / 1000);
 		this.service = new CallbackService();
+		this.type = type;
+		this.scope = scope;
+		this.api = new API({
+			token: "",
+		});
 		this.service.onCaptcha(captchaHandler);
+		this.service.onTwoFactor((_payload, retry) => {
+			this.retry = retry;
+		});
+	}
+
+	public async update(): Promise<void> {
+		switch (this.type) {
+			case "ImplicitFlowUser":
+				await this.implicitFlowUser();
+				break;
+			case "ImplicitFlowGroups":
+				await this.implicitFlowGroups();
+				break;
+			case "DirectAuthorization":
+				await this.directAuthorization();
+				break;
+		}
+	}
+
+	private async implicitFlowUser() {
+		const implicit = new ImplicitFlowUser({
+			apiVersion: "5.157",
+			login: DB.config.VK.user.login,
+			password: DB.config.VK.user.password,
+			clientId: this.app.toString(),
+			clientSecret: this.secret,
+			scope: this.scope,
+			callbackService: this.service,
+		});
+		const data = await implicit.run();
+		this.retry = null;
+		this.api = new API({
+			token: data.token,
+		});
+		this.expires = data.expires
+			? data.expires
+			: Math.ceil(Date.now() / 1000) + 86400;
+	}
+
+	private async implicitFlowGroups() {
+		const implicit = new ImplicitFlowGroups({
+			apiVersion: "5.157",
+			login: DB.config.VK.user.login,
+			password: DB.config.VK.user.password,
+			clientId: this.app.toString(),
+			clientSecret: this.secret,
+			scope: this.scope,
+			callbackService: this.service,
+			groupIds: [DB.config.VK.group.id],
+		});
+		const data = await implicit.run();
+		this.retry = null;
+		this.api = new API({
+			token: data.groups[0].token,
+		});
+		this.expires = data.groups[0].expires;
+	}
+
+	private async directAuthorization() {
+		const implicit = new DirectAuthorization({
+			apiVersion: "5.157",
+			login: DB.config.VK.user.login,
+			password: DB.config.VK.user.password,
+			clientId: this.app.toString(),
+			clientSecret: this.secret,
+			scope: this.scope,
+			callbackService: this.service,
+		});
+		const data = await implicit.run();
+		this.retry = null;
+		this.api = new API({
+			token: data.token,
+		});
+		this.expires = data.expires;
 	}
 }
 
-class Authorization {
-	private readonly codes: IAuthorizationCode[] = [];
-	private readonly authorizations: TempAuthorize[] = [];
+class AuthorizationManager {
+	private readonly authorizations: Authorization[] = [];
 
-	public async authorize(app_id: number, secret = ""): Promise<void> {
-		const tempAuthorization = new TempAuthorize({
-			app_id,
-			secret,
-		});
-		this.authorizations.push(tempAuthorization);
+	public add(authorization: Authorization) {
+		this.authorizations.push(authorization);
 	}
 
 	public async messageHandler(
@@ -56,6 +152,7 @@ class Authorization {
 					/(?:Код подтверждения входа: )(\d+)./,
 				) as RegExpMatchArray;
 				this.onCode({
+					id: context.id,
 					code: (args[1] as string).trim(),
 					date: context.createdAt,
 				});
@@ -64,9 +161,23 @@ class Authorization {
 		next();
 	}
 
-	private onCode(code: IAuthorizationCode) {
-		this.codes.push(code);
+	private onCode(info: IAuthorizationCode) {
+		const filteredAuthorizations = this.authorizations.filter(
+			(x) => x.created < info.date,
+		);
+		for (const authorize of filteredAuthorizations) {
+			if (authorize.retry) {
+				authorize.retry(info.code);
+				VK.user.getAPI().messages.delete({
+					peer_id: 100,
+					message_ids: info.id,
+				});
+			}
+		}
 	}
 }
 
-export default Authorization;
+const manager = new AuthorizationManager();
+
+export default manager;
+export { Authorization };
