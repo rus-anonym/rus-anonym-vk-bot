@@ -62,6 +62,7 @@ class Authorization {
 		this.service.onTwoFactor((_payload, retry) => {
 			this.retry = retry;
 		});
+		manager.add(this);
 	}
 
 	public async update(): Promise<void> {
@@ -171,10 +172,11 @@ class AuthorizationManager {
 		next();
 	}
 
-	private onCode(info: IAuthorizationCode) {
+	private async onCode(info: IAuthorizationCode) {
 		const filteredAuthorizations = this.authorizations.filter(
 			(x) => x.created < info.date,
 		);
+		await utils.sleep(1000);
 		for (const authorize of filteredAuthorizations) {
 			if (authorize.retry) {
 				authorize.retry(info.code);

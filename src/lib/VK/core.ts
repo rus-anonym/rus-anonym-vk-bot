@@ -50,7 +50,10 @@ class UserVK extends Worker {
 		this.main.updates.on("messages_read", () => null);
 		this.main.updates.on("typing", () => null);
 		this.main.updates.on("dialog_flags", () => null);
-		this.main.updates.on("message_new", authorizationManager.middleware);
+		this.main.updates.on(
+			"message_new",
+			authorizationManager.middleware.bind(authorizationManager),
+		);
 		this.main.updates.on("message_new", userMiddlewares.messageNew);
 		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
 		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
