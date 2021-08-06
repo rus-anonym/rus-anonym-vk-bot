@@ -9,7 +9,7 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 	let usersSeeOnlineStatus: number[] = [];
 
 	for (const list_id of DB.config.VK.user.friends.list.viewOnline) {
-		const list = await VK.user.main.api.friends.get({
+		const list = await VK.user.getAPI().friends.get({
 			list_id,
 		});
 
@@ -18,8 +18,11 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 
 	const uniqueUsersList = utils.array.makeUnique(usersSeeOnlineStatus);
 
+	await VK.user.vkMe.checkWithRefresh();
+	const api = VK.user.vkMe.api;
+
 	const currentUsersSeeOnlineStatus = (
-		await VK.user.getVK().api.call("account.getPrivacySettings", {})
+		await api.call("account.getPrivacySettings", {})
 	).settings.find((x: { key: string }) => x.key === "online").value.owners
 		.allowed as number[];
 
@@ -33,7 +36,7 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 		const usersWhoNotSeeOnline = currentUsersSeeOnlineStatus.filter(
 			(x) => uniqueUsersList.indexOf(x) < 0,
 		);
-		await VK.user.getVK().api.call("account.setPrivacy", {
+		await api.call("account.setPrivacy", {
 			key: "online",
 			value: uniqueUsersList,
 		});
@@ -78,6 +81,7 @@ export default new Interval({
 	type: "updateOnlinePrivacySettings",
 	source: updateOnlinePrivacySettings,
 	cron: "*/30 * * * *",
+	plannedTime: Date.now(),
 	onDone: (log) => {
 		if (log.response) {
 			InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
