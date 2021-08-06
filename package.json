@@ -5,8 +5,9 @@
 	"license": "MIT",
 	"repository": "https://github.com/RusAnonym/user-vk-bot",
 	"scripts": {
-		"build:prod": "rollup -c rollup.config.prod.ts",
+		"build": "tsc --project tsconfig.json",
 		"build:dev": "rollup -c rollup.config.dev.ts",
+		"build:prod": "rollup -c rollup.config.prod.ts",
 		"lint": "eslint ./src"
 	},
 	"dependencies": {
