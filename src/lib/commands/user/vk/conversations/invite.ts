@@ -41,12 +41,12 @@ new UserCommand(/(?:^!invite|!inv)(?:\s(.*))?$/i, async function (message, vk) {
 		await message.editMessage({
 			message: "Проверяю токен от BotPod",
 		});
-		const isValid = await VK.user.botpod.isValid();
+		const isValid = await VK.user.botpod.check();
 		if (!isValid) {
 			await message.editMessage({
 				message: "Обновляю токен от BotPod",
 			});
-			await VK.user.botpod.updateToken();
+			await VK.user.botpod.update();
 		}
 		try {
 			await VK.user.botpod.addBotToChat(message.peerId, userID);
