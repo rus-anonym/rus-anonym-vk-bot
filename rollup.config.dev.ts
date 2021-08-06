@@ -1,5 +1,5 @@
 import json from "@rollup/plugin-json";
-import typescript from "@rollup/plugin-typescript";
+import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
 
 export default {
