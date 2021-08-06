@@ -1,4 +1,4 @@
-import { VK, CallbackService } from "vk-io";
+import { VK, CallbackService, API } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
@@ -19,6 +19,7 @@ abstract class Worker {
 	abstract additional: string[];
 
 	abstract getVK(): VK;
+	abstract getAPI(): API;
 }
 
 class UserVK extends Worker {
@@ -83,6 +84,14 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 
 	public botpod = new BotPodVK();
 
+	public getAPI() {
+		return new API({
+			token: utils.array.random(this.additional),
+			callbackService: userCallbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
+	}
+
 	public getVK() {
 		return new VK({
 			token: utils.array.random(this.additional),
@@ -145,6 +154,12 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 					).toString(),
 				},
 			});
+		});
+	}
+
+	public getAPI() {
+		return new API({
+			token: utils.array.random(this.additional),
 		});
 	}
 
