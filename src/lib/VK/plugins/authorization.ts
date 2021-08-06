@@ -9,6 +9,7 @@ import {
 	ImplicitFlowGroups,
 	DirectAuthorization,
 } from "@vk-io/authorization";
+import utils from "rus-anonym-utils";
 
 import DB from "../../DB/core";
 import VK from "../../VK/core";
@@ -77,6 +78,15 @@ class Authorization {
 		}
 	}
 
+	public async check(): Promise<boolean> {
+		try {
+			await utils.vk.api.checkToken(this.api.options.token);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
 	private async implicitFlowUser() {
 		const implicit = new ImplicitFlowUser({
 			apiVersion: "5.157",
@@ -142,7 +152,7 @@ class AuthorizationManager {
 		this.authorizations.push(authorization);
 	}
 
-	public async messageHandler(
+	public async middleware(
 		context: MessageContext,
 		next: () => void,
 	): Promise<void> {
