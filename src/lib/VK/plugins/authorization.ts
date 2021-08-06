@@ -2,6 +2,7 @@ import {
 	API,
 	CallbackService,
 	CallbackServiceRetry,
+	IAPIOptions,
 	MessageContext,
 } from "vk-io";
 import {
@@ -35,19 +36,25 @@ class Authorization {
 	public created: number;
 	public expires: number | undefined;
 	public api: API;
-
 	public retry: CallbackServiceRetry | null = null;
+
+	private apiOptions: Partial<IAPIOptions>;
+	private apiVersion: string;
 
 	constructor({
 		app_id,
 		secret,
 		type,
 		scope,
+		apiVersion = "5.157",
+		apiOptions = {},
 	}: {
 		app_id: string | number;
 		secret: string;
 		scope: string;
 		type: TAuthorize;
+		apiOptions?: Partial<IAPIOptions>;
+		apiVersion?: string;
 	}) {
 		this.app = app_id;
 		this.secret = secret;
@@ -56,8 +63,12 @@ class Authorization {
 		this.type = type;
 		this.scope = scope;
 		this.api = new API({
+			...apiOptions,
 			token: "",
+			apiVersion,
 		});
+		this.apiOptions = apiOptions;
+		this.apiVersion = apiVersion;
 		this.service.onCaptcha(captchaHandler);
 		this.service.onTwoFactor((_payload, retry) => {
 			this.retry = retry;
@@ -108,7 +119,9 @@ class Authorization {
 		const data = await implicit.run();
 		this.retry = null;
 		this.api = new API({
+			...this.apiOptions,
 			token: data.token,
+			apiVersion: this.apiVersion,
 		});
 		this.expires = data.expires
 			? data.expires
@@ -129,7 +142,9 @@ class Authorization {
 		const data = await implicit.run();
 		this.retry = null;
 		this.api = new API({
+			...this.apiOptions,
 			token: data.groups[0].token,
+			apiVersion: this.apiVersion,
 		});
 		this.expires = data.groups[0].expires;
 	}
@@ -147,7 +162,9 @@ class Authorization {
 		const data = await implicit.run();
 		this.retry = null;
 		this.api = new API({
+			...this.apiOptions,
 			token: data.token,
+			apiVersion: this.apiVersion,
 		});
 		this.expires = data.expires;
 	}
