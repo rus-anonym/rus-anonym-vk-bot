@@ -1,10 +1,12 @@
-import { VK, CallbackService } from "vk-io";
+import { VK, CallbackService, API } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
 import DB from "../DB/core";
 
+import authorizationManager from "./plugins/authorization";
 import BotPodVK from "./plugins/BotPod";
+import VKMe from "./plugins/VKMe";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
 
@@ -19,6 +21,7 @@ abstract class Worker {
 	abstract additional: string[];
 
 	abstract getVK(): VK;
+	abstract getAPI(): API;
 }
 
 class UserVK extends Worker {
@@ -50,7 +53,7 @@ class UserVK extends Worker {
 		this.main.updates.on("dialog_flags", () => null);
 		this.main.updates.on(
 			"message_new",
-			this.botpod.messageHandler.bind(this.botpod),
+			authorizationManager.middleware.bind(authorizationManager),
 		);
 		this.main.updates.on("message_new", userMiddlewares.messageNew);
 		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
@@ -82,6 +85,15 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 	}
 
 	public botpod = new BotPodVK();
+	public vkMe = new VKMe();
+
+	public getAPI() {
+		return new API({
+			token: utils.array.random(this.additional),
+			callbackService: userCallbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
+	}
 
 	public getVK() {
 		return new VK({
@@ -145,6 +157,12 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 					).toString(),
 				},
 			});
+		});
+	}
+
+	public getAPI() {
+		return new API({
+			token: utils.array.random(this.additional),
 		});
 	}
 

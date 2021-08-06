@@ -3,10 +3,10 @@
 		"user": {
 			"defaultParams": {
 				"apiVersion": "5.157",
-				"headers": {
+				"apiHeaders": {
 					"X-Get-Processing-Time": "1",
 					"X-Fork-Disabled": "1",
-					"User-Agent": "VKAndroidApp/1.0",
+					"User-Agent": "VKAndroidApp/6.30-0 (Android 11.0; SDK 30; x64; Huawei; ru)",
 					"X-VK-Android-Client": "new"
 				}
 			}
@@ -14,10 +14,10 @@
 		"fake": {
 			"defaultParams": {
 				"apiVersion": "5.157",
-				"headers": {
+				"apiHeaders": {
 					"X-Get-Processing-Time": "1",
 					"X-Fork-Disabled": "1",
-					"User-Agent": "VKAndroidApp/1.0",
+					"User-Agent": "VKAndroidApp/6.30-0 (Android 11.0; SDK 30; x64; Huawei; ru)",
 					"X-VK-Android-Client": "new"
 				}
 			}
