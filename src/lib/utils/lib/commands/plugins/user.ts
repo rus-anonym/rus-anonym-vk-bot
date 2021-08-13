@@ -160,18 +160,21 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 				case "sticker": {
 					++i;
 					const sticker = attachment.sticker;
+
 					const [userStickerPackInfo] = (
-						(await VK.user.getVK().api.store.getProducts({
+						(await VK.fakes.getUserFakeAPI().store.getProducts({
 							product_ids: [sticker.product_id],
 							type: "stickers",
 							user_id,
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						})) as any
 					).items as StoreGetProductsResponse;
+
 					const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
 						VK.user.getVK().api.options.token,
 						[sticker.product_id],
 					);
+
 					const url = utils.array.last<{
 						url: string;
 					}>(sticker.images).url;
@@ -179,6 +182,12 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 					const urlWithBackground = utils.array.last<{
 						url: string;
 					}>(sticker.images_with_background).url;
+
+					const stickerSuggestions = await VK.fakes
+						.getUserFakeAPI()
+						.call("store.getStickerSuggestions", {
+							sticker_id: sticker.sticker_id,
+						});
 
 					text += `${i}. Стикер:
 ID: ${sticker.sticker_id}
@@ -201,7 +210,11 @@ URL с фоном: ${urlWithBackground}
 					} ${stickerPackInfo.isStyle ? "стиль" : "стикерпак"}
 ${stickerPackInfo.isFree ? "Добавлен" : "Куплен"} пользователем: ${moment(
 						userStickerPackInfo.purchase_date! * 1000,
-					).format("DD.MM.YYYY, HH:mm:ss")}\n\n`;
+					).format("DD.MM.YYYY, HH:mm:ss")}\n
+Подсказки: ${stickerSuggestions.suggestions
+						.filter((x: { is_user: boolean }) => !x.is_user)
+						.map((x: { word: string }) => x.word)
+						.join(", ")}`;
 					break;
 				}
 				case "audio_playlist": {
