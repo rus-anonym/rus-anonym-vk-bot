@@ -55,7 +55,8 @@ $ yarn
 					"friends_activity": 0,
 					"info": 0,
 					"userTrack": 0,
-					"captcha": 0
+					"captcha": 0,
+					"api": 0
 				} // Conversation identifiers, for the group bot
 			}
 		} // Group
