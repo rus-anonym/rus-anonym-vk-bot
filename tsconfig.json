@@ -3,7 +3,7 @@
 		"rootDir": "./src/",
 		"outDir": "./dist/",
 		"target": "ES2019",
-		"module": "ESNext",
+		"module": "CommonJS",
 		"moduleResolution": "Node",
 		"declaration": false,
 		"strict": true,

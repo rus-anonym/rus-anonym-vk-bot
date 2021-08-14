@@ -9,6 +9,7 @@ import getBirthdays from "./tasks/getBirthdays";
 import deleteSameAudios from "./tasks/deleteSameAudios";
 import deleteSameDocuments from "./tasks/deleteSameDocuments";
 import sendHappyBirthdayGreetings from "./tasks/sendHappyBirthdayGreetings";
+import sendApiStatus from "./tasks/sendApiStatus";
 
 scheduler.events.on("error", (error) => {
 	InternalUtils.logger.send({
@@ -27,4 +28,5 @@ export default {
 	// updateOnlinePrivacySettings,
 	sendHappyBirthdayGreetings,
 	deleteSameDocuments,
+	sendApiStatus,
 };
