@@ -31,21 +31,21 @@ async function updateUsersData(): Promise<string | null> {
 					`Фамилия изменена: ${user.info.surname} => ${userInfo.last_name}`,
 				);
 			}
-			if (user.info.extends.domain !== userInfo.domain) {
+			if (
+				user.info.extends.domain !== userInfo.domain &&
+				user.info.extends.domain !== `id${userInfo.id}` &&
+				userInfo.domain !== `id${userInfo.id}`
+			) {
 				output.push(
 					`Ссылка изменена: ${user.info.extends.domain} => ${userInfo.domain}`,
 				);
-				if (user.info.extends.domain !== `id${userInfo.id}`) {
-					try {
-						await InternalUtils.user.reserveScreenName(
-							user.info.extends.domain,
-						);
-						output.push(
-							`Удачная попытка резервирования @${user.info.extends.domain}`,
-						);
-					} catch (error) {
-						output.push(`Неудачная попытка резервирования домена`);
-					}
+				try {
+					await InternalUtils.user.reserveScreenName(user.info.extends.domain);
+					output.push(
+						`Удачная попытка резервирования @${user.info.extends.domain}`,
+					);
+				} catch (error) {
+					output.push(`Неудачная попытка резервирования домена`);
 				}
 			}
 			if (
