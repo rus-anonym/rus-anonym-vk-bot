@@ -43,8 +43,12 @@ new UserCommand(/(?:^!add)$/i, async function (context) {
 	}
 
 	if (context.hasForwards) {
+		let message = "";
+		for (const forward of context.forwards) {
+			message += await add(forward);
+		}
 		return await context.editMessage({
-			message: await add(context.forwards[0]!),
+			message,
 		});
 	}
 

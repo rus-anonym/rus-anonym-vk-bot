@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 import config from "../../DB/config.json";
 import constants from "../../DB/constants.json";
+
+import mainSchemes from "./mainSchemes";
 import userSchemes from "./userSchemes";
 import groupSchemes from "./groupSchemes";
 
@@ -88,8 +90,17 @@ class MainDB extends DB {
 		},
 	);
 
-	public models = {};
-	public schemes = {};
+	public models = {
+		reserveGroup: typedModel(
+			"reserveGroup",
+			mainSchemes.reserveGroup,
+			"reserve-groups",
+			undefined,
+			undefined,
+			this.connection,
+		),
+	};
+	public schemes = mainSchemes;
 }
 
 class CoreDB {

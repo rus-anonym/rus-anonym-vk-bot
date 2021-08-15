@@ -17,7 +17,6 @@ import "./user/utils/communication";
 import "./user/utils/tiktok";
 import "./user/utils/repeat";
 
-import "./user/vk/attachments/article";
 import "./user/vk/attachments/whatis";
 import "./user/vk/attachments/audio";
 import "./user/vk/attachments/add";
