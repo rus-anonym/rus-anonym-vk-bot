@@ -6,7 +6,7 @@ import DB from "../DB/core";
 
 import authorizationManager from "./plugins/authorization";
 import BotPodVK from "./plugins/BotPod";
-// import VKMe from "./plugins/VKMe";
+import VKMe from "./plugins/VKMe";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
 
@@ -85,7 +85,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 	}
 
 	public botpod = new BotPodVK();
-	// public vkMe = new VKMe();
+	public vkMe = new VKMe();
 
 	public getAPI() {
 		return new API({

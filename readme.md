@@ -26,7 +26,10 @@ $ yarn
 			"password": "", // User Password
 			"tokens": {
 				"main": "", // User token for polling
-				"additional": [] // Array with user tokens (minimum 1)
+				"additional": [], // Array with user tokens (minimum 1)
+				"apps": {
+					"6146827": "" // Token from VK Me
+				}
 			}, // User Tokens
 			"friends": {
 				"list": {
