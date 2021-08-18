@@ -1,21 +1,19 @@
-// import { officialAppCredentials } from "@vk-io/authorization";
+import { API, CallbackService } from "vk-io";
 
-// import { Authorization } from "./authorization";
-// import DB from "../../DB/core";
+import DB from "../../DB/core";
+import captchaHandler from "./captchaHandler";
 
-// class VKMe extends Authorization {
-// 	constructor() {
-// 		super({
-// 			app_id: officialAppCredentials.vkMe.clientId,
-// 			scope: "0",
-// 			secret: officialAppCredentials.vkMe.clientSecret,
-// 			type: "ImplicitFlowUser",
-// 			apiVersion: DB.constants.vk.user.defaultParams.apiVersion,
-// 			apiOptions: {
-// 				...DB.constants.vk.user.defaultParams,
-// 			},
-// 		});
-// 	}
-// }
+const callbackService = new CallbackService();
+callbackService.onCaptcha(captchaHandler);
 
-// export default VKMe;
+class VKMe extends API {
+	constructor() {
+		super({
+			token: DB.config.VK.user.tokens.apps[6146827],
+			callbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
+	}
+}
+
+export default VKMe;
