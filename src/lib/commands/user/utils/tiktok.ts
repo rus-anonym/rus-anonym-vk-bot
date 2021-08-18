@@ -74,9 +74,7 @@ new UserCommand(/^(https:\/\/(vm|www).tiktok.com\/(?:.*))/, async function (
 
 	await context.editMessage({
 		attachment: attachment.toString(),
-		message: context.text?.replace(
-			/^(https:\/\/(vm|www).tiktok.com\/(?:.*))$/i,
-			"",
-		),
+		message: context.text,
+		dont_parse_links: true,
 	});
 });
