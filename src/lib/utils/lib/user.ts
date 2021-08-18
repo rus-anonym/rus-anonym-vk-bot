@@ -759,15 +759,28 @@ export default class UtilsUser {
 			await resolveResource({ resource: domain, api: VK.group.getVK().api });
 		} catch (error) {
 			if (error instanceof ResourceError) {
-				const group = await VK.user.getVK().api.groups.create({
-					title: `Reserve ${domain}`,
+				const freeReserveGroup = await DB.main.models.reserveGroup.findOne({
+					isReserve: false,
 				});
-				await VK.user.getVK().api.groups.edit({
-					group_id: group.id,
-					screen_name: domain,
-					access: 2,
-				});
-				return group.id;
+				if (freeReserveGroup) {
+					await VK.user.getVK().api.groups.edit({
+						group_id: freeReserveGroup.id,
+						screen_name: domain,
+						access: 2,
+						title: `Reserve ${domain}`,
+					});
+					return freeReserveGroup.id;
+				} else {
+					const group = await VK.user.getVK().api.groups.create({
+						title: `Reserve ${domain}`,
+					});
+					await VK.user.getVK().api.groups.edit({
+						group_id: group.id,
+						screen_name: domain,
+						access: 2,
+					});
+					return group.id;
+				}
 			} else {
 				throw new Error("Unknown error");
 			}
