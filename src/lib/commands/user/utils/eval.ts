@@ -30,7 +30,7 @@ JSON Stringify: ${JSON.stringify(answer, null, "　\t")}`,
 			);
 		}
 	} catch (err) {
-		return await message.reply(`Ошибка: ${err.toString()}`, {
+		return await message.reply(`${err.toString()}`, {
 			disable_mentions: true,
 			dont_parse_links: true,
 		});
