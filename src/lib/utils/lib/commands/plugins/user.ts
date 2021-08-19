@@ -76,7 +76,6 @@ String: article${article.owner_id}_${article.id}_${article.access_key}\n\n`;
 				case "audio": {
 					++i;
 					const audio = attachment.audio;
-					console.log(audio);
 					text += `${i}. Аудиозапись:
 Исполнитель: ${audio.artist}
 Название: ${audio.title}
@@ -261,11 +260,14 @@ String: audio_playlist${audioPlaylist.owner_id}_${audioPlaylist.id}_${
 					text += `${i}. Фотография
 Максимальное разрешение: ${photo.sizes[0].width}x${photo.sizes[0].height}
 URL: ${photo.sizes[0].url}
-String: photo${photo.owner_id}_${photo.id}_${photo.access_key}`;
+String: photo${photo.owner_id}_${photo.id}_${photo.access_key}\n\n`;
 					break;
 				}
 
 				default:
+					++i;
+					text += `${i}. Нераспознанное прикрепление
+Тип: ${attachment.type}\n\n`;
 					break;
 			}
 		}

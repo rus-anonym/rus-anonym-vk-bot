@@ -13,6 +13,12 @@ Chats: ${await DB.user.models.chat.countDocuments()}
 Group DB Stats:
 Users: ${await DB.group.models.user.countDocuments()}
 
+Free groups for reserve: ${await DB.main.models.reserveGroup
+			.find({
+				isReserve: false,
+			})
+			.countDocuments()}
+
 Process:
 RSS: ${InternalUtils.commands.bytesToSize(memoryData.rss)}
 Heap Total: ${InternalUtils.commands.bytesToSize(memoryData.heapTotal)}
