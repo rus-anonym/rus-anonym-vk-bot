@@ -266,6 +266,9 @@ String: photo${photo.owner_id}_${photo.id}_${photo.access_key}\n\n`;
 				}
 
 				default:
+					++i;
+					text += `${i}. Нераспознанное прикрепление
+Тип: ${attachment.type}\n\n`;
 					break;
 			}
 		}
