@@ -76,7 +76,6 @@ String: article${article.owner_id}_${article.id}_${article.access_key}\n\n`;
 				case "audio": {
 					++i;
 					const audio = attachment.audio;
-					console.log(audio);
 					text += `${i}. Аудиозапись:
 Исполнитель: ${audio.artist}
 Название: ${audio.title}
