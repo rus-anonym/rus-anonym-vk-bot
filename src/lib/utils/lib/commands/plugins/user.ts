@@ -241,6 +241,29 @@ String: audio_playlist${audioPlaylist.owner_id}_${audioPlaylist.id}_${
 					}\n\n`;
 					break;
 				}
+				case "photo": {
+					++i;
+					const photo = attachment.photo;
+					photo.sizes.sort(
+						(
+							a: { width: number; height: number },
+							b: { width: number; height: number },
+						) => {
+							if (a.width > b.width || a.height > b.height) {
+								return -1;
+							} else if (a.width < b.width || a.height < b.height) {
+								return 1;
+							} else {
+								return 0;
+							}
+						},
+					);
+					text += `${i}. Фотография
+Максимальное разрешение: ${photo.sizes[0].width}x${photo.sizes[0].height}
+URL: ${photo.sizes[0].url}
+String: photo${photo.owner_id}_${photo.id}_${photo.access_key}`;
+					break;
+				}
 
 				default:
 					break;
