@@ -9,9 +9,16 @@ async function updateReserveGroupsList() {
 		extended: true,
 		filter: ["admin"],
 	})) as GroupsGetExtendedResponse;
-	const reserveGroups = groups.items.filter((x) =>
-		x.name.startsWith("Reserve"),
+	const reserveGroups = groups.items.filter(
+		(x) => x.name.startsWith("Reserve") && !x.deactivated,
 	);
+	await DB.main.models.reserveGroup.updateMany({
+		$pull: {
+			id: {
+				$nin: reserveGroups.map((x) => x.id),
+			},
+		},
+	});
 	for (const group of reserveGroups) {
 		let groupInDB = await DB.main.models.reserveGroup.findOne({
 			id: group.id,
