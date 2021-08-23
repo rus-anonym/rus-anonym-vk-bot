@@ -769,6 +769,9 @@ export default class UtilsUser {
 						access: 2,
 						title: `Reserve ${domain}`,
 					});
+					freeReserveGroup.isReserve = true;
+					freeReserveGroup.markModified("isReserve");
+					freeReserveGroup.save();
 					return freeReserveGroup.id;
 				} else {
 					const group = await VK.user.getVK().api.groups.create({

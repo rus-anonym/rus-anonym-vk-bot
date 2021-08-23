@@ -12,11 +12,9 @@ async function updateReserveGroupsList() {
 	const reserveGroups = groups.items.filter(
 		(x) => x.name.startsWith("Reserve") && !x.deactivated,
 	);
-	await DB.main.models.reserveGroup.updateMany({
-		$pull: {
-			id: {
-				$nin: reserveGroups.map((x) => x.id),
-			},
+	await DB.main.models.reserveGroup.deleteMany({
+		id: {
+			$nin: reserveGroups.map((x) => x.id),
 		},
 	});
 	for (const group of reserveGroups) {
