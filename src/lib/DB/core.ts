@@ -1,5 +1,5 @@
 import { typedModel } from "ts-mongoose";
-import mongoose from "mongoose";
+import mongoose, { ConnectionOptions } from "mongoose";
 
 import config from "../../DB/config.json";
 import constants from "../../DB/constants.json";
@@ -10,6 +10,22 @@ import groupSchemes from "./groupSchemes";
 
 mongoose.Schema.Types.String.checkRequired((text) => text !== null);
 
+const mongoDbAddress = `mongodb://${config.DBMS.mongo.address}:27017/`;
+
+const buildConnectionConfig = (dbName: string): ConnectionOptions => {
+	return {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true,
+		auth: {
+			user: config.DBMS.mongo.login,
+			password: config.DBMS.mongo.password,
+		},
+		authSource: "admin",
+		dbName: dbName,
+	};
+};
+
 abstract class DB {
 	abstract connection: unknown;
 	abstract models: unknown;
@@ -18,12 +34,8 @@ abstract class DB {
 
 class UserDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.user.name}`,
-		{
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true,
-		},
+		mongoDbAddress,
+		buildConnectionConfig(config.DBMS.mongo.database.user.name),
 	);
 
 	public models = {
@@ -58,12 +70,8 @@ class UserDB extends DB {
 
 class GroupDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.group.name}`,
-		{
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true,
-		},
+		mongoDbAddress,
+		buildConnectionConfig(config.DBMS.mongo.database.group.name),
 	);
 
 	public models = {
@@ -82,12 +90,8 @@ class GroupDB extends DB {
 
 class MainDB extends DB {
 	public connection = mongoose.createConnection(
-		`mongodb+srv://${config.DBMS.mongo.login}:${config.DBMS.mongo.password}@${config.DBMS.mongo.address}/${config.DBMS.mongo.database.main.name}`,
-		{
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true,
-		},
+		mongoDbAddress,
+		buildConnectionConfig(config.DBMS.mongo.database.main.name),
 	);
 
 	public models = {
