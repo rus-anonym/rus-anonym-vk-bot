@@ -9,12 +9,28 @@ import VK from "../../VK/core";
 
 let VK_API_STATUS: types.IVKAPIStatus[] | null = null;
 
+const compareStatuses = (NEW_VK_API_STATUS: types.IVKAPIStatus[]) => {
+	if (VK_API_STATUS) {
+		let isChange = false;
+		for (const sectionIndex in NEW_VK_API_STATUS) {
+			const currentSection = NEW_VK_API_STATUS[sectionIndex];
+			const oldSection = VK_API_STATUS[sectionIndex];
+			if (Math.abs(oldSection.performance - currentSection.performance) > 20) {
+				isChange = true;
+			}
+			if (currentSection.uptime !== 100) {
+				isChange = true;
+			}
+			return isChange;
+		}
+	} else {
+		return false;
+	}
+};
+
 async function sendApiStatus() {
 	const NEW_VK_API_STATUS = await utils.vk.api.status();
-	if (
-		VK_API_STATUS &&
-		JSON.stringify(NEW_VK_API_STATUS) !== JSON.stringify(VK_API_STATUS)
-	) {
+	if (VK_API_STATUS && compareStatuses(NEW_VK_API_STATUS)) {
 		let message = "";
 		for (const section of NEW_VK_API_STATUS) {
 			const oldSectionData = VK_API_STATUS.find(
