@@ -1,12 +1,14 @@
-import { UserModernMessageContextState } from "../../../utils/lib/commands/core";
+import utils from "rus-anonym-utils";
+
 import { MessageContext } from "vk-io";
+import { UserModernMessageContextState } from "../../../utils/lib/commands/core";
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
 
-function userMessageNew(
+async function userMessageNew(
 	message: MessageContext<UserModernMessageContextState>,
-): void {
+): Promise<void> {
 	InternalUtils.user.saveMessage(message).catch(() => null);
 
 	if (message.isOutbox && message.text) {
@@ -27,6 +29,20 @@ JSON Stringify: ${JSON.stringify(err.toJSON(), null, "\t")}`,
 					type: "error",
 				});
 			});
+		} else {
+			let newMessageText = message.text;
+			if (/[\wа-я]/i.test(utils.array.last(message.text.split("")))) {
+				newMessageText += ".";
+			}
+			if (/[\wа-я]/.test(message.text[0])) {
+				newMessageText = newMessageText.substring(1);
+				newMessageText = message.text[0].toUpperCase() + newMessageText;
+			}
+			if (message.text !== newMessageText) {
+				await message.editMessage({
+					message: newMessageText,
+				});
+			}
 		}
 	}
 }
