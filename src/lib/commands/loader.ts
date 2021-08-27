@@ -17,6 +17,7 @@ import "./user/utils/communication";
 import "./user/utils/tiktok";
 import "./user/utils/repeat";
 import "./user/utils/rus_anonym";
+import "./user/utils/pohui";
 
 import "./user/vk/attachments/whatis";
 import "./user/vk/attachments/audio";
