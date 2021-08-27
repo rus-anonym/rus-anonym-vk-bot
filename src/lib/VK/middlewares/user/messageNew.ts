@@ -31,10 +31,10 @@ JSON Stringify: ${JSON.stringify(err.toJSON(), null, "\t")}`,
 			});
 		} else {
 			let newMessageText = message.text;
-			if (/[\wа-я]/i.test(utils.array.last(message.text.split("")))) {
+			if (/[\wа-яё	]/i.test(utils.array.last(message.text.split("")))) {
 				newMessageText += ".";
 			}
-			if (/[\wа-я]/.test(message.text[0])) {
+			if (/[\wа-яё]/.test(message.text[0])) {
 				newMessageText = newMessageText.substring(1);
 				newMessageText = message.text[0].toUpperCase() + newMessageText;
 			}
