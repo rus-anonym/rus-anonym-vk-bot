@@ -6,6 +6,21 @@ import { UserModernMessageContextState } from "../../../utils/lib/commands/core"
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
 
+const improveText = (text: string) => {
+	if (text.includes("&#13;") || /^(?:\[club\d+\|.*])/.test(text)) {
+		return text;
+	}
+	let newText = text;
+	if (/(?=[^\d])[\wа-яё]/i.test(utils.array.last(text.split("")))) {
+		newText += ".";
+	}
+	if (/(?=[^\d])[\wа-яё]/.test(text[0])) {
+		newText = newText.substring(1);
+		newText = text[0].toUpperCase() + newText;
+	}
+	return newText;
+};
+
 async function userMessageNew(
 	message: MessageContext<UserModernMessageContextState>,
 ): Promise<void> {
@@ -41,14 +56,7 @@ async function userMessageNew(
 				});
 			});
 		} else {
-			let newMessageText = message.text;
-			if (/[\wа-яё]/i.test(utils.array.last(message.text.split("")))) {
-				newMessageText += ".";
-			}
-			if (/[\wа-яё]/.test(message.text[0])) {
-				newMessageText = newMessageText.substring(1);
-				newMessageText = message.text[0].toUpperCase() + newMessageText;
-			}
+			const newMessageText = improveText(message.text);
 			if (message.text !== newMessageText) {
 				await message.editMessage({
 					message: newMessageText,
