@@ -2,7 +2,7 @@ import utils from "rus-anonym-utils";
 
 import { UserCommand } from "../../../utils/lib/commands/core";
 
-new UserCommand(/(?:^!zz)(\s(.*))?$/i, async function (message) {
+new UserCommand(/^zz ((?:.|\s)+)$/i, async function (message) {
 	if (!message.state.args[1]) {
 		return message.reply(`нет кода`);
 	}
