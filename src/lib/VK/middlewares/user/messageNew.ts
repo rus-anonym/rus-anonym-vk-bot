@@ -31,7 +31,7 @@ JSON Stringify: ${JSON.stringify(err.toJSON(), null, "\t")}`,
 			});
 		} else {
 			let newMessageText = message.text;
-			if (/[\wа-яё	]/i.test(utils.array.last(message.text.split("")))) {
+			if (/[\wа-яё]/i.test(utils.array.last(message.text.split("")))) {
 				newMessageText += ".";
 			}
 			if (/[\wа-яё]/.test(message.text[0])) {
