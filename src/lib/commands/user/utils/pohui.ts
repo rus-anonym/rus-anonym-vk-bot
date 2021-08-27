@@ -25,6 +25,7 @@ const images = [
 ];
 
 new UserCommand(/(?:^похуй)(?:\s(\d+))?$/i, async function (message) {
+	await message.loadMessagePayload();
 	message.state.args[1] = message.state.args[1] || "2";
 	const selectedNumber = Number(message.state.args[1]);
 	const count = selectedNumber > images.length ? images.length : selectedNumber;
@@ -32,10 +33,15 @@ new UserCommand(/(?:^похуй)(?:\s(\d+))?$/i, async function (message) {
 	for (let i = 0; i < count; ++i) {
 		selectedAttachments.push(images[i]);
 	}
+	await message.editMessage({
+		message: "",
+		attachment: selectedAttachments.splice(0, 10),
+	});
 	for (const chunk of utils.array.splitTo(selectedAttachments, 10)) {
 		await message.send({
 			random_id: getRandomId(),
 			attachment: chunk,
+			reply_to: message.replyMessage?.id,
 		});
 	}
 });
