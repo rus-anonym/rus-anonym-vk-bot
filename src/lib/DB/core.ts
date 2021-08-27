@@ -108,7 +108,7 @@ class MainDB extends DB {
 }
 
 class CoreDB {
-	public config = config;
+	public readonly config = Object.freeze(config);
 	public constants = constants;
 
 	public user = new UserDB();
