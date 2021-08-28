@@ -39,6 +39,27 @@ async function updateReserveGroupsList() {
 				access: 2,
 			});
 		}
+
+		const freeReserveGroupsCount = await DB.main.models.reserveGroup
+			.find({
+				isReserve: false,
+			})
+			.countDocuments();
+
+		if (freeReserveGroupsCount < 25) {
+			const newGroup = await VK.user.getAPI().groups.create({
+				title: "Reserve group",
+			});
+			await VK.user.getAPI().groups.edit({
+				group_id: newGroup.id,
+				access: 2,
+			});
+			await DB.main.models.reserveGroup.insertMany({
+				id: newGroup.id,
+				domain: "id" + newGroup.id,
+				isReserve: false,
+			});
+		}
 	}
 }
 
