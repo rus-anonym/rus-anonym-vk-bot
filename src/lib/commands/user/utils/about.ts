@@ -26,6 +26,10 @@ Heap Used: ${InternalUtils.commands.bytesToSize(memoryData.heapUsed)}
 V8 External Memory: ${InternalUtils.commands.bytesToSize(memoryData.external)}
 
 Author: https://vk.com/rus_anonym
-Source Code: https://github.com/RusAnonym/rus-anonym-vk-bot`,
+${
+	message.text === "!about"
+		? "Source Code: https://github.com/RusAnonym/rus-anonym-vk-bot"
+		: ""
+}`,
 	});
 });
