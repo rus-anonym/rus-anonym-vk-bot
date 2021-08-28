@@ -20,7 +20,7 @@ import "./user/utils/rus_anonym";
 import "./user/utils/pohui";
 import "./user/utils/fixText";
 import "./user/utils/paymentDetails";
-import "./user/utils/missingQuestionMark";
+import "./user/utils/missingPunctuationMarks";
 import "./user/utils/null";
 
 import "./user/vk/attachments/whatis";
@@ -46,6 +46,7 @@ import "./user/graphics/sepia";
 import "./user/graphics/posterize";
 import "./user/graphics/contrast";
 import "./user/graphics/grayscale";
+import "./user/graphics/demotivator";
 
 /**
  * Group commands
@@ -72,6 +73,7 @@ import "./group/graphics/sepia";
 import "./group/graphics/posterize";
 import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
+import "./group/graphics/demotivator";
 
 import "./group/private/main";
 import "./group/private/tasks/tasks";
