@@ -46,6 +46,7 @@ import "./user/graphics/sepia";
 import "./user/graphics/posterize";
 import "./user/graphics/contrast";
 import "./user/graphics/grayscale";
+import "./user/graphics/demotivator";
 
 /**
  * Group commands
@@ -72,6 +73,7 @@ import "./group/graphics/sepia";
 import "./group/graphics/posterize";
 import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
+import "./group/graphics/demotivator";
 
 import "./group/private/main";
 import "./group/private/tasks/tasks";

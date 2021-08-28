@@ -26,7 +26,7 @@ async function userMessageNew(
 ): Promise<void> {
 	InternalUtils.user.saveMessage(message).catch(() => null);
 
-	if (message.isOutbox && message.text) {
+	if (message.isOutbox && message.text && !message.text.includes("&#13;")) {
 		const selectedCommand = InternalUtils.userCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			message.text!,
