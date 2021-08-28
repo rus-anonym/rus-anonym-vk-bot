@@ -20,7 +20,7 @@ import "./user/utils/rus_anonym";
 import "./user/utils/pohui";
 import "./user/utils/fixText";
 import "./user/utils/paymentDetails";
-import "./user/utils/missingQuestionMark";
+import "./user/utils/missingPunctuationMarks";
 import "./user/utils/null";
 
 import "./user/vk/attachments/whatis";
