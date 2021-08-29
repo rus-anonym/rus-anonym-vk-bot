@@ -6,8 +6,12 @@ import { GroupCommand } from "../../../utils/lib/commands/core";
 
 const demotivate = async (source: string, text: string): Promise<Buffer> => {
 	const image = await JIMP.read(source);
-	const demotivator = await JIMP.read(path.resolve("./assets/demotivator.jpg"));
-	const font = await JIMP.loadFont(path.resolve("./assets/demotivator.fnt"));
+	const demotivator = await JIMP.read(
+		path.resolve(__dirname + "../../../../../../assets/demotivator.jpg"),
+	);
+	const font = await JIMP.loadFont(
+		path.resolve(__dirname + "../../../../../../assets/demotivator.fnt"),
+	);
 	image.resize(560, 410);
 	demotivator.blit(image, 700 / 2 - 600 / 2 + 20, 560 / 2 - 410 / 2 - 29);
 	demotivator.print(
