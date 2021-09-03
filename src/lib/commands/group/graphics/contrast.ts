@@ -35,7 +35,7 @@ new GroupCommand({
 			const image = await JIMP.read(source.url);
 			image.posterize(contrastEffect);
 
-			const graffiti = await VK.master.getVK().upload.documentGraffiti({
+			const graffiti = await VK.slave.getVK().upload.documentGraffiti({
 				group_id: DB.config.VK.group.id,
 				source: {
 					value: await image.getBufferAsync(JIMP.MIME_PNG),
@@ -46,6 +46,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Стикер в контрасте:`,
 				attachment: graffiti.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -67,6 +73,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Фото в контрасте:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -87,6 +99,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Фото в контрасте:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
