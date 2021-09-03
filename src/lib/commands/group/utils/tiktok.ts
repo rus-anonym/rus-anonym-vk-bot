@@ -26,9 +26,6 @@ new GroupCommand({
 			if (!response.video_no_watermark) {
 				throw new Error(`Непредвиденная ошибка, повторите запрос.`);
 			}
-
-			const message = `TikTok video:`;
-
 			const builder = Keyboard.builder();
 
 			builder.urlButton({
@@ -44,7 +41,7 @@ new GroupCommand({
 			builder.inline();
 
 			const userResponse = await context.state.sendMessage({
-				message,
+				message: `TikTok video:`,
 				dont_parse_links: true,
 				keyboard: builder,
 				content_source: JSON.stringify({
@@ -69,7 +66,7 @@ new GroupCommand({
 			return await VK.group.getVK().api.messages.edit({
 				peer_id: context.peerId,
 				conversation_message_id: userResponse.conversationMessageId,
-				message,
+				message: "",
 				attachment: attachment.toString(),
 				keyboard: builder,
 				content_source: JSON.stringify({
