@@ -14,7 +14,7 @@ new UserCommand(/(?:^(\+|-)др)(?:\s(.*))?$/i, async function (message) {
 	}
 
 	try {
-		const [userStatus] = await VK.user.getVK().api.friends.areFriends({
+		const [userStatus] = await VK.master.getVK().api.friends.areFriends({
 			user_ids: userID,
 		});
 
@@ -33,7 +33,7 @@ new UserCommand(/(?:^(\+|-)др)(?:\s(.*))?$/i, async function (message) {
 				});
 			}
 
-			const response = await VK.user.getVK().api.friends.add({
+			const response = await VK.master.getVK().api.friends.add({
 				user_id: userID,
 			});
 			return message.reply({
@@ -61,7 +61,7 @@ new UserCommand(/(?:^(\+|-)др)(?:\s(.*))?$/i, async function (message) {
 				});
 			}
 
-			const response = await VK.user.getVK().api.friends.delete({
+			const response = await VK.master.getVK().api.friends.delete({
 				user_id: userID,
 			});
 			let text = ``;

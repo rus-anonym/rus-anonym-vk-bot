@@ -9,7 +9,7 @@ new UserCommand(/(?:^!кто\s)(.*)$/i, async function (message) {
 			message: `Работает только в чатах`,
 		});
 	}
-	const users = await VK.user.getVK().api.messages.getConversationMembers({
+	const users = await VK.master.getVK().api.messages.getConversationMembers({
 		peer_id: message.peerId,
 	});
 	const randomUser = users.profiles?.find(

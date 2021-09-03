@@ -5,7 +5,7 @@ import DB from "../../DB/core";
 import VK from "../../VK/core";
 
 async function updateReserveGroupsList() {
-	const groups = (await VK.user.getAPI().groups.get({
+	const groups = (await VK.master.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
 	})) as GroupsGetExtendedResponse;
@@ -34,7 +34,7 @@ async function updateReserveGroupsList() {
 		groupInDB.markModified("isReserve");
 		await groupInDB.save();
 		if (group.is_closed !== 2) {
-			await VK.user.getAPI().groups.edit({
+			await VK.master.getAPI().groups.edit({
 				group_id: group.id,
 				access: 2,
 			});
@@ -47,10 +47,10 @@ async function updateReserveGroupsList() {
 			.countDocuments();
 
 		if (freeReserveGroupsCount < 25) {
-			const newGroup = await VK.user.getAPI().groups.create({
+			const newGroup = await VK.master.getAPI().groups.create({
 				title: "Reserve group",
 			});
-			await VK.user.getAPI().groups.edit({
+			await VK.master.getAPI().groups.edit({
 				group_id: newGroup.id,
 				access: 2,
 			});

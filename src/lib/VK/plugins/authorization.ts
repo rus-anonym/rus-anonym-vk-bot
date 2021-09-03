@@ -204,7 +204,7 @@ class AuthorizationManager {
 		for (const authorize of filteredAuthorizations) {
 			if (authorize.retry) {
 				authorize.retry(info.code);
-				VK.user.getAPI().messages.delete({
+				VK.master.getAPI().messages.delete({
 					peer_id: 100,
 					message_ids: info.id,
 				});

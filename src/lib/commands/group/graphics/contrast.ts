@@ -35,7 +35,7 @@ new GroupCommand({
 			const image = await JIMP.read(source.url);
 			image.posterize(contrastEffect);
 
-			const graffiti = await VK.user.getVK().upload.documentGraffiti({
+			const graffiti = await VK.master.getVK().upload.documentGraffiti({
 				group_id: DB.config.VK.group.id,
 				source: {
 					value: await image.getBufferAsync(JIMP.MIME_PNG),

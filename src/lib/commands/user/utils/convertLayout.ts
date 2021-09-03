@@ -12,7 +12,7 @@ new UserCommand(/(?:^!tr)$/i, async function (message) {
 			message.replyMessage.senderId === DB.config.VK.user.master.id &&
 			message.replyMessage.text
 		) {
-			return await VK.user.getVK().api.messages.edit({
+			return await VK.master.getVK().api.messages.edit({
 				message_id: message.replyMessage.id,
 				peer_id: message.replyMessage.peerId,
 				keep_forward_messages: true,

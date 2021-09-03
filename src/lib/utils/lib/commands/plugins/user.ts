@@ -170,7 +170,7 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 					).items as StoreGetProductsResponse;
 
 					const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
-						VK.user.getVK().api.options.token,
+						VK.master.getVK().api.options.token,
 						[sticker.product_id],
 					);
 

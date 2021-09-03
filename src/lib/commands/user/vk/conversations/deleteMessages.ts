@@ -40,7 +40,7 @@ new UserCommand(/^(?:!clear)(?:\s(\d+))$/i, async function (context) {
 	let deletedMessages = 0;
 
 	for (const chunk of utils.array.splitTo(messagesForDelete, 1000)) {
-		await VK.user.getVK().api.messages.delete({
+		await VK.master.getVK().api.messages.delete({
 			message_ids: chunk.map((x) => x._id),
 			delete_for_all: 1,
 		});

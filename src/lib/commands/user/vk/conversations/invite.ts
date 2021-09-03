@@ -41,9 +41,9 @@ new UserCommand(/(?:^!invite|!inv)(?:\s(.*))?$/i, async function (message, vk) {
 		await message.editMessage({
 			message: "Проверяю токен от BotPod",
 		});
-		await VK.user.botpod.checkWithRefresh();
+		await VK.master.botpod.checkWithRefresh();
 		try {
-			await VK.user.botpod.addBotToChat(message.peerId, userID);
+			await VK.master.botpod.addBotToChat(message.peerId, userID);
 			return message.editMessage({
 				message: `https://vk.com/club${-userID} добавлен в беседу в ${moment().format(
 					"HH:mm:ss",

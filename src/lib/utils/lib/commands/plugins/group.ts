@@ -187,7 +187,7 @@ String: ${poll.toString()}\n`;
 		for (const sticker of message.getAttachments(`sticker`)) {
 			++i;
 			const [userStickerPackInfo] = (
-				(await VK.user.getVK().api.store.getProducts({
+				(await VK.master.getVK().api.store.getProducts({
 					product_ids: [sticker.productId],
 					type: "stickers",
 					user_id: message.senderId,
@@ -195,7 +195,7 @@ String: ${poll.toString()}\n`;
 				})) as any
 			).items as StoreGetProductsResponse;
 			const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
-				VK.user.getVK().api.options.token,
+				VK.master.getVK().api.options.token,
 				[sticker.productId],
 			);
 			text += `${i}. sticker 	

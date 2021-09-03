@@ -13,7 +13,7 @@ DB.user.connection.once("open", () => {
 	InternalUtils.logger.send(
 		{ message: `Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}` },
 	);
-	VK.user.master.updates.start().then(() => {
+	VK.master.main.updates.start().then(() => {
 		InternalUtils.logger.send(
 			{
 				message: `VK User polling start at ${moment().format(
@@ -28,7 +28,7 @@ DB.group.connection.once("open", () => {
 	InternalUtils.logger.send(
 		{ message: `Connect to GroupBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}` },
 	);
-	VK.group.master.updates.start().then(() => {
+	VK.group.main.updates.start().then(() => {
 		InternalUtils.logger.send(
 			{
 				message: `VK Group polling start at ${moment().format(

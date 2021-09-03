@@ -10,7 +10,7 @@ new UserCommand(/(?:^!audio)(?:\s(.*))?$/i, async function (message) {
 		});
 	}
 
-	const audios = await VK.user.getVK().api.call("audio.search", {
+	const audios = await VK.master.getVK().api.call("audio.search", {
 		q: message.state.args[1],
 		count: 10,
 	});
