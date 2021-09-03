@@ -16,14 +16,14 @@ async function groupMessageNew(
 		let selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
-			context.senderId === DB.config.VK.user.id,
+			context.senderId === DB.config.VK.user.master.id,
 		);
 
 		if (!selectedCommand && context.hasMessagePayload) {
 			selectedCommand = InternalUtils.groupCommands.findCommand(
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				context.messagePayload.cmd || "null",
-				context.senderId === DB.config.VK.user.id,
+				context.senderId === DB.config.VK.user.master.id,
 			);
 		}
 

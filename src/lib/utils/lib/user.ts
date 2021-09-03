@@ -162,7 +162,7 @@ export default class UtilsUser {
 				}
 			});
 
-		if (event.peerId !== DB.config.VK.user.id) {
+		if (event.peerId !== DB.config.VK.user.master.id) {
 			await VK.user.getVK().api.messages.restore({
 				message_id: event.id,
 			});
@@ -329,7 +329,9 @@ export default class UtilsUser {
 					peerId: message.peerId,
 					peerType: message.peerType,
 					senderId:
-						message.isOutbox === true ? DB.config.VK.user.id : message.senderId,
+						message.isOutbox === true
+							? DB.config.VK.user.master.id
+							: message.senderId,
 					senderType: message.senderType,
 					created: new Date(message.createdAt * 1000),
 					updated: new Date(message.createdAt * 1000),
@@ -408,7 +410,7 @@ export default class UtilsUser {
 
 		if (!message.isGroup) {
 			const fixedSenderId = message.isOutbox
-				? DB.config.VK.user.id
+				? DB.config.VK.user.master.id
 				: message.senderId;
 			const userData = await this.getUserData(fixedSenderId);
 			if (message.isChat === false) {

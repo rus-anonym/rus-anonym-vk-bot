@@ -17,7 +17,7 @@ const userCallbackService = new CallbackService();
 userCallbackService.onCaptcha(captchaHandler);
 
 abstract class Worker {
-	abstract main: VK;
+	abstract master: VK;
 	abstract additional: string[];
 
 	abstract getVK(): VK;
@@ -25,13 +25,13 @@ abstract class Worker {
 }
 
 class UserVK extends Worker {
-	public main = new VK({
-		token: DB.config.VK.user.tokens.main,
+	public master = new VK({
+		token: DB.config.VK.user.master.tokens.main,
 		callbackService: userCallbackService,
 		...DB.constants.vk.user.defaultParams,
 	});
 
-	public additional = DB.config.VK.user.tokens.additional.map((token) => {
+	public additional = DB.config.VK.user.master.tokens.additional.map((token) => {
 		return token;
 	});
 
@@ -41,25 +41,25 @@ class UserVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
-		this.main.updates.on("chat_create", () => null);
-		this.main.updates.on("chat_title_update", () => null);
-		this.main.updates.on("chat_pin_message", () => null);
-		this.main.updates.on("chat_unpin_message", () => null);
-		this.main.updates.on("chat_kick_user", () => null);
-		this.main.updates.on("chat_invite_user", () => null);
-		this.main.updates.on("chat_invite_user_by_link", () => null);
-		this.main.updates.on("messages_read", () => null);
-		this.main.updates.on("typing", () => null);
-		this.main.updates.on("dialog_flags", () => null);
-		this.main.updates.on(
+		this.master.updates.on("chat_create", () => null);
+		this.master.updates.on("chat_title_update", () => null);
+		this.master.updates.on("chat_pin_message", () => null);
+		this.master.updates.on("chat_unpin_message", () => null);
+		this.master.updates.on("chat_kick_user", () => null);
+		this.master.updates.on("chat_invite_user", () => null);
+		this.master.updates.on("chat_invite_user_by_link", () => null);
+		this.master.updates.on("messages_read", () => null);
+		this.master.updates.on("typing", () => null);
+		this.master.updates.on("dialog_flags", () => null);
+		this.master.updates.on(
 			"message_new",
 			authorizationManager.middleware.bind(authorizationManager),
 		);
-		this.main.updates.on("message_new", userMiddlewares.messageNew);
-		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
-		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
-		this.main.updates.on("friend_activity", userMiddlewares.friendActivity);
-		this.main.updates.use(async (event) => {
+		this.master.updates.on("message_new", userMiddlewares.messageNew);
+		this.master.updates.on("message_edit", userMiddlewares.messageEdit);
+		this.master.updates.on("message_flags", userMiddlewares.messageFlags);
+		this.master.updates.on("friend_activity", userMiddlewares.friendActivity);
+		this.master.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие пользователя:
 Type: ${event.type}
@@ -105,7 +105,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 }
 
 class GroupVK extends Worker {
-	public main = new VK({
+	public master = new VK({
 		token: DB.config.VK.group.tokens.main,
 	});
 
@@ -115,27 +115,27 @@ class GroupVK extends Worker {
 
 	constructor() {
 		super();
-		this.main.updates.on("group_join", () => null);
-		this.main.updates.on("group_leave", () => null);
-		this.main.updates.on("like_add", () => null);
-		this.main.updates.on("like_remove", () => null);
-		this.main.updates.on("message_reply", () => null);
-		this.main.updates.on("message_typing_state", () => null);
-		this.main.updates.on("typing_group", () => null);
-		this.main.updates.on("chat_kick_user", () => null);
-		this.main.updates.on("chat_invite_user", () => null);
-		this.main.updates.on("wall_reply", () => null);
-		this.main.updates.on("message_edit", () => null);
-		this.main.updates.on("video_comment", () => null);
-		this.main.updates.on("message_new", groupMiddlewares.messageNew);
-		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
-		this.main.updates.on("user_block", groupMiddlewares.userBlock);
-		this.main.updates.on("user_unblock", groupMiddlewares.userUnblock);
-		this.main.updates.on(
+		this.master.updates.on("group_join", () => null);
+		this.master.updates.on("group_leave", () => null);
+		this.master.updates.on("like_add", () => null);
+		this.master.updates.on("like_remove", () => null);
+		this.master.updates.on("message_reply", () => null);
+		this.master.updates.on("message_typing_state", () => null);
+		this.master.updates.on("typing_group", () => null);
+		this.master.updates.on("chat_kick_user", () => null);
+		this.master.updates.on("chat_invite_user", () => null);
+		this.master.updates.on("wall_reply", () => null);
+		this.master.updates.on("message_edit", () => null);
+		this.master.updates.on("video_comment", () => null);
+		this.master.updates.on("message_new", groupMiddlewares.messageNew);
+		this.master.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
+		this.master.updates.on("user_block", groupMiddlewares.userBlock);
+		this.master.updates.on("user_unblock", groupMiddlewares.userUnblock);
+		this.master.updates.on(
 			"group_officers_edit",
 			groupMiddlewares.groupOfficersEdit,
 		);
-		this.main.updates.use(async (event) => {
+		this.master.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие группы:
 Type: ${event.type}

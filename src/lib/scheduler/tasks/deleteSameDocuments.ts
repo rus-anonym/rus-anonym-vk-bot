@@ -64,7 +64,7 @@ async function deleteSameDocuments() {
 		});
 		for (let i = 1; i < documents.length; i++) {
 			await VK.user.getVK().api.docs.delete({
-				owner_id: DB.config.VK.user.id,
+				owner_id: DB.config.VK.user.master.id,
 				doc_id: documents[i].id,
 			});
 		}

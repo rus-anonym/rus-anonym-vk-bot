@@ -21,22 +21,36 @@ $ yarn
 {
 	"VK": {
 		"user": {
-			"id": 0, // User ID
-			"login": "", // User Login
-			"password": "", // User Password
-			"tokens": {
-				"main": "", // User token for polling
-				"additional": [], // Array with user tokens (minimum 1)
-				"apps": {
-					"6146827": "" // Token from VK Me
+			"master": {
+				"id": 0, // User ID
+				"login": "", // User Login
+				"password": "", // User Password
+				"tokens": {
+					"main": "", // User token for polling
+					"additional": [], // Array with user tokens (minimum 1)
+					"apps": {
+						"6146827": "" // Token from VK Me
+					}
+				}, // User Tokens
+				"friends": {
+					"list": {
+						"viewOnline": [] // array with the IDs of the lists of friends who can see online
+					}
 				}
-			}, // User Tokens
-			"friends": {
-				"list": {
-					"viewOnline": [] // array with the IDs of the lists of friends who can see online
-				}
-			}
-		}, // User
+			}, // User Master
+			"slave": {
+				"id": 0, // User ID
+				"login": "", // User Login
+				"password": "", // User Password
+				"tokens": {
+					"main": "", // User token for polling
+					"additional": [], // Array with user tokens (minimum 1)
+					"apps": {
+						"6146827": "" // Token from VK Me
+					}
+				} // User Tokens
+			} // User Slave
+		},
 		"userFakes": [
 			{
 				"id": 0, // Fake user ID

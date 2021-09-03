@@ -8,7 +8,7 @@ import DB from "../../DB/core";
 async function updateOnlinePrivacySettings(): Promise<string | void> {
 	let usersSeeOnlineStatus: number[] = [];
 
-	for (const list_id of DB.config.VK.user.friends.list.viewOnline) {
+	for (const list_id of DB.config.VK.user.master.friends.list.viewOnline) {
 		const list = await VK.user.getAPI().friends.get({
 			list_id,
 		});
