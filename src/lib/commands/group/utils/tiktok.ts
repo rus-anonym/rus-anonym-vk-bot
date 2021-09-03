@@ -49,7 +49,7 @@ new GroupCommand({
 				keyboard: builder,
 			});
 
-			const attachment = await VK.master.main.upload.video({
+			const attachment = await VK.slave.main.upload.video({
 				source: {
 					value: response.video_no_watermark,
 				},
