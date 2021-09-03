@@ -8,8 +8,8 @@ import DB from "../../DB/core";
 async function updateOnlinePrivacySettings(): Promise<string | void> {
 	let usersSeeOnlineStatus: number[] = [];
 
-	for (const list_id of DB.config.VK.user.friends.list.viewOnline) {
-		const list = await VK.user.getAPI().friends.get({
+	for (const list_id of DB.config.VK.user.master.friends.list.viewOnline) {
+		const list = await VK.master.getAPI().friends.get({
 			list_id,
 		});
 
@@ -18,7 +18,7 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 
 	const uniqueUsersList = utils.array.makeUnique(usersSeeOnlineStatus);
 
-	const api = VK.user.vkMe;
+	const api = VK.master.vkMe;
 
 	const currentUsersSeeOnlineStatus = (
 		await api.call("account.getPrivacySettings", {})

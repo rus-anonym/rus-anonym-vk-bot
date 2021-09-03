@@ -22,8 +22,8 @@ const fixText = async (text: string): Promise<string> => {
 new UserCommand(/(?:^!fixText)$/i, async function (message) {
 	if (message.hasReplyMessage && message.replyMessage) {
 		await message.loadMessagePayload();
-		if (message.replyMessage.senderId === DB.config.VK.user.id) {
-			return await VK.user.getVK().api.messages.edit({
+		if (message.replyMessage.senderId === DB.config.VK.user.master.id) {
+			return await VK.master.getVK().api.messages.edit({
 				message_id: message.replyMessage.id,
 				peer_id: message.replyMessage.peerId,
 				keep_forward_messages: true,

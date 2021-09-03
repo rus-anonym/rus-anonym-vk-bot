@@ -18,7 +18,7 @@ new UserCommand(/^(?:!syncFriends)(?:\s(.*))?$/i, async function (message) {
 		message: `Получаю друзей https://vk.com/id${userID}`,
 	});
 
-	const { items: userFriends } = await VK.user.getVK().api.friends.get({
+	const { items: userFriends } = await VK.master.getVK().api.friends.get({
 		user_id: userID,
 		count: 10000,
 	});

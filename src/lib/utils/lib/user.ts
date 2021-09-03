@@ -162,11 +162,11 @@ export default class UtilsUser {
 				}
 			});
 
-		if (event.peerId !== DB.config.VK.user.id) {
-			await VK.user.getVK().api.messages.restore({
+		if (event.peerId !== DB.config.VK.user.master.id) {
+			await VK.master.getVK().api.messages.restore({
 				message_id: event.id,
 			});
-			await VK.user
+			await VK.master
 				.getVK()
 				.api.messages.edit({
 					message_id: event.id,
@@ -178,7 +178,7 @@ export default class UtilsUser {
 					dont_parse_links: 0,
 				})
 				.catch(() => null);
-			await VK.user.getVK().api.messages.delete({
+			await VK.master.getVK().api.messages.delete({
 				message_ids: event.id,
 				delete_for_all: true,
 			});
@@ -329,7 +329,9 @@ export default class UtilsUser {
 					peerId: message.peerId,
 					peerType: message.peerType,
 					senderId:
-						message.isOutbox === true ? DB.config.VK.user.id : message.senderId,
+						message.isOutbox === true
+							? DB.config.VK.user.master.id
+							: message.senderId,
 					senderType: message.senderType,
 					created: new Date(message.createdAt * 1000),
 					updated: new Date(message.createdAt * 1000),
@@ -351,7 +353,7 @@ export default class UtilsUser {
 					],
 					data: [
 						(
-							await VK.user
+							await VK.master
 								.getVK()
 								.api.messages.getById({ message_ids: message.id })
 						).items[0],
@@ -376,7 +378,7 @@ export default class UtilsUser {
 						hasForwards: message.hasForwards,
 					});
 					const newMessageData = (
-						await VK.user
+						await VK.master
 							.getVK()
 							.api.messages.getById({ message_ids: message.id })
 					).items[0];
@@ -408,7 +410,7 @@ export default class UtilsUser {
 
 		if (!message.isGroup) {
 			const fixedSenderId = message.isOutbox
-				? DB.config.VK.user.id
+				? DB.config.VK.user.master.id
 				: message.senderId;
 			const userData = await this.getUserData(fixedSenderId);
 			if (message.isChat === false) {
@@ -449,7 +451,7 @@ export default class UtilsUser {
 		});
 		if (!userData) {
 			if (!vkUserData) {
-				[vkUserData] = await VK.user
+				[vkUserData] = await VK.master
 					.getVK()
 					.api.users.get({ user_id: id, fields: this.allUsersGetFields });
 			}
@@ -536,7 +538,7 @@ export default class UtilsUser {
 		userInfo?: UsersUserFull,
 	): Promise<void> {
 		if (!userInfo) {
-			[userInfo] = await VK.user.getVK().api.users.get({
+			[userInfo] = await VK.master.getVK().api.users.get({
 				user_ids: id.toString(),
 				fields: this.allUsersGetFields,
 			});
@@ -581,7 +583,7 @@ export default class UtilsUser {
 		}
 
 		const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
-			api: VK.user.getVK().api,
+			api: VK.master.getVK().api,
 			method: "friends.get",
 			params: {
 				user_id: id,
@@ -610,12 +612,12 @@ export default class UtilsUser {
 		});
 
 		if (friendsDiff.length > 0) {
-			const friendsDiffInfo = await VK.user.getVK().api.users.get({
+			const friendsDiffInfo = await VK.master.getVK().api.users.get({
 				user_ids: friendsDiff.map((x) => String(x)),
 			});
 			for (const user of friendsDiffInfo) {
 				try {
-					const userFriends = await VK.user.getVK().api.friends.get({
+					const userFriends = await VK.master.getVK().api.friends.get({
 						user_ids: user.id.toString(),
 					});
 					if (userFriends.includes(user.id)) {
@@ -637,7 +639,7 @@ export default class UtilsUser {
 		}
 
 		const groupsIterator = createCollectIterator<Objects.GroupsGroupFull>({
-			api: VK.user.getVK().api,
+			api: VK.master.getVK().api,
 			method: "groups.get",
 			params: {
 				user_id: id,
@@ -667,7 +669,7 @@ export default class UtilsUser {
 
 		if (groupsDiff.length > 0) {
 			const groupsDiffInfo = (
-				(await VK.user.getVK().api.groups.getById({
+				(await VK.master.getVK().api.groups.getById({
 					group_ids: groupsDiff.map((x) => String(x)),
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})) as unknown as any
@@ -690,7 +692,7 @@ export default class UtilsUser {
 					title: string;
 					artist: string;
 				}>({
-					api: VK.user.getVK().api,
+					api: VK.master.getVK().api,
 					method: "audio.get",
 					params: {
 						user_id: id,
@@ -763,7 +765,7 @@ export default class UtilsUser {
 					isReserve: false,
 				});
 				if (freeReserveGroup) {
-					await VK.user.getVK().api.groups.edit({
+					await VK.master.getVK().api.groups.edit({
 						group_id: freeReserveGroup.id,
 						screen_name: domain,
 						access: 2,
@@ -774,10 +776,10 @@ export default class UtilsUser {
 					freeReserveGroup.save();
 					return freeReserveGroup.id;
 				} else {
-					const group = await VK.user.getVK().api.groups.create({
+					const group = await VK.master.getVK().api.groups.create({
 						title: `Reserve ${domain}`,
 					});
-					await VK.user.getVK().api.groups.edit({
+					await VK.master.getVK().api.groups.edit({
 						group_id: group.id,
 						screen_name: domain,
 						access: 2,
@@ -796,7 +798,7 @@ export default class UtilsUser {
 		const validDate = moment(date).format("D.M");
 
 		const iterator = createCollectIterator<FriendsUserXtrLists>({
-			api: VK.user.getVK().api,
+			api: VK.master.getVK().api,
 			method: "friends.get",
 			params: {
 				fields: [`bdate`],

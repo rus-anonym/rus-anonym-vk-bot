@@ -42,7 +42,7 @@ new UserCommand(/(?:^!repeat)(?:\s(\d+))?(\strue)?$/i, async function (
 		const promises = [];
 		for (let i = 0; i < Number(message.state.args[1]); ++i) {
 			promises.push(
-				VK.user.getVK().api.messages.send({
+				VK.master.getVK().api.messages.send({
 					peer_id: message.peerId,
 					random_id: getRandomId(),
 					...params,
@@ -52,7 +52,7 @@ new UserCommand(/(?:^!repeat)(?:\s(\d+))?(\strue)?$/i, async function (
 		await Promise.all(promises);
 	} else {
 		for (let i = 0; i < Number(message.state.args[1]); ++i) {
-			await VK.user.getVK().api.messages.send({
+			await VK.master.getVK().api.messages.send({
 				peer_id: message.peerId,
 				random_id: getRandomId(),
 				...params,

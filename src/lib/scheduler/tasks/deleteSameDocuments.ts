@@ -19,7 +19,7 @@ const getDocumentUrl = (source: string): Promise<string> => {
 };
 
 async function deleteSameDocuments() {
-	const userDocuments = (await VK.user.getVK().api.docs.get({})).items;
+	const userDocuments = (await VK.master.getVK().api.docs.get({})).items;
 
 	const userDocumentsParsed: {
 		url: string;
@@ -63,8 +63,8 @@ async function deleteSameDocuments() {
 			return 0;
 		});
 		for (let i = 1; i < documents.length; i++) {
-			await VK.user.getVK().api.docs.delete({
-				owner_id: DB.config.VK.user.id,
+			await VK.master.getVK().api.docs.delete({
+				owner_id: DB.config.VK.user.master.id,
 				doc_id: documents[i].id,
 			});
 		}

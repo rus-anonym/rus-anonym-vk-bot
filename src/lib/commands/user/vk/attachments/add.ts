@@ -9,7 +9,7 @@ const add = async (message: MessageContext): Promise<string> => {
 	let log = "";
 	for (const audio of message.getAttachments("audio")) {
 		try {
-			await VK.user.getVK().api.call("audio.add", {
+			await VK.master.getVK().api.call("audio.add", {
 				audio_id: audio.id,
 				owner_id: audio.ownerId,
 			});
@@ -20,7 +20,7 @@ const add = async (message: MessageContext): Promise<string> => {
 	}
 	for (const doc of message.getAttachments("doc")) {
 		try {
-			await VK.user.getVK().api.docs.add({
+			await VK.master.getVK().api.docs.add({
 				owner_id: doc.ownerId,
 				doc_id: doc.id,
 				access_key: doc.accessKey,

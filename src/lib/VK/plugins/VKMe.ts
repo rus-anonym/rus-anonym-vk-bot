@@ -9,7 +9,7 @@ callbackService.onCaptcha(captchaHandler);
 class VKMe extends API {
 	constructor() {
 		super({
-			token: DB.config.VK.user.tokens.apps[6146827],
+			token: DB.config.VK.user.master.tokens.apps[6146827],
 			callbackService,
 			...DB.constants.vk.user.defaultParams,
 		});

@@ -24,16 +24,18 @@ abstract class Worker {
 	abstract getAPI(): API;
 }
 
-class UserVK extends Worker {
+class MasterVK extends Worker {
 	public main = new VK({
-		token: DB.config.VK.user.tokens.main,
+		token: DB.config.VK.user.master.tokens.main,
 		callbackService: userCallbackService,
 		...DB.constants.vk.user.defaultParams,
 	});
 
-	public additional = DB.config.VK.user.tokens.additional.map((token) => {
-		return token;
-	});
+	public additional = DB.config.VK.user.master.tokens.additional.map(
+		(token) => {
+			return token;
+		},
+	);
 
 	constructor() {
 		super();
@@ -173,8 +175,41 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 	}
 }
 
+class SlaveVK extends Worker {
+	public main = new VK({
+		token: DB.config.VK.user.slave.tokens.main,
+		callbackService: userCallbackService,
+		...DB.constants.vk.user.defaultParams,
+	});
+
+	public additional = DB.config.VK.user.slave.tokens.additional.map((token) => {
+		return token;
+	});
+
+	constructor() {
+		super();
+	}
+
+	public getAPI() {
+		return new API({
+			token: utils.array.random(this.additional),
+			callbackService: userCallbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
+	}
+
+	public getVK() {
+		return new VK({
+			token: utils.array.random(this.additional),
+			callbackService: userCallbackService,
+			...DB.constants.vk.user.defaultParams,
+		});
+	}
+}
+
 class CoreVK {
-	public user = new UserVK();
+	public master = new MasterVK();
+	public slave = new SlaveVK();
 	public group = new GroupVK();
 	public fakes = new FakesAlpha();
 }

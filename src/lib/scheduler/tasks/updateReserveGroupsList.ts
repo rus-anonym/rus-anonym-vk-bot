@@ -2,16 +2,25 @@ import { Interval } from "simple-scheduler-task";
 import { GroupsGetExtendedResponse } from "vk-io/lib/api/schemas/responses";
 
 import DB from "../../DB/core";
+import InternalUtils from "../../utils/core";
 import VK from "../../VK/core";
 
 async function updateReserveGroupsList() {
-	const groups = (await VK.user.getAPI().groups.get({
+	const masterGroups = (await VK.master.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
 	})) as GroupsGetExtendedResponse;
-	const reserveGroups = groups.items.filter(
+	const slaveGroups = (await VK.slave.getAPI().groups.get({
+		extended: true,
+		filter: ["admin"],
+	})) as GroupsGetExtendedResponse;
+	const masterReserveGroups = masterGroups.items.filter(
 		(x) => x.name.startsWith("Reserve") && !x.deactivated,
 	);
+	const slaveReserveGroyps = slaveGroups.items.filter(
+		(x) => x.name.startsWith("Reserve") && !x.deactivated,
+	);
+	const reserveGroups = [...masterReserveGroups, ...slaveReserveGroyps];
 	await DB.main.models.reserveGroup.deleteMany({
 		id: {
 			$nin: reserveGroups.map((x) => x.id),
@@ -34,10 +43,17 @@ async function updateReserveGroupsList() {
 		groupInDB.markModified("isReserve");
 		await groupInDB.save();
 		if (group.is_closed !== 2) {
-			await VK.user.getAPI().groups.edit({
-				group_id: group.id,
-				access: 2,
-			});
+			if (masterReserveGroups.find((x) => x.id === group.id)) {
+				await VK.master.getAPI().groups.edit({
+					group_id: group.id,
+					access: 2,
+				});
+			} else {
+				await VK.slave.getAPI().groups.edit({
+					group_id: group.id,
+					access: 2,
+				});
+			}
 		}
 
 		const freeReserveGroupsCount = await DB.main.models.reserveGroup
@@ -47,10 +63,10 @@ async function updateReserveGroupsList() {
 			.countDocuments();
 
 		if (freeReserveGroupsCount < 25) {
-			const newGroup = await VK.user.getAPI().groups.create({
+			const newGroup = await VK.slave.getAPI().groups.create({
 				title: "Reserve group",
 			});
-			await VK.user.getAPI().groups.edit({
+			await VK.slave.getAPI().groups.edit({
 				group_id: newGroup.id,
 				access: 2,
 			});
@@ -58,6 +74,10 @@ async function updateReserveGroupsList() {
 				id: newGroup.id,
 				domain: "id" + newGroup.id,
 				isReserve: false,
+			});
+			await InternalUtils.logger.send({
+				message: `Создана новая группа для резервирования\n@club${newGroup.id}`,
+				type: "info",
 			});
 		}
 	}

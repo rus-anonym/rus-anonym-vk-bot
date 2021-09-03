@@ -14,10 +14,10 @@ async function deleteSameAudios() {
 		artist: string;
 		url: string;
 	}>({
-		api: VK.user.getVK().api,
+		api: VK.master.getVK().api,
 		method: "audio.get",
 		params: {
-			user_id: DB.config.VK.user.id,
+			user_id: DB.config.VK.user.master.id,
 		},
 		countPerRequest: 5000,
 	});
@@ -67,8 +67,8 @@ async function deleteSameAudios() {
 			return 0;
 		});
 		for (let i = 1; i < audios.length; i++) {
-			await VK.user.getVK().api.call("audio.delete", {
-				owner_id: DB.config.VK.user.id,
+			await VK.master.getVK().api.call("audio.delete", {
+				owner_id: DB.config.VK.user.master.id,
 				audio_id: audios[i].id,
 			});
 		}

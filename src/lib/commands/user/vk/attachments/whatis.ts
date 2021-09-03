@@ -7,7 +7,7 @@ new UserCommand(/(?:^!whatis)$/i, async function (message) {
 
 	if (message.forwards[0]) {
 		const [forwardMessageInfo] = (
-			await VK.user.getVK().api.messages.getById({
+			await VK.master.getVK().api.messages.getById({
 				message_ids: message.forwards[0].id,
 			})
 		).items;
@@ -30,7 +30,7 @@ ${await InternalUtls.userCommands.attachmentsToString(
 
 	if (message.replyMessage) {
 		const [replyMessageInfo] = (
-			await VK.user.getVK().api.messages.getById({
+			await VK.master.getVK().api.messages.getById({
 				message_ids: message.replyMessage.id,
 			})
 		).items;
@@ -53,7 +53,7 @@ ${await InternalUtls.userCommands.attachmentsToString(
 
 	if (message.hasAttachments()) {
 		const [messageInfo] = (
-			await VK.user.getVK().api.messages.getById({
+			await VK.master.getVK().api.messages.getById({
 				message_ids: message.id,
 			})
 		).items;

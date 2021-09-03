@@ -109,8 +109,8 @@ class Authorization {
 	private async implicitFlowUser() {
 		const implicit = new ImplicitFlowUser({
 			apiVersion: "5.157",
-			login: DB.config.VK.user.login,
-			password: DB.config.VK.user.password,
+			login: DB.config.VK.user.master.login,
+			password: DB.config.VK.user.master.password,
 			clientId: this.app.toString(),
 			clientSecret: this.secret,
 			scope: this.scope,
@@ -131,8 +131,8 @@ class Authorization {
 	private async implicitFlowGroups() {
 		const implicit = new ImplicitFlowGroups({
 			apiVersion: "5.157",
-			login: DB.config.VK.user.login,
-			password: DB.config.VK.user.password,
+			login: DB.config.VK.user.master.login,
+			password: DB.config.VK.user.master.password,
 			clientId: this.app.toString(),
 			clientSecret: this.secret,
 			scope: this.scope,
@@ -152,8 +152,8 @@ class Authorization {
 	private async directAuthorization() {
 		const implicit = new DirectAuthorization({
 			apiVersion: "5.157",
-			login: DB.config.VK.user.login,
-			password: DB.config.VK.user.password,
+			login: DB.config.VK.user.master.login,
+			password: DB.config.VK.user.master.password,
 			clientId: this.app.toString(),
 			clientSecret: this.secret,
 			scope: this.scope,
@@ -204,7 +204,7 @@ class AuthorizationManager {
 		for (const authorize of filteredAuthorizations) {
 			if (authorize.retry) {
 				authorize.retry(info.code);
-				VK.user.getAPI().messages.delete({
+				VK.master.getAPI().messages.delete({
 					peer_id: 100,
 					message_ids: info.id,
 				});

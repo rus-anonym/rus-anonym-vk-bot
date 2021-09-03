@@ -10,7 +10,7 @@ new UserCommand(/(?:^!doc)(?:\s(.*))?$/i, async function (message) {
 		});
 	}
 
-	const documents = await VK.user.getVK().api.docs.search({
+	const documents = await VK.master.getVK().api.docs.search({
 		q: message.state.args[1],
 		count: 10,
 	});

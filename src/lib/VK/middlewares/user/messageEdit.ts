@@ -16,7 +16,7 @@ function userMessageEdit(
 		);
 
 		if (selectedCommand) {
-			const TempVK = VK.user.getVK();
+			const TempVK = VK.master.getVK();
 			message.state.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;

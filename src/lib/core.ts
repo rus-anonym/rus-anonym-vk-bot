@@ -13,7 +13,7 @@ DB.user.connection.once("open", () => {
 	InternalUtils.logger.send(
 		{ message: `Connect to UserBot DB at ${moment().format("HH:mm:ss.SSS | DD.MM.YYYY")}` },
 	);
-	VK.user.main.updates.start().then(() => {
+	VK.master.main.updates.start().then(() => {
 		InternalUtils.logger.send(
 			{
 				message: `VK User polling start at ${moment().format(
