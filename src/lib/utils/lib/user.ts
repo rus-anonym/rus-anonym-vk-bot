@@ -765,21 +765,32 @@ export default class UtilsUser {
 					isReserve: false,
 				});
 				if (freeReserveGroup) {
-					await VK.master.getVK().api.groups.edit({
-						group_id: freeReserveGroup.id,
-						screen_name: domain,
-						access: 2,
-						title: `Reserve ${domain}`,
-					});
+					if (freeReserveGroup.ownerId === DB.config.VK.user.master.id) {
+						await VK.master.getAPI().groups.edit({
+							group_id: freeReserveGroup.id,
+							screen_name: domain,
+							access: 2,
+							title: `Reserve ${domain}`,
+						});
+					} else if (freeReserveGroup.ownerId === DB.config.VK.user.slave.id) {
+						await VK.slave.getAPI().groups.edit({
+							group_id: freeReserveGroup.id,
+							screen_name: domain,
+							access: 2,
+							title: `Reserve ${domain}`,
+						});
+					} else {
+						throw new Error(`Unknown owner ${freeReserveGroup.ownerId}`);
+					}
 					freeReserveGroup.isReserve = true;
 					freeReserveGroup.markModified("isReserve");
 					freeReserveGroup.save();
 					return freeReserveGroup.id;
 				} else {
-					const group = await VK.master.getVK().api.groups.create({
+					const group = await VK.slave.getVK().api.groups.create({
 						title: `Reserve ${domain}`,
 					});
-					await VK.master.getVK().api.groups.edit({
+					await VK.slave.getVK().api.groups.edit({
 						group_id: group.id,
 						screen_name: domain,
 						access: 2,
