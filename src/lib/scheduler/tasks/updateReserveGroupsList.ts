@@ -41,45 +41,48 @@ async function updateReserveGroupsList() {
 		}
 		groupInDB.isReserve = group.screen_name !== `club${group.id}`;
 		groupInDB.markModified("isReserve");
-		await groupInDB.save();
 		if (group.is_closed !== 2) {
+			groupInDB.ownerId = DB.config.VK.user.master.id;
 			if (masterReserveGroups.find((x) => x.id === group.id)) {
 				await VK.master.getAPI().groups.edit({
 					group_id: group.id,
 					access: 2,
 				});
 			} else {
+				groupInDB.ownerId = DB.config.VK.user.slave.id;
 				await VK.slave.getAPI().groups.edit({
 					group_id: group.id,
 					access: 2,
 				});
 			}
 		}
+		await groupInDB.save();
+	}
 
-		const freeReserveGroupsCount = await DB.main.models.reserveGroup
-			.find({
-				isReserve: false,
-			})
-			.countDocuments();
+	const freeReserveGroupsCount = await DB.main.models.reserveGroup
+		.find({
+			isReserve: false,
+		})
+		.countDocuments();
 
-		if (freeReserveGroupsCount < 25) {
-			const newGroup = await VK.slave.getAPI().groups.create({
-				title: "Reserve group",
-			});
-			await VK.slave.getAPI().groups.edit({
-				group_id: newGroup.id,
-				access: 2,
-			});
-			await DB.main.models.reserveGroup.insertMany({
-				id: newGroup.id,
-				domain: "id" + newGroup.id,
-				isReserve: false,
-			});
-			await InternalUtils.logger.send({
-				message: `Создана новая группа для резервирования\n@club${newGroup.id}`,
-				type: "info",
-			});
-		}
+	if (freeReserveGroupsCount < 25) {
+		const newGroup = await VK.slave.getAPI().groups.create({
+			title: "Reserve group",
+		});
+		await VK.slave.getAPI().groups.edit({
+			group_id: newGroup.id,
+			access: 2,
+		});
+		await DB.main.models.reserveGroup.insertMany({
+			id: newGroup.id,
+			domain: "id" + newGroup.id,
+			isReserve: false,
+			ownerId: DB.config.VK.user.slave.id,
+		});
+		await InternalUtils.logger.send({
+			message: `Создана новая группа для резервирования\n@club${newGroup.id}`,
+			type: "info",
+		});
 	}
 }
 
