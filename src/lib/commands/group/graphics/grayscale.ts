@@ -27,6 +27,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Серый стикер:`,
 				attachment: graffiti.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -48,6 +54,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Серое фото:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -68,6 +80,12 @@ new GroupCommand({
 			return await message.state.sendMessage({
 				message: `Серое фото:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 

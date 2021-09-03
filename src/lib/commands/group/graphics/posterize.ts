@@ -9,7 +9,7 @@ new GroupCommand({
 	regexp: /(?:^\/posterize)(?:\s(.*))?$/i,
 	process: async function (message, vk) {
 		if (message.state.args[1] && !Number(message.state.args[1])) {
-			return await message.editMessage({
+			return await message.state.sendMessage({
 				message: `${message.state.args[1]} не является числом`,
 			});
 		}
@@ -34,9 +34,15 @@ new GroupCommand({
 				},
 			});
 
-			return await message.reply({
+			return await message.state.sendMessage({
 				message: `Стикер в постеризации:`,
 				attachment: graffiti.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -55,9 +61,15 @@ new GroupCommand({
 				},
 			});
 
-			return await message.reply({
+			return await message.state.sendMessage({
 				message: `Фото в постеризации:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
@@ -75,13 +87,19 @@ new GroupCommand({
 				},
 			});
 
-			return await message.reply({
+			return await message.state.sendMessage({
 				message: `Фото в постеризации:`,
 				attachment: photo.toString(),
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: message.senderId,
+					peer_id: message.peerId,
+					conversation_message_id: message.conversationMessageId,
+				}),
 			});
 		}
 
-		return await message.editMessage({
+		return await message.state.sendMessage({
 			message: `Не найдено изображение или стикер`,
 		});
 	},

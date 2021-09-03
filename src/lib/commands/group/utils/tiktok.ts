@@ -47,6 +47,12 @@ new GroupCommand({
 				message,
 				dont_parse_links: true,
 				keyboard: builder,
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: context.senderId,
+					peer_id: context.peerId,
+					conversation_message_id: context.conversationMessageId,
+				}),
 			});
 
 			const attachment = await VK.slave.main.upload.video({
@@ -66,6 +72,12 @@ new GroupCommand({
 				message,
 				attachment: attachment.toString(),
 				keyboard: builder,
+				content_source: JSON.stringify({
+					type: "message",
+					owner_id: context.senderId,
+					peer_id: context.peerId,
+					conversation_message_id: context.conversationMessageId,
+				}),
 			});
 		} catch (error) {
 			return await context.state.sendMessage({
