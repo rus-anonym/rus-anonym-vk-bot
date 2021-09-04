@@ -28,7 +28,7 @@ class MasterVK extends Worker {
 	public main = new VK({
 		token: DB.config.VK.user.master.tokens.main,
 		callbackService: userCallbackService,
-		...DB.constants.vk.user.defaultParams,
+		...DB.constants.vk.master.defaultParams,
 	});
 
 	public additional = DB.config.VK.user.master.tokens.additional.map(
@@ -93,7 +93,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
-			...DB.constants.vk.user.defaultParams,
+			...DB.constants.vk.master.defaultParams,
 		});
 	}
 
@@ -101,7 +101,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
-			...DB.constants.vk.user.defaultParams,
+			...DB.constants.vk.master.defaultParams,
 		});
 	}
 }
@@ -179,7 +179,7 @@ class SlaveVK extends Worker {
 	public main = new VK({
 		token: DB.config.VK.user.slave.tokens.main,
 		callbackService: userCallbackService,
-		...DB.constants.vk.user.defaultParams,
+		...DB.constants.vk.slave.defaultParams,
 	});
 
 	public additional = DB.config.VK.user.slave.tokens.additional.map((token) => {
@@ -194,7 +194,7 @@ class SlaveVK extends Worker {
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
-			...DB.constants.vk.user.defaultParams,
+			...DB.constants.vk.slave.defaultParams,
 		});
 	}
 
@@ -202,7 +202,7 @@ class SlaveVK extends Worker {
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
-			...DB.constants.vk.user.defaultParams,
+			...DB.constants.vk.slave.defaultParams,
 		});
 	}
 }

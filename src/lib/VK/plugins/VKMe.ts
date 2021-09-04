@@ -11,7 +11,7 @@ class VKMe extends API {
 		super({
 			token: DB.config.VK.user.master.tokens.apps[6146827],
 			callbackService,
-			...DB.constants.vk.user.defaultParams,
+			...DB.constants.vk.master.defaultParams,
 		});
 	}
 }

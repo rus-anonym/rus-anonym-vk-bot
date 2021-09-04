@@ -28,7 +28,7 @@ const user = createSchema(
 				surname_abl: Type.string({ required: true }),
 				domain: Type.string({ required: true }),
 				photo_max_orig: Type.string({ required: true }),
-				status: Type.string({ required: true }),
+				status: Type.string(),
 			}),
 			isBot: Type.boolean({ required: true }),
 			isTrack: Type.boolean({ required: true }),

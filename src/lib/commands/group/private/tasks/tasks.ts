@@ -8,19 +8,18 @@ import tasks from "../../../../scheduler/core";
 import { TSchedulerTaskStatus } from "simple-scheduler-task/dist/cjs/types/tasks";
 
 const validStatus = (type: TSchedulerTaskStatus): string => {
-	if (type === "await") {
-		return `Ожидается выполнение`;
+	switch (type) {
+		case "await":
+			return `Ожидается выполнение`;
+		case "done":
+			return "Выполнена";
+		case "pause":
+			return "Приостановлена";
+		case "process":
+			return "Выполняется";
+		default:
+			return "Неизвестно";
 	}
-	if (type === "done") {
-		return "Выполнена";
-	}
-	if (type === "pause") {
-		return "Приостановлена";
-	}
-	if (type === "process") {
-		return "Выполняется";
-	}
-	return "Неизвестно";
 };
 
 new GroupCommand({

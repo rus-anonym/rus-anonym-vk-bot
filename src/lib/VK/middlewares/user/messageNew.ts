@@ -26,10 +26,13 @@ async function userMessageNew(
 ): Promise<void> {
 	InternalUtils.user.saveMessage(message).catch(() => null);
 
-	if (message.isOutbox && message.text && !message.text.includes("&#13;")) {
+	if (
+		message.isOutbox &&
+		message.text &&
+		message.text.charCodeAt(message.text.length - 1) !== 13
+	) {
 		const selectedCommand = InternalUtils.userCommands.findCommand(
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			message.text!,
+			message.text,
 		);
 
 		if (selectedCommand) {
@@ -37,18 +40,7 @@ async function userMessageNew(
 			message.state.args = selectedCommand.regexp.exec(
 				message.text,
 			) as RegExpExecArray;
-			const sendMessage = message.send.bind(message);
-			message.send = (text, params = {}) => {
-				if (typeof text === "string") {
-					return sendMessage({
-						message: text + "&#13;",
-						...params,
-					});
-				} else {
-					text.message ? (text.message += "&#13;") : null;
-					return sendMessage(text);
-				}
-			};
+			InternalUtils.user.improveMessageContext(message);
 			selectedCommand.process(message, TempVK).catch((err) => {
 				InternalUtils.logger.send({
 					message: `Error on execute command\nError: ${err.toString()}`,
