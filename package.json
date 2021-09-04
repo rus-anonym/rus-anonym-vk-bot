@@ -9,6 +9,7 @@
 		"lint": "eslint ./src"
 	},
 	"dependencies": {
+		"@types/ping": "^0.2.1",
 		"@vk-io/authorization": "^1.2.1",
 		"axios": "^0.21.3",
 		"cheerio": "^1.0.0-rc.10",
@@ -16,6 +17,7 @@
 		"jimp": "^0.16.1",
 		"moment": "^2.29.1",
 		"mongoose": "^6.0.4",
+		"ping": "^0.4.1",
 		"rucaptcha-io": "^1.0.1",
 		"rus-anonym-utils": "^2.6.1",
 		"simple-scheduler-task": "^4.0.0",

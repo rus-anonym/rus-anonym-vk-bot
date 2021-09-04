@@ -12,7 +12,8 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"noImplicitAny": true,
-		"lib": ["ES2021"]
+		"lib": ["ES2021"],
+		"useUnknownInCatchVariables": false
 	},
 	"include": ["./src"]
 }

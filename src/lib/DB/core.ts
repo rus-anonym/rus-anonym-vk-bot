@@ -1,5 +1,5 @@
 import { typedModel } from "ts-mongoose";
-import mongoose, { ConnectionOptions } from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 
 import config from "../../DB/config.json";
 import constants from "../../DB/constants.json";
@@ -12,13 +12,10 @@ mongoose.Schema.Types.String.checkRequired((text) => text !== null);
 
 const mongoDbAddress = `mongodb://${config.DBMS.mongo.address}:27017/`;
 
-const buildConnectionConfig = (dbName: string): ConnectionOptions => {
+const buildConnectionConfig = (dbName: string): ConnectOptions => {
 	return {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
 		auth: {
-			user: config.DBMS.mongo.login,
+			username: config.DBMS.mongo.login,
 			password: config.DBMS.mongo.password,
 		},
 		authSource: "admin",

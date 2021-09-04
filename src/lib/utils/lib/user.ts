@@ -834,6 +834,39 @@ export default class UtilsUser {
 		return birthdays;
 	}
 
+	public improveMessageContext(message: MessageContext): MessageContext {
+		const sendMessage = message.send.bind(message);
+		const editMessage = message.editMessage.bind(message);
+		const replyMessage = message.reply.bind(message);
+		message.send = (text, params = {}) => {
+			if (typeof text === "string") {
+				return sendMessage({
+					message: text + "&#13;",
+					...params,
+				});
+			} else {
+				text.message ? (text.message += "&#13;") : null;
+				return sendMessage(text);
+			}
+		};
+		message.reply = (text, params = {}) => {
+			if (typeof text === "string") {
+				return replyMessage({
+					message: text + "&#13;",
+					...params,
+				});
+			} else {
+				text.message ? (text.message += "&#13;") : null;
+				return replyMessage(text);
+			}
+		};
+		message.editMessage = (params) => {
+			params.message ? (params.message += "&#13;") : null;
+			return editMessage(params);
+		};
+		return message;
+	}
+
 	private async uploadAttachments(
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		attachments: any[],

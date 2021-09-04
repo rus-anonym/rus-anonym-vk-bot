@@ -9,11 +9,11 @@ async function updateReserveGroupsList() {
 	const masterGroups = (await VK.master.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
-	})) as GroupsGetExtendedResponse;
+	})) as unknown as GroupsGetExtendedResponse;
 	const slaveGroups = (await VK.slave.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
-	})) as GroupsGetExtendedResponse;
+	})) as unknown as GroupsGetExtendedResponse;
 	const masterReserveGroups = masterGroups.items.filter(
 		(x) => x.name.startsWith("Reserve") && !x.deactivated,
 	);
@@ -68,7 +68,7 @@ async function updateReserveGroupsList() {
 	if (freeReserveGroupsCount < 25) {
 		const newGroup = await VK.slave.getAPI().groups.create({
 			title: "Reserve group",
-		});	
+		});
 		await VK.slave.getAPI().groups.edit({
 			group_id: newGroup.id,
 			access: 2,
