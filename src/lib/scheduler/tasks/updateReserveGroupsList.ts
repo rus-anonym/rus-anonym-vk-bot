@@ -68,7 +68,7 @@ async function updateReserveGroupsList() {
 	if (freeReserveGroupsCount < 25) {
 		const newGroup = await VK.slave.getAPI().groups.create({
 			title: "Reserve group",
-		});
+		});	
 		await VK.slave.getAPI().groups.edit({
 			group_id: newGroup.id,
 			access: 2,

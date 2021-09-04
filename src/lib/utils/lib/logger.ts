@@ -73,7 +73,7 @@ ${prefix} - ${message}`;
 
 		message += `🔴🔴🔴🔴🔴🔴🔴🔴`;
 
-		await VK.group.getVK().api.messages.send(
+		await VK.group.getAPI().messages.send(
 			Object.assign(
 				{
 					chat_id: selectedChat,
