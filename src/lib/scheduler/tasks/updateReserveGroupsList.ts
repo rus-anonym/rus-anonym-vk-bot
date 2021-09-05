@@ -41,15 +41,18 @@ async function updateReserveGroupsList() {
 		}
 		groupInDB.isReserve = group.screen_name !== `club${group.id}`;
 		groupInDB.markModified("isReserve");
-		if (group.is_closed !== 2) {
+		if (masterReserveGroups.find((x) => x.id === group.id)) {
 			groupInDB.ownerId = DB.config.VK.user.master.id;
-			if (masterReserveGroups.find((x) => x.id === group.id)) {
+		} else {
+			groupInDB.ownerId = DB.config.VK.user.slave.id;
+		}
+		if (group.is_closed !== 2) {
+			if (groupInDB.ownerId === DB.config.VK.user.master.id) {
 				await VK.master.getAPI().groups.edit({
 					group_id: group.id,
 					access: 2,
 				});
 			} else {
-				groupInDB.ownerId = DB.config.VK.user.slave.id;
 				await VK.slave.getAPI().groups.edit({
 					group_id: group.id,
 					access: 2,
