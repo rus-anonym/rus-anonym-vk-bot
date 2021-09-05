@@ -23,6 +23,7 @@ import "./user/utils/paymentDetails";
 import "./user/utils/missingPunctuationMarks";
 import "./user/utils/null";
 import "./user/utils/ping";
+import "./user/utils/domains";
 
 import "./user/vk/attachments/whatis";
 import "./user/vk/attachments/audio";
