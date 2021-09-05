@@ -5,7 +5,7 @@ import VK from "../../../VK/core";
 
 async function userBlock(event: GroupUserContext): Promise<void> {
 	if (event.isExpired) {
-		const [userData] = await VK.fakes.getUserFakeAPI().users.get({
+		const [userData] = await VK.group.getAPI().users.get({
 			user_ids: [event.userId.toString()],
 			fields: ["sex", "first_name_gen", "last_name_gen"],
 		});
@@ -21,7 +21,7 @@ async function userBlock(event: GroupUserContext): Promise<void> {
 		});
 		return;
 	} else {
-		const usersData = await VK.fakes.getUserFakeAPI().users.get({
+		const usersData = await VK.group.getAPI().users.get({
 			user_ids: [event.adminId!.toString(), event.userId.toString()],
 			fields: ["sex", "first_name_gen", "last_name_gen"],
 		});

@@ -6,7 +6,7 @@ import VK from "../../../VK/core";
 const roles = [`пользователя`, `модератора`, `редактора`, `администратора`];
 
 async function groupOfficersEdit(event: GroupUpdateContext): Promise<void> {
-	const usersData = await VK.fakes.getUserFakeAPI().users.get({
+	const usersData = await VK.group.getAPI().users.get({
 		user_ids: [event.adminId!.toString(), event.userId.toString()],
 		fields: ["sex"],
 	});

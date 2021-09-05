@@ -18,7 +18,7 @@ new UserCommand(/^(?:!стикеры|!stickers)(?:\s(.*))?$/i, async function (
 	}
 
 	const userStickers = await utils.vk.user.getUserStickerPacks(
-		VK.fakes.getUserFakeAPI().options.token,
+		VK.slave.getAPI().options.token,
 		userID,
 		true,
 	);
