@@ -161,7 +161,7 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 					const sticker = attachment.sticker;
 
 					const [userStickerPackInfo] = (
-						(await VK.fakes.getUserFakeAPI().store.getProducts({
+						(await VK.slave.getAPI().store.getProducts({
 							product_ids: [sticker.product_id],
 							type: "stickers",
 							user_id,
@@ -182,8 +182,8 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 						url: string;
 					}>(sticker.images_with_background).url;
 
-					const stickerSuggestions = await VK.fakes
-						.getUserFakeAPI()
+					const stickerSuggestions = await VK.slave
+						.getAPI()
 						.call("store.getStickerSuggestions", {
 							sticker_id: sticker.sticker_id,
 						});

@@ -5,35 +5,36 @@ import InternalUtils from "../../../utils/core";
 import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand({
-		regexp: /^(?:\/стикеры)(?:\s(.*))?$/i, process: async function (message) {
-			await message.loadMessagePayload();
-			let userID;
-			try {
-				userID = await InternalUtils.groupCommands.getUserId(message);
-			} catch (error) {
-				return await message.state.sendMessage({
-					message: error.message,
-				});
-			}
+	regexp: /^(?:\/стикеры)(?:\s(.*))?$/i,
+	process: async function (message) {
+		await message.loadMessagePayload();
+		let userID;
+		try {
+			userID = await InternalUtils.groupCommands.getUserId(message);
+		} catch (error) {
+			return await message.state.sendMessage({
+				message: error.message,
+			});
+		}
 
-			const userStickers = await utils.vk.user.getUserStickerPacks(
-				VK.fakes.getUserFakeAPI().options.token,
-				userID,
-				true
-			);
+		const userStickers = await utils.vk.user.getUserStickerPacks(
+			VK.slave.getAPI().options.token,
+			userID,
+			true,
+		);
 
-			return message.state.sendMessage({
-				message: `У @id${userID} ${utils.string.declOfNum(
-					userStickers.items.length,
-					["найден", "найдено", "найдено"]
-				)} ${utils.number.separator(
-					userStickers.items.length,
-					"."
-				)} ${utils.string.declOfNum(userStickers.items.length, [
-					"стикерпак",
-					"стикерпака",
-					"стикерпаков",
-				])} на сумму ${utils.number.separator(userStickers.totalPrice * 7, ".")}₽
+		return message.state.sendMessage({
+			message: `У @id${userID} ${utils.string.declOfNum(
+				userStickers.items.length,
+				["найден", "найдено", "найдено"],
+			)} ${utils.number.separator(
+				userStickers.items.length,
+				".",
+			)} ${utils.string.declOfNum(userStickers.items.length, [
+				"стикерпак",
+				"стикерпака",
+				"стикерпаков",
+			])} на сумму ${utils.number.separator(userStickers.totalPrice * 7, ".")}₽
 Платных: ${userStickers.stats.paid}
 Бесплатных: ${userStickers.stats.free}
 
@@ -60,7 +61,7 @@ new GroupCommand({
 ⠀Платных обычных: ${userStickers.stats.styles.paidSimple}
 ⠀Платных анимированных: ${userStickers.stats.styles.paidAnimated}
 ⠀Всего платных: ${userStickers.stats.styles.paid}`,
-				disable_mentions: true,
-			});
-		}
-	});
+			disable_mentions: true,
+		});
+	},
+});

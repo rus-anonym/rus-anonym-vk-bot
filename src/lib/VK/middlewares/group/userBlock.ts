@@ -13,7 +13,7 @@ const reasons = [
 ];
 
 async function userBlock(event: GroupUserContext): Promise<void> {
-	const usersData = await VK.fakes.getUserFakeAPI().users.get({
+	const usersData = await VK.group.getAPI().users.get({
 		user_ids: [event.adminId!.toString(), event.userId.toString()],
 		fields: ["sex", "first_name_gen", "last_name_gen"],
 	});

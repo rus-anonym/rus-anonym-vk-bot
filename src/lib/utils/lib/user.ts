@@ -566,7 +566,7 @@ export default class UtilsUser {
 		let log = `Track Log: @id${userInfo.id} (${userInfo.first_name} ${userInfo.last_name}):`;
 
 		const userStickerPacks = await utils.vk.user.getUserStickerPacks(
-			VK.fakes.getUserFakeAPI().options.token,
+			VK.slave.getAPI().options.token,
 			userInfo.id,
 			true,
 		);
