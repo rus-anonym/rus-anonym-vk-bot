@@ -1,4 +1,4 @@
-import { VK, CallbackService, API } from "vk-io";
+import { VK, CallbackService, API, WallPostContext, getRandomId } from "vk-io";
 import utils from "rus-anonym-utils";
 
 import InternalUtils from "../utils/core";
@@ -215,5 +215,27 @@ class CoreVK {
 }
 
 const vk = new CoreVK();
+
+const repostsMiddleware = async (event: WallPostContext) => {
+	for (const peer_id of DB.config.VK.groupReposts.chats) {
+		if (event.wall.postType !== "suggest") {
+			await vk.slave.getAPI().messages.send({
+				peer_id,
+				attachment: event.wall.toString(),
+				random_id: getRandomId(),
+			});
+		}
+	}
+	return;
+};
+
+for (const group of DB.config.VK.groupReposts.tokens) {
+	const tempVK = new VK({
+		token: group.token,
+		pollingGroupId: group.id,
+	});
+	tempVK.updates.on("wall_post_new", repostsMiddleware);
+	tempVK.updates.startPolling();
+}
 
 export default vk;
