@@ -81,6 +81,25 @@ export class GroupCommand extends Command {
 	}
 }
 
+export class SlaveCommand extends Command {
+	public process: (
+		message: MessageContext<UserModernMessageContextState>,
+		vk: VK,
+	) => Promise<unknown>;
+
+	constructor(
+		regexp: RegExp,
+		process: (
+			message: MessageContext<UserModernMessageContextState>,
+			vk: VK,
+		) => Promise<unknown>,
+	) {
+		super(regexp);
+		this.process = process;
+		InternalUtils.slaveCommands.addCommand(this);
+	}
+}
+
 export abstract class UtilsCommands {
 	abstract list: unknown[];
 	abstract addCommand(command: unknown): void;

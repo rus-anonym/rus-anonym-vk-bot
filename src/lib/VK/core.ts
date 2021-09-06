@@ -10,7 +10,8 @@ import VKMe from "./plugins/VKMe";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
 
-import userMiddlewares from "./middlewares/user";
+import masterMiddlewares from "./middlewares/master";
+import slaveMiddlewares from "./middlewares/slave";
 import groupMiddlewares from "./middlewares/group";
 
 const userCallbackService = new CallbackService();
@@ -59,10 +60,10 @@ class MasterVK extends Worker {
 			"message_new",
 			authorizationManager.middleware.bind(authorizationManager),
 		);
-		this.main.updates.on("message_new", userMiddlewares.messageNew);
-		this.main.updates.on("message_edit", userMiddlewares.messageEdit);
-		this.main.updates.on("message_flags", userMiddlewares.messageFlags);
-		this.main.updates.on("friend_activity", userMiddlewares.friendActivity);
+		this.main.updates.on("message_new", masterMiddlewares.messageNew);
+		this.main.updates.on("message_edit", masterMiddlewares.messageEdit);
+		this.main.updates.on("message_flags", masterMiddlewares.messageFlags);
+		this.main.updates.on("friend_activity", masterMiddlewares.friendActivity);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие пользователя:
@@ -191,6 +192,8 @@ class SlaveVK extends Worker {
 
 	constructor() {
 		super();
+		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
+		this.main.updates.on("message_edit", slaveMiddlewares.messageEdit);
 	}
 
 	public getAPI() {
