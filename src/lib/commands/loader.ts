@@ -1,55 +1,55 @@
 /**
  * User commands
  */
-import "./user/utils/eval";
-import "./user/utils/about";
-import "./user/utils/randomNumber";
-import "./user/utils/choose";
-import "./user/utils/who";
-import "./user/utils/tele2Monday";
-import "./user/utils/track";
-import "./user/utils/sync";
-import "./user/utils/moonToSun";
-import "./user/utils/newChild";
-import "./user/utils/balaboba";
-import "./user/utils/convertLayout";
-import "./user/utils/communication";
-import "./user/utils/tiktok";
-import "./user/utils/repeat";
-import "./user/utils/rus_anonym";
-import "./user/utils/pohui";
-import "./user/utils/fixText";
-import "./user/utils/paymentDetails";
-import "./user/utils/missingPunctuationMarks";
-import "./user/utils/null";
-import "./user/utils/ping";
-import "./user/utils/domains";
+import "./master/utils/eval";
+import "./master/utils/about";
+import "./master/utils/randomNumber";
+import "./master/utils/choose";
+import "./master/utils/who";
+import "./master/utils/tele2Monday";
+import "./master/utils/track";
+import "./master/utils/sync";
+import "./master/utils/moonToSun";
+import "./master/utils/newChild";
+import "./master/utils/balaboba";
+import "./master/utils/convertLayout";
+import "./master/utils/communication";
+import "./master/utils/tiktok";
+import "./master/utils/repeat";
+import "./master/utils/rus_anonym";
+import "./master/utils/pohui";
+import "./master/utils/fixText";
+import "./master/utils/paymentDetails";
+import "./master/utils/missingPunctuationMarks";
+import "./master/utils/null";
+import "./master/utils/ping";
+import "./master/utils/domains";
 
-import "./user/vk/attachments/whatis";
-import "./user/vk/attachments/audio";
-import "./user/vk/attachments/add";
-import "./user/vk/attachments/document";
+import "./master/vk/attachments/whatis";
+import "./master/vk/attachments/audio";
+import "./master/vk/attachments/add";
+import "./master/vk/attachments/document";
 
-import "./user/vk/utils/apiStatus";
-import "./user/vk/utils/stickers";
-import "./user/vk/utils/isTester";
-import "./user/vk/utils/reserveScreenName";
-import "./user/vk/utils/info";
-import "./user/vk/utils/update";
-import "./user/vk/utils/friend";
-import "./user/vk/utils/syncFriends";
-import "./user/vk/utils/regGroup";
+import "./master/vk/utils/apiStatus";
+import "./master/vk/utils/stickers";
+import "./master/vk/utils/isTester";
+import "./master/vk/utils/reserveScreenName";
+import "./master/vk/utils/info";
+import "./master/vk/utils/update";
+import "./master/vk/utils/friend";
+import "./master/vk/utils/syncFriends";
+import "./master/vk/utils/regGroup";
 
-import "./user/vk/conversations/deleteMessages";
-import "./user/vk/conversations/kick";
-import "./user/vk/conversations/invite";
+import "./master/vk/conversations/deleteMessages";
+import "./master/vk/conversations/kick";
+import "./master/vk/conversations/invite";
 
-import "./user/graphics/invert";
-import "./user/graphics/sepia";
-import "./user/graphics/posterize";
-import "./user/graphics/contrast";
-import "./user/graphics/grayscale";
-import "./user/graphics/demotivator";
+import "./master/graphics/invert";
+import "./master/graphics/sepia";
+import "./master/graphics/posterize";
+import "./master/graphics/contrast";
+import "./master/graphics/grayscale";
+import "./master/graphics/demotivator";
 
 /**
  * Group commands
@@ -80,3 +80,9 @@ import "./group/graphics/demotivator";
 
 import "./group/private/main";
 import "./group/private/tasks/tasks";
+
+/**
+ * Slave commands
+ */
+
+import "./slave/ping";
