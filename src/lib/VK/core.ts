@@ -16,6 +16,8 @@ import groupMiddlewares from "./middlewares/group";
 const userCallbackService = new CallbackService();
 userCallbackService.onCaptcha(captchaHandler);
 
+const plug = () => null;
+
 abstract class Worker {
 	abstract main: VK;
 	abstract additional: string[];
@@ -43,16 +45,16 @@ class MasterVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
-		this.main.updates.on("chat_create", () => null);
-		this.main.updates.on("chat_title_update", () => null);
-		this.main.updates.on("chat_pin_message", () => null);
-		this.main.updates.on("chat_unpin_message", () => null);
-		this.main.updates.on("chat_kick_user", () => null);
-		this.main.updates.on("chat_invite_user", () => null);
-		this.main.updates.on("chat_invite_user_by_link", () => null);
-		this.main.updates.on("messages_read", () => null);
-		this.main.updates.on("typing", () => null);
-		this.main.updates.on("dialog_flags", () => null);
+		this.main.updates.on("chat_create", plug);
+		this.main.updates.on("chat_title_update", plug);
+		this.main.updates.on("chat_pin_message", plug);
+		this.main.updates.on("chat_unpin_message", plug);
+		this.main.updates.on("chat_kick_user", plug);
+		this.main.updates.on("chat_invite_user", plug);
+		this.main.updates.on("chat_invite_user_by_link", plug);
+		this.main.updates.on("messages_read", plug);
+		this.main.updates.on("typing", plug);
+		this.main.updates.on("dialog_flags", plug);
 		this.main.updates.on(
 			"message_new",
 			authorizationManager.middleware.bind(authorizationManager),
@@ -117,18 +119,19 @@ class GroupVK extends Worker {
 
 	constructor() {
 		super();
-		this.main.updates.on("group_join", () => null);
-		this.main.updates.on("group_leave", () => null);
-		this.main.updates.on("like_add", () => null);
-		this.main.updates.on("like_remove", () => null);
-		this.main.updates.on("message_reply", () => null);
-		this.main.updates.on("message_typing_state", () => null);
-		this.main.updates.on("typing_group", () => null);
-		this.main.updates.on("chat_kick_user", () => null);
-		this.main.updates.on("chat_invite_user", () => null);
-		this.main.updates.on("wall_reply", () => null);
-		this.main.updates.on("message_edit", () => null);
-		this.main.updates.on("video_comment", () => null);
+		this.main.updates.on("photo_comment", plug);
+		this.main.updates.on("group_join", plug);
+		this.main.updates.on("group_leave", plug);
+		this.main.updates.on("like_add", plug);
+		this.main.updates.on("like_remove", plug);
+		this.main.updates.on("message_reply", plug);
+		this.main.updates.on("message_typing_state", plug);
+		this.main.updates.on("typing_group", plug);
+		this.main.updates.on("chat_kick_user", plug);
+		this.main.updates.on("chat_invite_user", plug);
+		this.main.updates.on("wall_reply", plug);
+		this.main.updates.on("message_edit", plug);
+		this.main.updates.on("video_comment", plug);
 		this.main.updates.on("message_new", groupMiddlewares.messageNew);
 		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
 		this.main.updates.on("user_block", groupMiddlewares.userBlock);
