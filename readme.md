@@ -76,7 +76,11 @@ $ yarn
 					"api": 0
 				} // Conversation identifiers, for the group bot
 			}
-		} // Group
+		}, // Group
+		"groupReposts": {
+			"tokens": [], // Array of group tokens for repost
+			"chats": [] // Peer ID of chats for repost from slave account
+		}
 	},
 	"DBMS": {
 		"mongo": {
