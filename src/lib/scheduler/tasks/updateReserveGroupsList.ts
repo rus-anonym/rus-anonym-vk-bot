@@ -1,5 +1,5 @@
 import { Interval } from "simple-scheduler-task";
-import { GroupsGetExtendedResponse } from "vk-io/lib/api/schemas/responses";
+import { GroupsGetObjectExtendedResponse } from "vk-io/lib/api/schemas/responses";
 
 import DB from "../../DB/core";
 import InternalUtils from "../../utils/core";
@@ -9,11 +9,11 @@ async function updateReserveGroupsList() {
 	const masterGroups = (await VK.master.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
-	})) as unknown as GroupsGetExtendedResponse;
+	})) as unknown as GroupsGetObjectExtendedResponse;
 	const slaveGroups = (await VK.slave.getAPI().groups.get({
 		extended: true,
 		filter: ["admin"],
-	})) as unknown as GroupsGetExtendedResponse;
+	})) as unknown as GroupsGetObjectExtendedResponse;
 	const masterReserveGroups = masterGroups.items.filter(
 		(x) => x.name.startsWith("Reserve") && !x.deactivated,
 	);

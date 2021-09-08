@@ -14,16 +14,12 @@ import {
 	ResourceError,
 	Objects,
 } from "vk-io";
-import {
-	FriendsUserXtrLists,
-	UsersFields,
-	UsersUserFull,
-} from "vk-io/lib/api/schemas/objects";
-import { GroupsGetByIdLegacyResponse } from "vk-io/lib/api/schemas/responses";
+import { UsersUserFull, UsersFields } from "vk-io/lib/api/schemas/objects";
 
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 import InternalUtils from "../core";
+import { GroupsGetByIdObjectLegacyResponse } from "vk-io/lib/api/schemas/responses";
 
 interface BirthdayUser {
 	name: string;
@@ -123,7 +119,6 @@ export default class UtilsUser {
 		"video_live_count",
 		"clips_count",
 		"service_description",
-		"is_dead",
 	];
 
 	public mainUsersGetFields: UsersFields[] = [
@@ -582,7 +577,7 @@ export default class UtilsUser {
 				.join(", ")} на сумму ${utils.number.separator(totalPrice * 7, ".")}₽`;
 		}
 
-		const friendsIterator = createCollectIterator<Objects.FriendsUserXtrLists>({
+		const friendsIterator = createCollectIterator<Objects.UsersUserFull>({
 			api: VK.master.getVK().api,
 			method: "friends.get",
 			params: {
@@ -673,7 +668,7 @@ export default class UtilsUser {
 					group_ids: groupsDiff.map((x) => String(x)),
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})) as unknown as any
-			).groups as GroupsGetByIdLegacyResponse;
+			).groups as GroupsGetByIdObjectLegacyResponse;
 			for (const group of groupsDiffInfo) {
 				log += `\nВышел из группы: @club${group.id} (${group.name})`;
 			}
@@ -808,7 +803,7 @@ export default class UtilsUser {
 		const birthdays: BirthdayUser[] = [];
 		const validDate = moment(date).format("D.M");
 
-		const iterator = createCollectIterator<FriendsUserXtrLists>({
+		const iterator = createCollectIterator<UsersUserFull>({
 			api: VK.master.getVK().api,
 			method: "friends.get",
 			params: {
