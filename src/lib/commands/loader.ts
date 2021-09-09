@@ -35,7 +35,6 @@ import "./master/vk/utils/stickers";
 import "./master/vk/utils/isTester";
 import "./master/vk/utils/reserveScreenName";
 import "./master/vk/utils/info";
-import "./master/vk/utils/update";
 import "./master/vk/utils/friend";
 import "./master/vk/utils/syncFriends";
 import "./master/vk/utils/regGroup";
