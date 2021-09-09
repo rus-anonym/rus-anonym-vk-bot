@@ -46,6 +46,12 @@ class MasterVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-ignore
+		this.main.updates.on("chat_screenshot", plug);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-ignore
+		this.main.updates.on("conversation_style_update", plug);
 		this.main.updates.on("chat_create", plug);
 		this.main.updates.on("chat_title_update", plug);
 		this.main.updates.on("chat_pin_message", plug);

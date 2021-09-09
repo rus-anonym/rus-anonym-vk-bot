@@ -38,6 +38,7 @@ import "./master/vk/utils/info";
 import "./master/vk/utils/friend";
 import "./master/vk/utils/syncFriends";
 import "./master/vk/utils/regGroup";
+import "./master/vk/utils/interacting";
 
 import "./master/vk/conversations/deleteMessages";
 import "./master/vk/conversations/kick";
