@@ -75,7 +75,8 @@ $ yarn
 					"captcha": 0,
 					"api": 0
 				} // Conversation identifiers, for the group bot
-			}
+			},
+			"conversations": [] // Array of chatIDs of group conversations
 		}, // Group
 		"groupReposts": {
 			"tokens": [], // Array of group tokens for repost
