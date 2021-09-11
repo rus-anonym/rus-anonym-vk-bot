@@ -24,6 +24,8 @@ import "./master/utils/missingPunctuationMarks";
 import "./master/utils/null";
 import "./master/utils/ping";
 import "./master/utils/domains";
+import "./master/utils/getCat";
+import "./master/utils/httpStatus";
 
 import "./master/vk/attachments/whatis";
 import "./master/vk/attachments/audio";
@@ -65,6 +67,8 @@ import "./group/utils/commands";
 import "./group/utils/about";
 import "./group/utils/balaboba";
 import "./group/utils/tiktok";
+import "./group/utils/getCat";
+import "./group/utils/httpStatus";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
