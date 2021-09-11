@@ -4,6 +4,8 @@ import JIMP from "jimp";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
 
+import DB from "../../../DB/core";
+
 const demotivate = async (source: string, text: string): Promise<Buffer> => {
 	const image = await JIMP.read(source);
 	const demotivator = await JIMP.read(
@@ -37,7 +39,11 @@ new GroupCommand({
 			);
 
 			const photo = await vk.upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: await demotivate(source.url, message.state.args[1]),
 					filename: "demotivator.png",
@@ -61,7 +67,11 @@ new GroupCommand({
 				message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
 
 			const photo = await vk.upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: await demotivate(source as string, message.state.args[1]),
 					filename: "demotivator.png",
@@ -84,7 +94,11 @@ new GroupCommand({
 			const source = message.getAttachments("photo")[0].largeSizeUrl;
 
 			const photo = await vk.upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: await demotivate(source as string, message.state.args[1]),
 					filename: "demotivator.png",

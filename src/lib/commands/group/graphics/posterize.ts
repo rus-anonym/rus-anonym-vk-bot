@@ -54,7 +54,11 @@ new GroupCommand({
 			image.posterize(posterizeEffect);
 
 			const photo = await vk.upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: await image.getBufferAsync(JIMP.MIME_PNG),
 					filename: "sticker.png",
@@ -80,7 +84,11 @@ new GroupCommand({
 			image.posterize(posterizeEffect);
 
 			const photo = await vk.upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: await image.getBufferAsync(JIMP.MIME_PNG),
 					filename: "sticker.png",
