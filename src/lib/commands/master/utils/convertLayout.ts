@@ -12,6 +12,7 @@ new UserCommand(/(?:^!tr)$/i, async function (message) {
 			message.replyMessage.senderId === DB.config.VK.user.master.id &&
 			message.replyMessage.text
 		) {
+			await message.deleteMessage({ delete_for_all: true });
 			return await VK.master.getVK().api.messages.edit({
 				message_id: message.replyMessage.id,
 				peer_id: message.replyMessage.peerId,
