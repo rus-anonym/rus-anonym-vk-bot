@@ -9,7 +9,6 @@ import { UsersUserFull } from "vk-io/lib/api/schemas/objects";
 const getUsersData = async (
 	message: MessageContext,
 ): Promise<{ sender: UsersUserFull; target: UsersUserFull }> => {
-	await message.loadMessagePayload();
 	const userID = await InternalUtils.userCommands.getUserId(message);
 
 	const [senderInfo, targetInfo] = await VK.group.getAPI().users.get({
@@ -48,14 +47,18 @@ templates.map((template) => {
 		new RegExp(`(?:^${template.trigger})(?:\\s(.*))?$`, "i"),
 		async function (message) {
 			try {
+				await message.loadMessagePayload();
 				const { sender, target } = await getUsersData(message);
-				return message.reply({
+				await message.deleteMessage({ delete_for_all: true });
+				return await message.send({
 					message: `${template.smiley + " " || ""}@id${sender.id} (${
 						sender.first_name
 					} ${sender.last_name}) ${
 						sender.sex === 1 ? template.female : template.male
 					} @id${target.id} (${target.first_name_acc} ${target.last_name_acc})`,
 					disable_mentions: true,
+					reply_to: message.replyMessage?.id || undefined,
+					attachment: message.attachments.map((x) => x.toString()),
 				});
 			} catch (error) {
 				return await message.editMessage({

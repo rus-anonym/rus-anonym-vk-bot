@@ -23,6 +23,7 @@ new UserCommand(/(?:^!fixText)$/i, async function (message) {
 	if (message.hasReplyMessage && message.replyMessage) {
 		await message.loadMessagePayload();
 		if (message.replyMessage.senderId === DB.config.VK.user.master.id) {
+			await message.deleteMessage({ delete_for_all: true });
 			return await VK.master.getVK().api.messages.edit({
 				message_id: message.replyMessage.id,
 				peer_id: message.replyMessage.peerId,
