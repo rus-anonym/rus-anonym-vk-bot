@@ -3,7 +3,7 @@ import { Interval } from "simple-scheduler-task";
 
 import VK from "../../VK/core";
 
-async function getBirthdays(): Promise<void> {
+async function setSteps(): Promise<void> {
 	const currentDate = moment().add(7, "day");
 	const array: string[] = [];
 	for (let i = 0; i < 63; ++i) {
@@ -35,7 +35,7 @@ async function getBirthdays(): Promise<void> {
 
 export default new Interval({
 	isInform: true,
-	type: "getBirthdays",
-	source: getBirthdays,
+	type: "setSteps",
+	source: setSteps,
 	cron: "5 0 * * *",
 });
