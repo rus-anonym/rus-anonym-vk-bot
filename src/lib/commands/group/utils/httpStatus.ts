@@ -3,6 +3,7 @@ import cheerio from "cheerio";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
 import VK from "../../../VK/core";
+import DB from "../../../DB/core";
 
 const getHTPPCodeData = async (
 	code: number,
@@ -34,7 +35,11 @@ new GroupCommand({
 				Number(message.state.args[1]) || 100,
 			);
 			const attachment = await VK.group.getVK().upload.messagePhoto({
-				peer_id: message.peerId,
+				peer_id: DB.config.VK.group.conversations.includes(
+					message.chatId as number,
+				)
+					? undefined
+					: message.peerId,
 				source: {
 					value: image,
 					filename: "cat.jpg",

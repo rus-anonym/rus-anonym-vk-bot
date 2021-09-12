@@ -4,6 +4,7 @@ import { Keyboard } from "vk-io";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
 import VK from "../../../VK/core";
+import DB from "../../../DB/core";
 
 const getRandomCatUrl = async (): Promise<string> => {
 	const services = [
@@ -33,7 +34,11 @@ new GroupCommand({
 	regexp: /(?:^котик)$/i,
 	process: async function (message) {
 		const attachment = await VK.group.getVK().upload.messagePhoto({
-			peer_id: message.peerId,
+			peer_id: DB.config.VK.group.conversations.includes(
+				message.chatId as number,
+			)
+				? message.chatId
+				: undefined,
 			source: {
 				value: await getRandomCatUrl(),
 				filename: "cat.jpg",

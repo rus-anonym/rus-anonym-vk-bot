@@ -11,6 +11,7 @@ import deleteSameDocuments from "./tasks/deleteSameDocuments";
 import sendHappyBirthdayGreetings from "./tasks/sendHappyBirthdayGreetings";
 import sendApiStatus from "./tasks/sendApiStatus";
 import updateReserveGroupsList from "./tasks/updateReserveGroupsList";
+import setSteps from "./tasks/setSteps";
 
 scheduler.events.on("error", (error) => {
 	InternalUtils.logger.send({
@@ -31,4 +32,5 @@ export default {
 	deleteSameDocuments,
 	sendApiStatus,
 	updateReserveGroupsList,
+	setSteps,
 };
