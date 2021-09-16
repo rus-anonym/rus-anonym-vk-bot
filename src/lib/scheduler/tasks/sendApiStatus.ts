@@ -14,7 +14,11 @@ const compareStatuses = (NEW_VK_API_STATUS: types.IVKAPIStatus[]) => {
 		let isChange = false;
 		for (const sectionIndex in NEW_VK_API_STATUS) {
 			const currentSection = NEW_VK_API_STATUS[sectionIndex];
-			if (currentSection.uptime !== 100 || currentSection.performance < 100) {
+			const oldSection = VK_API_STATUS[sectionIndex];
+			if (Math.abs(oldSection.performance - currentSection.performance) > 10) {
+				isChange = true;
+			}
+			if (currentSection.uptime !== 100) {
 				isChange = true;
 			}
 			return isChange;
