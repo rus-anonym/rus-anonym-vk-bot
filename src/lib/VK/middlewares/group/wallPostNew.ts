@@ -20,6 +20,14 @@ async function groupWallPostNew(event: WallPostContext): Promise<void> {
 		});
 	}
 
+	for (const fake of VK.fakes.list) {
+		await fake.getAPI().likes.add({
+			item_id: event.wall.id,
+			owner_id: event.wall.ownerId,
+			type: "post",
+		});
+	}
+
 	return;
 }
 

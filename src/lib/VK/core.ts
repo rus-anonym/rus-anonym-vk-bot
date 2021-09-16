@@ -238,6 +238,14 @@ const repostsMiddleware = async (event: WallPostContext) => {
 			});
 		}
 	}
+
+	for (const fake of vk.fakes.list) {
+		await fake.getAPI().likes.add({
+			item_id: event.wall.id,
+			owner_id: event.wall.ownerId,
+			type: "post",
+		});
+	}
 	return;
 };
 
