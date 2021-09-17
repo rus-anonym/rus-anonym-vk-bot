@@ -46,6 +46,9 @@ new GroupCommand({
 			data: `act=validate_code&api_hash=${DB.temp.verification.slave.apiHash}&hash=${DB.temp.verification.slave.hash}&code=${answer.text}`,
 		});
 
+		DB.temp.verification.slave.apiHash = "";
+		DB.temp.verification.slave.hash = "";
+
 		return message.state.sendMessage("Решено.");
 	},
 });

@@ -1,5 +1,6 @@
 import utils from "rus-anonym-utils";
 import moment from "moment";
+import { Timeout } from "simple-scheduler-task";
 
 import DB from "../../../../DB/core";
 import VK from "../../../../VK/core";
@@ -55,5 +56,9 @@ new UserCommand({
 				["сообщение", `сообщения`, `сообщений`],
 			)}`,
 		});
+
+		new Timeout(async () => {
+			await context.deleteMessage({ delete_for_all: true });
+		}, 5000);
 	},
 });

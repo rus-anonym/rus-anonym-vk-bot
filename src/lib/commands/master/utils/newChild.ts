@@ -9,7 +9,7 @@ new UserCommand({
 		const woman = `🙎‍♀`;
 		const pregnantWoman = "🤰";
 		const child = "👶";
-		const comeBackTo = utils.array.random([`🍞`, `💃`, `✈`, `🚢`]);
+		const bread = "🍞";
 		const sex = "👩‍❤‍👨 ";
 		const invisibleSymbol = `⠀⠀`;
 		const distance = 4;
@@ -27,14 +27,14 @@ new UserCommand({
 		await utils.sleep(1000);
 		for (let i = distance; i >= 0; --i) {
 			await message.editMessage({
-				message: `${comeBackTo}${invisibleSymbol.repeat(
+				message: `${bread}${invisibleSymbol.repeat(
 					i,
 				)}${man}${invisibleSymbol.repeat(distance - i)}${pregnantWoman}`,
 			});
 			await utils.sleep(1000);
 		}
 		await message.editMessage({
-			message: `${comeBackTo}${man}${invisibleSymbol.repeat(
+			message: `${bread}${man}${invisibleSymbol.repeat(
 				distance,
 			)}${child}${woman}`,
 		});
