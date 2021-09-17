@@ -33,7 +33,7 @@ export default class UtilsUserCommands extends UtilsCommands {
 			try {
 				const linkData = await resolveResource({
 					resource: message.state.args[1],
-					api: VK.group.getVK().api,
+					api: VK.group.getAPI(),
 				});
 				if (linkData.type === "group") {
 					return -linkData.id;
@@ -170,7 +170,7 @@ String: doc${graffiti.owner_id}_${graffiti.id}_${graffiti.access_key}\n\n`;
 					).items as StoreGetProductsResponse;
 
 					const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
-						VK.master.getVK().api.options.token,
+						VK.master.getAPI().options.token,
 						[sticker.product_id],
 					);
 

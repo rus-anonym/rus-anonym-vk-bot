@@ -39,7 +39,7 @@ async function updateOnlinePrivacySettings(): Promise<string | void> {
 			key: "online",
 			value: uniqueUsersList,
 		});
-		const usersInfo = await VK.group.getVK().api.users.get({
+		const usersInfo = await VK.group.getAPI().users.get({
 			user_ids: utils.array
 				.makeUnique(newUsersWhoSeeOnline.concat(usersWhoNotSeeOnline))
 				.join(),

@@ -131,6 +131,21 @@ class CoreDB {
 	public readonly config = Object.freeze(config);
 	public readonly constants = Object.freeze(constants);
 
+	public temp: {
+		verification: {
+			slave: {
+				url: string;
+			};
+		};
+		[key: string]: unknown;
+	} = {
+		verification: {
+			slave: {
+				url: "",
+			},
+		},
+	};
+
 	public user = new UserDB();
 	public group = new GroupDB();
 	public main = new MainDB();

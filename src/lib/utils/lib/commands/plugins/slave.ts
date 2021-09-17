@@ -23,7 +23,7 @@ export default class UtilsSlaveCommands extends UtilsCommands {
 			try {
 				const linkData = await resolveResource({
 					resource: message.state.args[1],
-					api: VK.group.getVK().api,
+					api: VK.group.getAPI(),
 				});
 				if (linkData.type === "group") {
 					return -linkData.id;

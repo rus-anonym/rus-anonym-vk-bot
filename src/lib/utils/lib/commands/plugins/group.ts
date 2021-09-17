@@ -36,7 +36,7 @@ export default class UtilsGroupCommands extends UtilsCommands {
 			try {
 				const linkData = await resolveResource({
 					resource: message.state.args[1],
-					api: VK.group.getVK().api,
+					api: VK.group.getAPI(),
 				});
 				return linkData.id;
 			} catch (error) {
@@ -187,7 +187,7 @@ String: ${poll.toString()}\n`;
 		for (const sticker of message.getAttachments(`sticker`)) {
 			++i;
 			const [userStickerPackInfo] = (
-				(await VK.master.getVK().api.store.getProducts({
+				(await VK.master.getAPI().store.getProducts({
 					product_ids: [sticker.productId],
 					type: "stickers",
 					user_id: message.senderId,
@@ -195,7 +195,7 @@ String: ${poll.toString()}\n`;
 				})) as any
 			).items as StoreGetProductsResponse;
 			const [stickerPackInfo] = await utils.vk.user.getStickerPacksInfo(
-				VK.master.getVK().api.options.token,
+				VK.master.getAPI().options.token,
 				[sticker.productId],
 			);
 			text += `${i}. sticker 	

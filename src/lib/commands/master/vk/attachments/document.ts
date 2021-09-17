@@ -12,7 +12,7 @@ new UserCommand({
 			});
 		}
 
-		const documents = await VK.master.getVK().api.docs.search({
+		const documents = await VK.master.getAPI().docs.search({
 			q: message.state.args[1],
 			count: 10,
 		});

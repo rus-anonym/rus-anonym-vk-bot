@@ -4,59 +4,61 @@ import VK from "../../../VK/core";
 import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand({
-		regexp: /(?:^!repeat)(?:\s(\d+))?(\strue)?$/i, process: async function (
-			message) {
-			message.state.args[1] = message.state.args[1] || "1";
-			if (!Number(message.state.args[1])) {
-				message.state.args[1] = "1";
-			}
-			if (Number(message.state.args[1]) > 100) {
-				return await message.editMessage({
-					message: `Limit: 100`,
-				});
-			}
-			await message.loadMessagePayload();
-			const params: Record<string, string | number> = {};
-			if (message.replyMessage) {
-				if (message.replyMessage.text) {
-					params.message = message.replyMessage?.text;
-				}
-				if (message.replyMessage.hasAttachments("sticker")) {
-					params.sticker_id = message.replyMessage.getAttachments("sticker")[0].id;
-				} else {
-					params.attachment = message.replyMessage.attachments
-						.map((x) => x.toString())
-						.join();
-				}
-			}
-			if (Object.keys(params).length === 0) {
-				return await message.editMessage({
-					message: `Не обнаружено свойств`,
-				});
-			}
-			await message.deleteMessage({
-				delete_for_all: true,
+	regexp: /(?:^!repeat)(?:\s(\d+))?(\strue)?$/i,
+	process: async function (message) {
+		message.state.args[1] = message.state.args[1] || "1";
+		if (!Number(message.state.args[1])) {
+			message.state.args[1] = "1";
+		}
+		if (Number(message.state.args[1]) > 100) {
+			return await message.editMessage({
+				message: `Limit: 100`,
 			});
-			const isForce = Boolean(message.state.args[2]);
-			if (isForce) {
-				const promises = [];
-				for (let i = 0; i < Number(message.state.args[1]); ++i) {
-					promises.push(
-						VK.master.getVK().api.messages.send({
-							peer_id: message.peerId,
-							random_id: getRandomId(),
-							...params,
-						}));
-				}
-				await Promise.all(promises);
+		}
+		await message.loadMessagePayload();
+		const params: Record<string, string | number> = {};
+		if (message.replyMessage) {
+			if (message.replyMessage.text) {
+				params.message = message.replyMessage?.text;
+			}
+			if (message.replyMessage.hasAttachments("sticker")) {
+				params.sticker_id =
+					message.replyMessage.getAttachments("sticker")[0].id;
 			} else {
-				for (let i = 0; i < Number(message.state.args[1]); ++i) {
-					await VK.master.getVK().api.messages.send({
+				params.attachment = message.replyMessage.attachments
+					.map((x) => x.toString())
+					.join();
+			}
+		}
+		if (Object.keys(params).length === 0) {
+			return await message.editMessage({
+				message: `Не обнаружено свойств`,
+			});
+		}
+		await message.deleteMessage({
+			delete_for_all: true,
+		});
+		const isForce = Boolean(message.state.args[2]);
+		if (isForce) {
+			const promises = [];
+			for (let i = 0; i < Number(message.state.args[1]); ++i) {
+				promises.push(
+					VK.master.getAPI().messages.send({
 						peer_id: message.peerId,
 						random_id: getRandomId(),
 						...params,
-					});
-				}
+					}),
+				);
+			}
+			await Promise.all(promises);
+		} else {
+			for (let i = 0; i < Number(message.state.args[1]); ++i) {
+				await VK.master.getAPI().messages.send({
+					peer_id: message.peerId,
+					random_id: getRandomId(),
+					...params,
+				});
 			}
 		}
-	});
+	},
+});

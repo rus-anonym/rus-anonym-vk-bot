@@ -9,7 +9,7 @@ const add = async (message: MessageContext): Promise<string> => {
 	let log = "";
 	for (const audio of message.getAttachments("audio")) {
 		try {
-			await VK.master.getVK().api.call("audio.add", {
+			await VK.master.getAPI().call("audio.add", {
 				audio_id: audio.id,
 				owner_id: audio.ownerId,
 			});
@@ -20,7 +20,7 @@ const add = async (message: MessageContext): Promise<string> => {
 	}
 	for (const doc of message.getAttachments("doc")) {
 		try {
-			await VK.master.getVK().api.docs.add({
+			await VK.master.getAPI().docs.add({
 				owner_id: doc.ownerId,
 				doc_id: doc.id,
 				access_key: doc.accessKey,
@@ -34,27 +34,28 @@ const add = async (message: MessageContext): Promise<string> => {
 };
 
 new UserCommand({
-		regexp: /(?:^!add)$/i, process: async function (context) {
-			await context.loadMessagePayload();
+	regexp: /(?:^!add)$/i,
+	process: async function (context) {
+		await context.loadMessagePayload();
 
-			if (context.hasReplyMessage) {
-				return await context.editMessage({
-					message: await add(context.replyMessage!),
-				});
-			}
-
-			if (context.hasForwards) {
-				let message = "";
-				for (const forward of context.forwards) {
-					message += await add(forward);
-				}
-				return await context.editMessage({
-					message,
-				});
-			}
-
+		if (context.hasReplyMessage) {
 			return await context.editMessage({
-				message: `Не нашёл прикреплений`,
+				message: await add(context.replyMessage!),
 			});
 		}
-	});
+
+		if (context.hasForwards) {
+			let message = "";
+			for (const forward of context.forwards) {
+				message += await add(forward);
+			}
+			return await context.editMessage({
+				message,
+			});
+		}
+
+		return await context.editMessage({
+			message: `Не нашёл прикреплений`,
+		});
+	},
+});
