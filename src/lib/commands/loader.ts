@@ -52,6 +52,8 @@ import "./master/graphics/contrast";
 import "./master/graphics/grayscale";
 import "./master/graphics/demotivator";
 
+import "./master/bot/changeImproveText";
+
 /**
  * Group commands
  */
