@@ -134,14 +134,16 @@ class CoreDB {
 	public temp: {
 		verification: {
 			slave: {
-				url: string;
+				apiHash: string;
+				hash: string;
 			};
 		};
 		[key: string]: unknown;
 	} = {
 		verification: {
 			slave: {
-				url: "",
+				apiHash: "",
+				hash: "",
 			},
 		},
 	};

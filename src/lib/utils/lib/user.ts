@@ -555,8 +555,15 @@ export default class UtilsUser {
 							})
 							.catch((error) => {
 								if (error instanceof APIError && error.code === 17) {
-									DB.temp.verification.slave.url = error.redirectUri as string;
+									const url = new URL(error.redirectUri as string);
+									DB.temp.verification.slave.hash = url.searchParams.get(
+										"hash",
+									) as string;
+									DB.temp.verification.slave.apiHash = url.searchParams.get(
+										"api_hash",
+									) as string;
 								}
+								throw error;
 							});
 					} else {
 						throw new Error(`Unknown owner ${freeReserveGroup.ownerId}`);
