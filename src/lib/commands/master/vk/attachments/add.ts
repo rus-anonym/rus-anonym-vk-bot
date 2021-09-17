@@ -33,26 +33,28 @@ const add = async (message: MessageContext): Promise<string> => {
 	return log === "" ? `Не нашёл что нужно добавить` : log;
 };
 
-new UserCommand(/(?:^!add)$/i, async function (context) {
-	await context.loadMessagePayload();
+new UserCommand({
+		regexp: /(?:^!add)$/i, process: async function (context) {
+			await context.loadMessagePayload();
 
-	if (context.hasReplyMessage) {
-		return await context.editMessage({
-			message: await add(context.replyMessage!),
-		});
-	}
+			if (context.hasReplyMessage) {
+				return await context.editMessage({
+					message: await add(context.replyMessage!),
+				});
+			}
 
-	if (context.hasForwards) {
-		let message = "";
-		for (const forward of context.forwards) {
-			message += await add(forward);
+			if (context.hasForwards) {
+				let message = "";
+				for (const forward of context.forwards) {
+					message += await add(forward);
+				}
+				return await context.editMessage({
+					message,
+				});
+			}
+
+			return await context.editMessage({
+				message: `Не нашёл прикреплений`,
+			});
 		}
-		return await context.editMessage({
-			message,
-		});
-	}
-
-	return await context.editMessage({
-		message: `Не нашёл прикреплений`,
 	});
-});

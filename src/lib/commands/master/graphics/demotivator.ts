@@ -28,60 +28,61 @@ const demotivate = async (source: string, text: string): Promise<Buffer> => {
 	return await demotivator.getBufferAsync(JIMP.MIME_PNG);
 };
 
-new UserCommand(/(?:^демотиватор)((?:.|\s)+)$/i, async function (message, vk) {
-	await message.loadMessagePayload();
+new UserCommand({
+		regexp: /(?:^демотиватор)((?:.|\s)+)$/i, process: async function (message, vk) {
+			await message.loadMessagePayload();
 
-	if (message.replyMessage?.hasAttachments("sticker")) {
-		const source = utils.array.last(
-			message.replyMessage.getAttachments("sticker")[0].images,
-		);
+			if (message.replyMessage?.hasAttachments("sticker")) {
+				const source = utils.array.last(
+					message.replyMessage.getAttachments("sticker")[0].images);
 
-		const photo = await vk.upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: await demotivate(source.url, message.state.args[1]),
-				filename: "demotivator.png",
-			},
-		});
+				const photo = await vk.upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: await demotivate(source.url, message.state.args[1]),
+						filename: "demotivator.png",
+					},
+				});
 
-		return await message.reply({
-			attachment: photo.toString(),
-		});
-	}
+				return await message.reply({
+					attachment: photo.toString(),
+				});
+			}
 
-	if (message.replyMessage?.hasAttachments("photo")) {
-		const source = message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
+			if (message.replyMessage?.hasAttachments("photo")) {
+				const source = message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
 
-		const photo = await vk.upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: await demotivate(source as string, message.state.args[1]),
-				filename: "demotivator.png",
-			},
-		});
+				const photo = await vk.upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: await demotivate(source as string, message.state.args[1]),
+						filename: "demotivator.png",
+					},
+				});
 
-		return await message.reply({
-			attachment: photo.toString(),
-		});
-	}
+				return await message.reply({
+					attachment: photo.toString(),
+				});
+			}
 
-	if (message.hasAttachments("photo")) {
-		const source = message.getAttachments("photo")[0].largeSizeUrl;
+			if (message.hasAttachments("photo")) {
+				const source = message.getAttachments("photo")[0].largeSizeUrl;
 
-		const photo = await vk.upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: await demotivate(source as string, message.state.args[1]),
-				filename: "demotivator.png",
-			},
-		});
+				const photo = await vk.upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: await demotivate(source as string, message.state.args[1]),
+						filename: "demotivator.png",
+					},
+				});
 
-		return await message.reply({
-			attachment: photo.toString(),
-		});
-	}
+				return await message.reply({
+					attachment: photo.toString(),
+				});
+			}
 
-	return await message.editMessage({
-		message: `Не найдено изображение или стикер`,
+			return await message.editMessage({
+				message: `Не найдено изображение или стикер`,
+			});
+		}
 	});
-});

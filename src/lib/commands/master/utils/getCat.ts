@@ -28,18 +28,20 @@ const getRandomCatUrl = async (): Promise<string> => {
 	}
 };
 
-new UserCommand(/(?:^котик)$/i, async function (message) {
-	const value = await getRandomCatUrl();
-	const attachment = await VK.master.getVK().upload.messagePhoto({
-		peer_id: message.peerId,
-		source: {
-			value,
-			filename: "cat.jpg",
-		},
-	});
+new UserCommand({
+		regexp: /(?:^котик)$/i, process: async function (message) {
+			const value = await getRandomCatUrl();
+			const attachment = await VK.master.getVK().upload.messagePhoto({
+				peer_id: message.peerId,
+				source: {
+					value,
+					filename: "cat.jpg",
+				},
+			});
 
-	return message.editMessage({
-		message: "",
-		attachment: attachment.toString(),
+			return message.editMessage({
+				message: "",
+				attachment: attachment.toString(),
+			});
+		}
 	});
-});
