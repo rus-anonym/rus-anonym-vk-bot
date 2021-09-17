@@ -1,6 +1,6 @@
 import { ExtractDoc } from "ts-mongoose";
 import { IMessageContextSendOptions, MessageContext, VK } from "vk-io";
-import { IQuestionMessageContext } from "vk-io-question";
+import { IQuestionParams, Answer } from "vk-io-question";
 import DB from "../../../DB/core";
 import InternalUtils from "../../core";
 
@@ -15,6 +15,11 @@ export interface GroupModernMessageContextState extends MessageContextState {
 		text: string | IMessageContextSendOptions,
 		params?: IMessageContextSendOptions,
 	): Promise<MessageContext<Record<string, unknown>>>;
+}
+
+export interface GroupModernMessageContext
+	extends MessageContext<GroupModernMessageContextState> {
+	question(message: string, params?: IQuestionParams): Promise<Answer>;
 }
 
 abstract class Command {
@@ -56,8 +61,7 @@ export class GroupCommand extends Command {
 	public isSelf: boolean;
 
 	public process: (
-		message: MessageContext<GroupModernMessageContextState> &
-			IQuestionMessageContext,
+		message: GroupModernMessageContext,
 		vk: VK,
 	) => Promise<unknown>;
 
@@ -67,11 +71,7 @@ export class GroupCommand extends Command {
 		isSelf = false,
 	}: {
 		regexp: RegExp;
-		process: (
-			message: MessageContext<GroupModernMessageContextState> &
-				IQuestionMessageContext,
-			vk: VK,
-		) => Promise<unknown>;
+		process: (message: GroupModernMessageContext, vk: VK) => Promise<unknown>;
 		isSelf?: boolean;
 		type?: "callback" | "regexp";
 		callbackTrigger?: string;

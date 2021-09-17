@@ -1,12 +1,11 @@
-import { MessageContext } from "vk-io";
-import { GroupModernMessageContextState } from "../../../utils/lib/commands/core";
+import { GroupModernMessageContext } from "../../../utils/lib/commands/core";
 
 import InternalUtils from "../../../utils/core";
 import DB from "../../../DB/core";
 import VK from "../../core";
 
 async function groupMessageNew(
-	context: MessageContext<GroupModernMessageContextState>,
+	context: GroupModernMessageContext,
 ): Promise<void> {
 	if (context.isFromGroup) {
 		return;

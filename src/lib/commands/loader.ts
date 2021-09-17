@@ -86,6 +86,8 @@ import "./group/graphics/demotivator";
 import "./group/private/main";
 import "./group/private/tasks/tasks";
 
+import "./group/private/verification/init";
+
 /**
  * Slave commands
  */
