@@ -3,72 +3,73 @@ import JIMP from "jimp";
 
 import { UserCommand } from "../../../utils/lib/commands/core";
 
-new UserCommand(/(?:^!invert)$/i, async function (message, vk) {
-	await message.loadMessagePayload();
+new UserCommand({
+		regexp: /(?:^!invert)$/i, process: async function (message, vk) {
+			await message.loadMessagePayload();
 
-	if (message.replyMessage?.hasAttachments("sticker")) {
-		const source = utils.array.last(
-			message.replyMessage.getAttachments("sticker")[0].images,
-		);
+			if (message.replyMessage?.hasAttachments("sticker")) {
+				const source = utils.array.last(
+					message.replyMessage.getAttachments("sticker")[0].images);
 
-		const image = await JIMP.read(source.url);
-		image.invert();
+				const image = await JIMP.read(source.url);
+				image.invert();
 
-		const graffiti = await vk.upload.messageGraffiti({
-			peer_id: message.peerId,
-			source: {
-				value: await image.getBufferAsync(JIMP.MIME_PNG),
-				filename: "sticker.png",
-			},
-		});
+				const graffiti = await vk.upload.messageGraffiti({
+					peer_id: message.peerId,
+					source: {
+						value: await image.getBufferAsync(JIMP.MIME_PNG),
+						filename: "sticker.png",
+					},
+				});
 
-		return await message.reply({
-			message: `Инвертированный стикер:`,
-			attachment: graffiti.toString(),
-		});
-	}
+				return await message.reply({
+					message: `Инвертированный стикер:`,
+					attachment: graffiti.toString(),
+				});
+			}
 
-	if (message.replyMessage?.hasAttachments("photo")) {
-		const source = message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
+			if (message.replyMessage?.hasAttachments("photo")) {
+				const source = message.replyMessage.getAttachments("photo")[0].largeSizeUrl;
 
-		const image = await JIMP.read(source as string);
-		image.invert();
+				const image = await JIMP.read(source as string);
+				image.invert();
 
-		const photo = await vk.upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: await image.getBufferAsync(JIMP.MIME_PNG),
-				filename: "sticker.png",
-			},
-		});
+				const photo = await vk.upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: await image.getBufferAsync(JIMP.MIME_PNG),
+						filename: "sticker.png",
+					},
+				});
 
-		return await message.reply({
-			message: `Инвертированное фото:`,
-			attachment: photo.toString(),
-		});
-	}
+				return await message.reply({
+					message: `Инвертированное фото:`,
+					attachment: photo.toString(),
+				});
+			}
 
-	if (message.hasAttachments("photo")) {
-		const source = message.getAttachments("photo")[0].largeSizeUrl;
+			if (message.hasAttachments("photo")) {
+				const source = message.getAttachments("photo")[0].largeSizeUrl;
 
-		const image = await JIMP.read(source as string);
-		image.invert();
+				const image = await JIMP.read(source as string);
+				image.invert();
 
-		const photo = await vk.upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: await image.getBufferAsync(JIMP.MIME_PNG),
-				filename: "sticker.png",
-			},
-		});
+				const photo = await vk.upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: await image.getBufferAsync(JIMP.MIME_PNG),
+						filename: "sticker.png",
+					},
+				});
 
-		return await message.reply({
-			message: `Инвертированное фото:`,
-			attachment: photo.toString(),
-		});
-	}
+				return await message.reply({
+					message: `Инвертированное фото:`,
+					attachment: photo.toString(),
+				});
+			}
 
-	return await message.editMessage({
-		message: `Не найдено изображение или стикер`,
+			return await message.editMessage({
+				message: `Не найдено изображение или стикер`,
+			});
+		}
 	});
-});

@@ -43,7 +43,9 @@ import "./master/vk/utils/interacting";
 
 import "./master/vk/conversations/deleteMessages";
 import "./master/vk/conversations/kick";
+
 import "./master/vk/conversations/invite";
+import "./master/vk/conversations/messageInfo";
 
 import "./master/graphics/invert";
 import "./master/graphics/sepia";
@@ -51,6 +53,8 @@ import "./master/graphics/posterize";
 import "./master/graphics/contrast";
 import "./master/graphics/grayscale";
 import "./master/graphics/demotivator";
+
+import "./master/bot/changeImproveText";
 
 /**
  * Group commands
@@ -83,6 +87,8 @@ import "./group/graphics/demotivator";
 
 import "./group/private/main";
 import "./group/private/tasks/tasks";
+
+import "./group/private/verification/init";
 
 /**
  * Slave commands

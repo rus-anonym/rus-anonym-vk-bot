@@ -63,7 +63,7 @@ new GroupCommand({
 				repeat: 1,
 			});
 
-			return await VK.group.getVK().api.messages.edit({
+			return await VK.group.getAPI().messages.edit({
 				peer_id: context.peerId,
 				conversation_message_id: userResponse.conversationMessageId,
 				message: "",

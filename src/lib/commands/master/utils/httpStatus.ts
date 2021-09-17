@@ -26,25 +26,26 @@ const getHTPPCodeData = async (
 	};
 };
 
-new UserCommand(/(?:^http)(?:\s(\d+))$/i, async function (message) {
-	try {
-		const { image, title, description } = await getHTPPCodeData(
-			Number(message.state.args[1]) || 100,
-		);
-		const attachment = await VK.master.getVK().upload.messagePhoto({
-			peer_id: message.peerId,
-			source: {
-				value: image,
-				filename: "cat.jpg",
-			},
-		});
-		return message.editMessage({
-			message: title + `\n` + description,
-			attachment: attachment.toString(),
-		});
-	} catch (error) {
-		return message.editMessage({
-			message: `Такой код не найден`,
-		});
-	}
-});
+new UserCommand({
+		regexp: /(?:^http)(?:\s(\d+))$/i, process: async function (message) {
+			try {
+				const { image, title, description } = await getHTPPCodeData(
+					Number(message.state.args[1]) || 100);
+				const attachment = await VK.master.getVK().upload.messagePhoto({
+					peer_id: message.peerId,
+					source: {
+						value: image,
+						filename: "cat.jpg",
+					},
+				});
+				return message.editMessage({
+					message: title + `\n` + description,
+					attachment: attachment.toString(),
+				});
+			} catch (error) {
+				return message.editMessage({
+					message: `Такой код не найден`,
+				});
+			}
+		}
+	});

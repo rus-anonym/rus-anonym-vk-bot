@@ -5,6 +5,7 @@ import { UserModernMessageContextState } from "../../../utils/lib/commands/core"
 
 import InternalUtils from "../../../utils/core";
 import VK from "../../core";
+import DB from "../../../DB/core";
 
 const improveText = (text: string) => {
 	if (text.includes("&#13;") || /^(?:\[club\d+\|.*])/.test(text)) {
@@ -47,7 +48,9 @@ async function userMessageNew(
 					type: "error",
 				});
 			});
-		} else {
+		} else if (
+			!DB.main.config.data.exceptions.dontImproveText.includes(message.peerId)
+		) {
 			const newMessageText = improveText(message.text);
 			if (message.text !== newMessageText) {
 				await message.editMessage({

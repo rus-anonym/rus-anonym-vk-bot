@@ -9,6 +9,7 @@ import BotPodVK from "./plugins/BotPod";
 import VKMe from "./plugins/VKMe";
 import FakesAlpha from "./plugins/Fakes";
 import captchaHandler from "./plugins/captchaHandler";
+import questionManagers from "./plugins/questionManager";
 
 import masterMiddlewares from "./middlewares/master";
 import slaveMiddlewares from "./middlewares/slave";
@@ -126,6 +127,7 @@ class GroupVK extends Worker {
 
 	constructor() {
 		super();
+		this.main.updates.use(questionManagers.groupQuestionManager.middleware);
 		this.main.updates.on("photo_comment", plug);
 		this.main.updates.on("group_join", plug);
 		this.main.updates.on("group_leave", plug);
@@ -237,6 +239,14 @@ const repostsMiddleware = async (event: WallPostContext) => {
 				random_id: getRandomId(),
 			});
 		}
+	}
+
+	for (const fake of vk.fakes.list) {
+		await fake.getAPI().likes.add({
+			item_id: event.wall.id,
+			owner_id: event.wall.ownerId,
+			type: "post",
+		});
 	}
 	return;
 };

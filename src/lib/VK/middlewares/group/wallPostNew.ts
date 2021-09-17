@@ -4,7 +4,7 @@ import VK from "../../../VK/core";
 import DB from "../../../DB/core";
 
 async function groupWallPostNew(event: WallPostContext): Promise<void> {
-	await VK.group.getVK().api.messages.send({
+	await VK.group.getAPI().messages.send({
 		message: `Опубликован новый ${event.isRepost ? "репост" : "пост"}`,
 		attachment: event.wall.toString(),
 		disable_mentions: true,
@@ -17,6 +17,14 @@ async function groupWallPostNew(event: WallPostContext): Promise<void> {
 			peer_id,
 			attachment: event.wall.toString(),
 			random_id: getRandomId(),
+		});
+	}
+
+	for (const fake of VK.fakes.list) {
+		await fake.getAPI().likes.add({
+			item_id: event.wall.id,
+			owner_id: event.wall.ownerId,
+			type: "post",
 		});
 	}
 

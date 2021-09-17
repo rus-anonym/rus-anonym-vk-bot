@@ -13,6 +13,7 @@ import {
 	resolveResource,
 	ResourceError,
 	Objects,
+	APIError,
 } from "vk-io";
 import { UsersUserFull, UsersFields } from "vk-io/lib/api/schemas/objects";
 
@@ -157,7 +158,7 @@ export default class UtilsUser {
 			});
 
 		if (event.peerId !== DB.config.VK.user.master.id) {
-			await VK.master.getVK().api.messages.restore({
+			await VK.master.getAPI().messages.restore({
 				message_id: event.id,
 			});
 			await VK.master
@@ -172,7 +173,7 @@ export default class UtilsUser {
 					dont_parse_links: 0,
 				})
 				.catch(() => null);
-			await VK.master.getVK().api.messages.delete({
+			await VK.master.getAPI().messages.delete({
 				message_ids: event.id,
 				delete_for_all: true,
 			});
@@ -226,7 +227,7 @@ export default class UtilsUser {
 		if (deletedMessageData.senderId > 1) {
 			const userData = await this.getUserData(deletedMessageData.senderId);
 
-			VK.group.getVK().api.messages.send({
+			VK.group.getAPI().messages.send({
 				message: `Удалено сообщение #id${event.id} от ${moment(
 					deletedMessageData.created,
 				).format("HH:mm:ss, DD.MM.YYYY")}
@@ -243,7 +244,7 @@ export default class UtilsUser {
 				attachment: uploadedAttachments.map((x) => x.link),
 			});
 		} else {
-			VK.group.getVK().api.messages.send({
+			VK.group.getAPI().messages.send({
 				message: `Удалено сообщение #id${event.id} от ${moment(
 					deletedMessageData.created,
 				).format("HH:mm:ss, DD.MM.YYYY")}
@@ -280,7 +281,7 @@ export default class UtilsUser {
 		if (oldMessage.senderId > 0) {
 			const userData = await this.getUserData(oldMessage.senderId);
 
-			VK.group.getVK().api.messages.send({
+			VK.group.getAPI().messages.send({
 				message: `Отредактировано сообщение #${message.id}
 						https://vk.com/im?sel=${
 							message.isChat ? `c${message.chatId}` : message.peerId
@@ -296,7 +297,7 @@ export default class UtilsUser {
 				attachment: uploadedAttachments.map((x) => x.link),
 			});
 		} else {
-			VK.group.getVK().api.messages.send({
+			VK.group.getAPI().messages.send({
 				message: `Отредактировано сообщение #${message.id}
 						https://vk.com/im?sel=${
 							message.isChat ? `c${message.chatId}` : message.peerId
@@ -529,7 +530,7 @@ export default class UtilsUser {
 
 	public async reserveScreenName(domain: string): Promise<number> {
 		try {
-			await resolveResource({ resource: domain, api: VK.group.getVK().api });
+			await resolveResource({ resource: domain, api: VK.group.getAPI() });
 		} catch (error) {
 			if (error instanceof ResourceError) {
 				const freeReserveGroup = await DB.main.models.reserveGroup.findOne({
@@ -544,12 +545,26 @@ export default class UtilsUser {
 							title: `Reserve ${domain}`,
 						});
 					} else if (freeReserveGroup.ownerId === DB.config.VK.user.slave.id) {
-						await VK.slave.getAPI().groups.edit({
-							group_id: freeReserveGroup.id,
-							screen_name: domain,
-							access: 2,
-							title: `Reserve ${domain}`,
-						});
+						await VK.slave
+							.getAPI()
+							.groups.edit({
+								group_id: freeReserveGroup.id,
+								screen_name: domain,
+								access: 2,
+								title: `Reserve ${domain}`,
+							})
+							.catch((error) => {
+								if (error instanceof APIError && error.code === 17) {
+									const url = new URL(error.redirectUri as string);
+									DB.temp.verification.slave.hash = url.searchParams.get(
+										"hash",
+									) as string;
+									DB.temp.verification.slave.apiHash = url.searchParams.get(
+										"api_hash",
+									) as string;
+								}
+								throw error;
+							});
 					} else {
 						throw new Error(`Unknown owner ${freeReserveGroup.ownerId}`);
 					}
@@ -558,10 +573,10 @@ export default class UtilsUser {
 					freeReserveGroup.save();
 					return freeReserveGroup.id;
 				} else {
-					const group = await VK.slave.getVK().api.groups.create({
+					const group = await VK.slave.getAPI().groups.create({
 						title: `Reserve ${domain}`,
 					});
-					await VK.slave.getVK().api.groups.edit({
+					await VK.slave.getAPI().groups.edit({
 						group_id: group.id,
 						screen_name: domain,
 						access: 2,
@@ -580,7 +595,7 @@ export default class UtilsUser {
 		const validDate = moment(date).format("D.M");
 
 		const iterator = createCollectIterator<UsersUserFull>({
-			api: VK.master.getVK().api,
+			api: VK.master.getAPI(),
 			method: "friends.get",
 			params: {
 				fields: [`bdate`],

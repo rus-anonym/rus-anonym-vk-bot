@@ -1,5 +1,18 @@
 import { createSchema, Type } from "ts-mongoose";
 
+const config = createSchema(
+	{
+		exceptions: Type.object({ required: true }).of({
+			dontImproveText: Type.array({ required: true }).of(
+				Type.number({ required: true }),
+			),
+		}),
+	},
+	{
+		versionKey: false,
+	},
+);
+
 const reserveGroup = createSchema(
 	{
 		id: Type.number({ required: true, unique: true }),
@@ -12,4 +25,4 @@ const reserveGroup = createSchema(
 	},
 );
 
-export default { reserveGroup };
+export default { reserveGroup, config };

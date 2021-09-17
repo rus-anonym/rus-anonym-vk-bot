@@ -1,4 +1,4 @@
-import { typedModel } from "ts-mongoose";
+import { ExtractDoc, typedModel } from "ts-mongoose";
 import mongoose, { ConnectOptions } from "mongoose";
 
 import config from "../../DB/config.json";
@@ -85,6 +85,18 @@ class GroupDB extends DB {
 	public schemes = groupSchemes;
 }
 
+class MainConfig {
+	public data!: ExtractDoc<typeof mainSchemes.config>;
+
+	constructor(main: MainDB) {
+		main.models.config.findOne({}).then((res) => {
+			if (res) {
+				this.data = res;
+			}
+		});
+	}
+}
+
 class MainDB extends DB {
 	public connection = mongoose.createConnection(
 		mongoDbAddress,
@@ -92,6 +104,14 @@ class MainDB extends DB {
 	);
 
 	public models = {
+		config: typedModel(
+			"config",
+			mainSchemes.config,
+			"config",
+			undefined,
+			undefined,
+			this.connection,
+		),
 		reserveGroup: typedModel(
 			"reserveGroup",
 			mainSchemes.reserveGroup,
@@ -101,12 +121,32 @@ class MainDB extends DB {
 			this.connection,
 		),
 	};
+
 	public schemes = mainSchemes;
+
+	public config = new MainConfig(this);
 }
 
 class CoreDB {
 	public readonly config = Object.freeze(config);
-	public constants = constants;
+	public readonly constants = Object.freeze(constants);
+
+	public temp: {
+		verification: {
+			slave: {
+				apiHash: string;
+				hash: string;
+			};
+		};
+		[key: string]: unknown;
+	} = {
+		verification: {
+			slave: {
+				apiHash: "",
+				hash: "",
+			},
+		},
+	};
 
 	public user = new UserDB();
 	public group = new GroupDB();

@@ -9,7 +9,7 @@ async function updateUsersData(): Promise<string | null> {
 	const users = await DB.user.models.user.distinct(`id`);
 	const output: string[] = [];
 	for (const chunk of utils.array.splitTo(users, 250)) {
-		const chunkInfo = await VK.master.getVK().api.users.get({
+		const chunkInfo = await VK.master.getAPI().users.get({
 			user_ids: chunk,
 			fields: InternalUtils.user.mainUsersGetFields,
 		});

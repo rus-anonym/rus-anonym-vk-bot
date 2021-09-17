@@ -17,7 +17,7 @@ async function userBlock(event: GroupUserContext): Promise<void> {
 		user_ids: [event.adminId!.toString(), event.userId.toString()],
 		fields: ["sex", "first_name_gen", "last_name_gen"],
 	});
-	VK.group.getVK().api.messages.send({
+	VK.group.getAPI().messages.send({
 		message: `@id${usersData[0].id} (${usersData[0].first_name} ${
 			usersData[0].last_name
 		}) ${usersData[0].sex === 1 ? "заблокировала" : "заблокировал"} @id${

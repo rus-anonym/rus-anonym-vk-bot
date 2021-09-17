@@ -26,8 +26,8 @@ $ yarn
 				"login": "", // User Login
 				"password": "", // User Password
 				"tokens": {
-					"main": "", // User token for polling
-					"additional": [], // Array with user tokens (minimum 1)
+					"main": "", // User token for polling (VK Android)
+					"additional": [], // Array with user tokens (minimum 1) (VK Android)
 					"apps": {
 						"6146827": "" // Token from VK Me
 					}
@@ -43,8 +43,8 @@ $ yarn
 				"login": "", // User Login
 				"password": "", // User Password
 				"tokens": {
-					"main": "", // User token for polling
-					"additional": [], // Array with user tokens (minimum 1)
+					"main": "", // User token for polling (VK Android)
+					"additional": [], // Array with user tokens (minimum 1) (VK Android)
 					"apps": {
 						"6146827": "" // Token from VK Me
 					}
@@ -54,7 +54,9 @@ $ yarn
 		"userFakes": [
 			{
 				"id": 0, // Fake user ID
-				"tokens": [] // Array with tokens from a fake user
+				"login": "", // User Login
+				"password": "", // User Password
+				"tokens": [] // Array with tokens from a fake user (VK Android)
 			}
 		], // Array with fake users
 		"group": {

@@ -44,27 +44,25 @@ const templates: {
 
 templates.map((template) => {
 	new UserCommand(
-		new RegExp(`(?:^${template.trigger})(?:\\s(.*))?$`, "i"),
-		async function (message) {
-			try {
-				await message.loadMessagePayload();
-				const { sender, target } = await getUsersData(message);
-				await message.deleteMessage({ delete_for_all: true });
-				return await message.send({
-					message: `${template.smiley + " " || ""}@id${sender.id} (${
-						sender.first_name
-					} ${sender.last_name}) ${
-						sender.sex === 1 ? template.female : template.male
-					} @id${target.id} (${target.first_name_acc} ${target.last_name_acc})`,
-					disable_mentions: true,
-					reply_to: message.replyMessage?.id || undefined,
-					attachment: message.attachments.map((x) => x.toString()),
-				});
-			} catch (error) {
-				return await message.editMessage({
-					message: error.message,
-				});
-			}
+		{
+			regexp: new RegExp(`(?:^${template.trigger})(?:\\s(.*))?$`, "i"), process:
+				async function (message) {
+					try {
+						await message.loadMessagePayload();
+						const { sender, target } = await getUsersData(message);
+						await message.deleteMessage({ delete_for_all: true });
+						return await message.send({
+							message: `${template.smiley + " " || ""}@id${sender.id} (${sender.first_name} ${sender.last_name}) ${sender.sex === 1 ? template.female : template.male} @id${target.id} (${target.first_name_acc} ${target.last_name_acc})`,
+							disable_mentions: true,
+							reply_to: message.replyMessage?.id || undefined,
+							attachment: message.attachments.map((x) => x.toString()),
+						});
+					} catch (error) {
+						return await message.editMessage({
+							message: error.message,
+						});
+					}
+				}
 		},
 	);
 });

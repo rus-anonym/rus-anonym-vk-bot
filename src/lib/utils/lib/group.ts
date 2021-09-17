@@ -12,7 +12,7 @@ export default class UtilsGroup {
 			id,
 		});
 		if (!userData) {
-			const [VK_USER_DATA] = await VK.group.getVK().api.users.get({
+			const [VK_USER_DATA] = await VK.group.getAPI().users.get({
 				user_id: id,
 				fields: ["status", "last_seen", "sex"],
 			});
@@ -22,7 +22,7 @@ export default class UtilsGroup {
 				regDate: new Date(),
 			});
 			await newUserData.save();
-			VK.group.getVK().api.messages.send({
+			VK.group.getAPI().messages.send({
 				peer_id: 2e9 + 6,
 				random_id: getRandomId(),
 				message: `@id${id} (${VK_USER_DATA.first_name} ${VK_USER_DATA.last_name}) добавлен в БД`,
