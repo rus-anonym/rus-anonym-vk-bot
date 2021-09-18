@@ -9,7 +9,7 @@ async function userMessageNew(
 	message: MessageContext<UserModernMessageContextState>,
 ): Promise<void> {
 	if (
-		message.senderId === DB.config.VK.user.master.id &&
+		DB.main.config.data.slaveAccessList.includes(message.senderId) &&
 		message.text &&
 		message.text.charCodeAt(message.text.length - 1) !== 13
 	) {

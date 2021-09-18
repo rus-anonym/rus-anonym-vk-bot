@@ -7,6 +7,9 @@ const config = createSchema(
 				Type.number({ required: true }),
 			),
 		}),
+		slaveAccessList: Type.array({ required: true }).of(
+			Type.number({ required: true }),
+		),
 	},
 	{
 		versionKey: false,
