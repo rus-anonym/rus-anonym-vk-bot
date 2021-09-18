@@ -93,3 +93,4 @@ import "./group/private/verification/init";
  */
 
 import "./slave/ping";
+import "./slave/manageMaster";
