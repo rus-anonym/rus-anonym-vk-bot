@@ -201,7 +201,6 @@ class SlaveVK extends Worker {
 	constructor() {
 		super();
 		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
-		this.main.updates.on("message_edit", slaveMiddlewares.messageEdit);
 	}
 
 	public getAPI() {

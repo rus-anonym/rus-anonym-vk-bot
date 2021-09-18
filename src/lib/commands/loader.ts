@@ -5,7 +5,6 @@ import "./master/utils/eval";
 import "./master/utils/about";
 import "./master/utils/randomNumber";
 import "./master/utils/choose";
-import "./master/utils/who";
 import "./master/utils/tele2Monday";
 import "./master/utils/track";
 import "./master/utils/sync";
@@ -43,7 +42,6 @@ import "./master/vk/utils/interacting";
 
 import "./master/vk/conversations/deleteMessages";
 import "./master/vk/conversations/kick";
-
 import "./master/vk/conversations/invite";
 import "./master/vk/conversations/messageInfo";
 
@@ -95,3 +93,5 @@ import "./group/private/verification/init";
  */
 
 import "./slave/ping";
+import "./slave/manageMaster";
+import "./slave/who";
