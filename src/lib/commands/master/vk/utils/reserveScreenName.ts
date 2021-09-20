@@ -7,8 +7,14 @@ new UserCommand({
 		await message.loadMessagePayload();
 		let screenName: string | undefined = undefined;
 		if (!message.state.args[1]) {
-			if (message.replyMessage) {
-				screenName = message.replyMessage.text?.replace("@", "");
+			if (message.replyMessage && message.replyMessage.text) {
+				message.replyMessage.text = message.replyMessage.text.replace(/@/g, "");
+				const match = message.replyMessage.text.match(/\[id\d+\|(.*)\]/);
+				if (match && match[1]) {
+					screenName = match[1];
+				} else {
+					screenName = message.replyMessage.text?.replace("@", "");
+				}
 			}
 		} else {
 			screenName = message.state.args[1];
