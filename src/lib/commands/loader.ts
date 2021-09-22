@@ -53,6 +53,7 @@ import "./master/graphics/grayscale";
 import "./master/graphics/demotivator";
 
 import "./master/bot/changeImproveText";
+import "./master/bot/aliases";
 
 /**
  * Group commands

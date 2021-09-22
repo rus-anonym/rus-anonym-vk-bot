@@ -42,12 +42,38 @@ async function userMessageNew(
 				message.text,
 			) as RegExpExecArray;
 			InternalUtils.user.improveMessageContext(message);
-			selectedCommand.process(message, TempVK).catch((err) => {
+			await selectedCommand.process(message, TempVK).catch((err) => {
 				InternalUtils.logger.send({
 					message: `Error on execute command\nError: ${err.toString()}`,
 					type: "error",
 				});
 			});
+			return;
+		}
+
+		const alias = DB.main.config.data.textAliases.find(
+			(x) => x.trigger === message.text?.toLowerCase(),
+		);
+
+		if (alias) {
+			if (alias.sendNewMessage) {
+				await message.loadMessagePayload();
+				await message.deleteMessage({ delete_for_all: true });
+				await message.send({
+					message: alias.text,
+					disable_mentions: true,
+					reply_to: message.replyMessage?.id || undefined,
+					attachment: alias.attachments,
+				});
+			} else {
+				await message.editMessage({
+					message: alias.text,
+					disable_mentions: true,
+					attachment: alias.attachments,
+				});
+			}
+
+			return;
 		} else if (
 			!DB.main.config.data.exceptions.dontImproveText.includes(message.peerId)
 		) {

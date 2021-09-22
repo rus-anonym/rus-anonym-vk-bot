@@ -93,13 +93,16 @@ export class SlaveCommand extends Command {
 		vk: VK,
 	) => Promise<unknown>;
 
-	constructor(
-		regexp: RegExp,
+	constructor({
+		regexp,
+		process,
+	}: {
+		regexp: RegExp;
 		process: (
 			message: MessageContext<UserModernMessageContextState>,
 			vk: VK,
-		) => Promise<unknown>,
-	) {
+		) => Promise<unknown>;
+	}) {
 		super(regexp);
 		this.process = process;
 		InternalUtils.slaveCommands.addCommand(this);

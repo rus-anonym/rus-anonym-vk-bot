@@ -43,21 +43,27 @@ new UserCommand({
 			const promises = [];
 			for (let i = 0; i < Number(message.state.args[1]); ++i) {
 				promises.push(
-					VK.master.getAPI().messages.send({
-						peer_id: message.peerId,
-						random_id: getRandomId(),
-						...params,
-					}),
+					VK.master
+						.getAPI()
+						.messages.send({
+							peer_id: message.peerId,
+							random_id: getRandomId(),
+							...params,
+						})
+						.catch(() => null),
 				);
 			}
 			await Promise.all(promises);
 		} else {
 			for (let i = 0; i < Number(message.state.args[1]); ++i) {
-				await VK.master.getAPI().messages.send({
-					peer_id: message.peerId,
-					random_id: getRandomId(),
-					...params,
-				});
+				await VK.master
+					.getAPI()
+					.messages.send({
+						peer_id: message.peerId,
+						random_id: getRandomId(),
+						...params,
+					})
+					.catch(() => null);
 			}
 		}
 	},
