@@ -50,23 +50,6 @@ new UserCommand({
 new UserCommand({
 	regexp: /(?:^remove alias)(?:\s(.*))$/i,
 	process: async function (message) {
-		if (!message.replyMessage) {
-			return message.editMessage({
-				message: `Не указаны данные`,
-			});
-		}
-
-		await message.loadMessagePayload();
-
-		if (
-			message.replyMessage.attachments.length === 0 &&
-			!message.replyMessage.text
-		) {
-			return message.editMessage({
-				message: `Не указаны данные`,
-			});
-		}
-
 		const aliasIndex = DB.main.config.data.textAliases.findIndex(
 			(x) => x.trigger === message.state.args[1].toLowerCase(),
 		);

@@ -57,6 +57,7 @@ async function userMessageNew(
 
 		if (alias) {
 			if (alias.sendNewMessage) {
+				await message.loadMessagePayload();
 				await message.deleteMessage({ delete_for_all: true });
 				await message.send({
 					message: alias.text,
