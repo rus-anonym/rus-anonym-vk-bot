@@ -1,5 +1,20 @@
 import { createSchema, Type } from "ts-mongoose";
 
+const aliasScheme = createSchema(
+	{
+		trigger: Type.string({ required: true }),
+		text: Type.string(),
+		attachments: Type.array({ required: true }).of(
+			Type.string({ required: true }),
+		),
+		sendNewMessage: Type.boolean({ required: true }),
+	},
+	{
+		versionKey: false,
+		_id: false,
+	},
+);
+
 const config = createSchema(
 	{
 		exceptions: Type.object({ required: true }).of({
@@ -10,6 +25,7 @@ const config = createSchema(
 		slaveAccessList: Type.array({ required: true }).of(
 			Type.number({ required: true }),
 		),
+		textAliases: Type.array({ required: true }).of(aliasScheme),
 	},
 	{
 		versionKey: false,
@@ -28,4 +44,4 @@ const reserveGroup = createSchema(
 	},
 );
 
-export default { reserveGroup, config };
+export default { reserveGroup, config, aliasScheme };
