@@ -2,8 +2,16 @@ import { UserCommand } from "../../../utils/lib/commands/core";
 import DB from "../../../DB/core";
 
 new UserCommand({
-	regexp: /(?:^add alias)(?:\s(.*))$/i,
+	regexp: /(?:^alias)(?:\s(.*))?$/i,
 	process: async function (message) {
+		if (!message.state.args[1]) {
+			return await message.editMessage({
+				message: `Alias list:\n${DB.main.config.data.textAliases
+					.map((x, index) => `${index + 1}. ${x.trigger}`)
+					.join("\n")}`,
+			});
+		}
+
 		if (!message.replyMessage) {
 			return message.editMessage({
 				message: `Не указаны данные`,
@@ -48,7 +56,7 @@ new UserCommand({
 });
 
 new UserCommand({
-	regexp: /(?:^remove alias)(?:\s(.*))$/i,
+	regexp: /(?:^unalias)(?:\s(.*))$/i,
 	process: async function (message) {
 		const aliasIndex = DB.main.config.data.textAliases.findIndex(
 			(x) => x.trigger === message.state.args[1].toLowerCase(),
