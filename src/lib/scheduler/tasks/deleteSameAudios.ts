@@ -53,9 +53,12 @@ async function deleteSameAudios() {
 			.concat(duplicates.slice(i + 1, duplicates.length));
 	});
 
-	let log = `Найдено ${duplicates.length} дубликатов:\n`;
+	let log = `Найдено ${duplicates.length} ${utils.string.declOfNum(
+		duplicates.length - 1,
+		["дубликат", "дубликата", "дубликатов"],
+	)} дубликатов:\n`;
 
-	for (const duplicate of duplicates) {
+	for (const duplicate of [...new Set(duplicates)]) {
 		const audios = userAudios.filter((x) => x.url === duplicate);
 		audios.sort((a, b) => {
 			if (a.date > b.date) {
@@ -66,7 +69,7 @@ async function deleteSameAudios() {
 			}
 			return 0;
 		});
-		for (let i = 1; i < audios.length; i++) {
+		for (let i = 0; i < audios.length - 1; ++i) {
 			await VK.master.getAPI().call("audio.delete", {
 				owner_id: DB.config.VK.user.master.id,
 				audio_id: audios[i].id,
@@ -78,7 +81,7 @@ async function deleteSameAudios() {
 		)} трека ${audios[0].title} - ${audios[0].artist}\n`;
 	}
 
-	return log === `Найдено ${duplicates.length} дубликатов:\n` ? null : log;
+	return duplicates.length === 0 ? null : log;
 }
 
 export default new Interval({
@@ -86,6 +89,7 @@ export default new Interval({
 	source: deleteSameAudios,
 	type: "deleteSameAudios",
 	cron: "0 0 * * *",
+	plannedTime: Date.now(),
 	onDone: (log) => {
 		if (log.response) {
 			InternalUtils.logger.send({
