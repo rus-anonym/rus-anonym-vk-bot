@@ -52,7 +52,6 @@ async function cleanOldMessages(): Promise<string> {
 	});
 
 	return `Удалено ${oldMessagesCount} ${utils.string.declOfNum(
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		oldMessagesCount,
 		["старое сообщение", "старых сообщения", "старых сообщений"],
 	)}
