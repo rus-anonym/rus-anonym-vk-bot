@@ -22,10 +22,12 @@ const config = createSchema(
 				Type.number({ required: true }),
 			),
 		}),
+		slaveStatus: Type.boolean({ required: true }),
 		slaveAccessList: Type.array({ required: true }).of(
 			Type.number({ required: true }),
 		),
 		textAliases: Type.array({ required: true }).of(aliasScheme),
+		friendsList: Type.array({ required: true }).of(Type.number()),
 	},
 	{
 		versionKey: false,

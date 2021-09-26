@@ -95,6 +95,7 @@ import "./group/private/verification/init";
 
 import "./slave/ping";
 import "./slave/manageMaster";
+import "./slave/manageSlave";
 import "./slave/who";
 import "./slave/choose";
 import "./slave/stickers";

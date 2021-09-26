@@ -13,6 +13,13 @@ async function userMessageNew(
 		message.text &&
 		message.text.charCodeAt(message.text.length - 1) !== 13
 	) {
+		if (
+			DB.main.config.data.slaveStatus === false &&
+			message.senderId !== DB.config.VK.user.master.id
+		) {
+			return;
+		}
+
 		const selectedCommand = InternalUtils.slaveCommands.findCommand(
 			message.text,
 		);

@@ -72,7 +72,6 @@ async function userMessageNew(
 					attachment: alias.attachments,
 				});
 			}
-
 			return;
 		} else if (
 			!DB.main.config.data.exceptions.dontImproveText.includes(message.peerId)
