@@ -139,12 +139,22 @@ class CoreDB {
 				hash: string;
 			};
 		};
+		user: {
+			master: {
+				eval: Record<string, unknown>;
+			};
+		};
 		[key: string]: unknown;
 	} = {
 		verification: {
 			slave: {
 				apiHash: "",
 				hash: "",
+			},
+		},
+		user: {
+			master: {
+				eval: {},
 			},
 		},
 	};
