@@ -1,7 +1,7 @@
 import { ExtractDoc, typedModel } from "ts-mongoose";
 import mongoose, { ConnectOptions } from "mongoose";
 
-import config from "../../DB/config.json";
+import config from "../../DB/config";
 import constants from "../../DB/constants.json";
 
 import mainSchemes from "./mainSchemes";
