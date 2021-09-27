@@ -1,7 +1,8 @@
 import { ExtractDoc, typedModel } from "ts-mongoose";
 import mongoose, { ConnectOptions } from "mongoose";
 
-import config from "../../DB/config.json";
+import config from "../../DB/config";
+import IConfig from "../../DB/IConfig";
 import constants from "../../DB/constants.json";
 
 import mainSchemes from "./mainSchemes";
@@ -128,7 +129,7 @@ class MainDB extends DB {
 }
 
 class CoreDB {
-	public readonly config = Object.freeze(config);
+	public readonly config: IConfig = Object.freeze(config);
 	public readonly constants = Object.freeze(constants);
 
 	public temp: {
@@ -138,12 +139,22 @@ class CoreDB {
 				hash: string;
 			};
 		};
+		user: {
+			master: {
+				eval: Record<string, unknown>;
+			};
+		};
 		[key: string]: unknown;
 	} = {
 		verification: {
 			slave: {
 				apiHash: "",
 				hash: "",
+			},
+		},
+		user: {
+			master: {
+				eval: {},
 			},
 		},
 	};

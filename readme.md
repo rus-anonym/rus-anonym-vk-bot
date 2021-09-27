@@ -15,7 +15,7 @@ $ yarn
 
 ## Script setup
 
-### You must create a config.json file in the ./src/DB directory with the following parameters
+### You must create a config.ts file in the ./src/DB directory which will export by default an object of this type
 
 ```jsonc
 {
