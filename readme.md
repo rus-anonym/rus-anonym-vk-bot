@@ -17,7 +17,7 @@ $ yarn
 
 ### You must create a config.ts file in the ./src/DB directory which will export by default an object of this type
 
-@[typescript](./src/DB/config.template.ts)
+[ template](./src/DB/config.template.ts)
 
 ## Project build
 
