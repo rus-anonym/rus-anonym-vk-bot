@@ -44,10 +44,27 @@ JSON Stringify: ${JSON.stringify(answer, null, "　\t")}`;
 				response = `Type: ${type}
 Значение: ${answer}`;
 			}
-			return await message.reply(response, {
-				disable_mentions: true,
-				dont_parse_links: true,
-			});
+			if (response.length > 4000) {
+				return await message.reply({
+					disable_mentions: true,
+					dont_parse_links: true,
+					attachment: (
+						await vk.upload.messageDocument({
+							source: {
+								value: Buffer.from(response, "utf-8"),
+								filename: "response.txt",
+							},
+							peer_id:
+								2000000000 + DB.config.VK.group.logs.conversations.errors,
+						})
+					).toString(),
+				});
+			} else {
+				return await message.reply(response, {
+					disable_mentions: true,
+					dont_parse_links: true,
+				});
+			}
 		} catch (err) {
 			return await message.reply(`${err.toString()}`, {
 				disable_mentions: true,
