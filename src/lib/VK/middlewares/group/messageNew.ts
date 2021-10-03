@@ -11,7 +11,22 @@ async function groupMessageNew(
 		return;
 	}
 
-	if (context.text && context.isInbox) {
+	if (context.isInbox) {
+		if (!context.text) {
+			if (!context.isChat) {
+				await context.send({
+					message: `Команды:`,
+					attachment: "article-194686664_60597_e899de91872d46979d",
+					forward: JSON.stringify({
+						peer_id: context.peerId,
+						conversation_message_ids: context.conversationMessageId,
+						is_reply: 1,
+					}),
+				});
+			}
+			return;
+		}
+
 		let selectedCommand = InternalUtils.groupCommands.findCommand(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			context.text!,
