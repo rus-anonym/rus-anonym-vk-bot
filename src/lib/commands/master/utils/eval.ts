@@ -12,7 +12,7 @@ const asyncEval = async (code: string, params: Record<string, unknown>) => {
 		code = "return " + code;
 	}
 
-	code = `const { api, tmp, message, utils } = _params;\n` + code;
+	code = `const { DB, api, tmp, message, utils } = _params;\n` + code;
 
 	return await asyncFunctionConstructor(`_params`, code).call(this, params);
 };
@@ -28,6 +28,7 @@ new UserCommand({
 			const answer: string | number | JSON = await asyncEval(
 				message.state.args[1],
 				{
+					DB,
 					utils,
 					message,
 					api: vk.api,
@@ -35,24 +36,34 @@ new UserCommand({
 				},
 			);
 			const type = utils.typeof(answer);
+			let response: string;
 			if (type === "object" || type === "array") {
-				return await message.reply(
-					`Type: ${type}
-JSON Stringify: ${JSON.stringify(answer, null, "　\t")}`,
-					{
-						disable_mentions: true,
-						dont_parse_links: true,
-					},
-				);
+				response = `Type: ${type}
+JSON Stringify: ${JSON.stringify(answer, null, "　\t")}`;
 			} else {
-				return await message.reply(
-					`Type: ${type}
-Значение: ${answer}`,
-					{
-						disable_mentions: true,
-						dont_parse_links: true,
-					},
-				);
+				response = `Type: ${type}
+Значение: ${answer}`;
+			}
+			if (response.length > 4000) {
+				return await message.reply({
+					disable_mentions: true,
+					dont_parse_links: true,
+					attachment: (
+						await vk.upload.messageDocument({
+							source: {
+								value: Buffer.from(response, "utf-8"),
+								filename: "response.txt",
+							},
+							peer_id:
+								2000000000 + DB.config.VK.group.logs.conversations.errors,
+						})
+					).toString(),
+				});
+			} else {
+				return await message.reply(response, {
+					disable_mentions: true,
+					dont_parse_links: true,
+				});
 			}
 		} catch (err) {
 			return await message.reply(`${err.toString()}`, {
