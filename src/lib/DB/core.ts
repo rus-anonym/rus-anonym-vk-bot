@@ -121,6 +121,14 @@ class MainDB extends DB {
 			undefined,
 			this.connection,
 		),
+		vkConversation: typedModel(
+			"conversation",
+			mainSchemes.conversation,
+			"vk-conversation",
+			undefined,
+			undefined,
+			this.connection,
+		),
 	};
 
 	public schemes = mainSchemes;
