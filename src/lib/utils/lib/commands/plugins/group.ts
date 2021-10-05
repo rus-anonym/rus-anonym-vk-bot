@@ -117,7 +117,6 @@ String: ${graffiti.toString()}\n`;
 			++i;
 			text += `${i}. link
 Title: ${link.title}\n`;
-			console.log(link);
 			try {
 				const articleData = await utils.vk.article.getByURL(link.url);
 				text += `Это статья:
