@@ -5,7 +5,7 @@ import { getRandomId } from "vk-io";
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 
-async function getNewConversations(): Promise<number> {
+async function getNewConversations(): Promise<string[]> {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const lastPosts = (
 		await VK.fakes.getUserFakeAPI().newsfeed.search({
@@ -14,7 +14,7 @@ async function getNewConversations(): Promise<number> {
 		})
 	).items!;
 
-	let newConversations = 0;
+	const newConversations: string[] = [];
 
 	for (const post of lastPosts) {
 		if (!post.text) {
@@ -43,7 +43,7 @@ async function getNewConversations(): Promise<number> {
 						updateDate: new Date(),
 						regDate: new Date(),
 					});
-					newConversations++;
+					newConversations.push(link);
 				}
 			} catch (error) {
 				//
@@ -65,10 +65,16 @@ export default new Interval({
 			VK.group.getAPI().messages.send({
 				random_id: getRandomId(),
 				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
-				message: `Добавил ${log.response} ${utils.string.declOfNum(
-					log.response as number,
-					["новую беседу", "новые беседы", "новых бесед"],
-				)}`,
+				message: `Добавил ${
+					(log.response as string[]).length
+				} ${utils.string.declOfNum((log.response as string[]).length, [
+					"новую беседу",
+					"новые беседы",
+					"новых бесед",
+				])}
+${(log.response as string[])
+	.map((item, index) => `${index + 1}. ${item}`)
+	.join("\n")}`,
 			});
 		}
 	},
