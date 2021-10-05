@@ -84,10 +84,10 @@ import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
 import "./group/graphics/demotivator";
 
-import "./group/private/main";
-import "./group/private/tasks/tasks";
+import "./group/private/self/main";
+import "./group/private/self/tasks/tasks";
 
-import "./group/private/verification/init";
+import "./group/private/self/verification/init";
 
 /**
  * Slave commands

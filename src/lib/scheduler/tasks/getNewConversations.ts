@@ -1,6 +1,7 @@
 import { Interval } from "simple-scheduler-task";
+import utils from "rus-anonym-utils";
+import { getRandomId } from "vk-io";
 
-import InternalUtils from "../../utils/core";
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 
@@ -28,13 +29,14 @@ async function getNewConversations(): Promise<number> {
 				const dbInfo = await DB.main.models.vkConversation.findOne({
 					link: "https://" + link,
 				});
+				console.log(dbInfo);
 				if (!dbInfo) {
 					const conversationInfo = await VK.fakes
 						.getUserFakeAPI()
 						.messages.getChatPreview({
 							link,
 						});
-					await DB.main.models.vkConversation.insertOne({
+					await DB.main.models.vkConversation.insertMany({
 						link: "https://" + link,
 						ownerId: conversationInfo.preview.admin_id,
 						members: conversationInfo.preview.members,
@@ -53,15 +55,20 @@ async function getNewConversations(): Promise<number> {
 }
 
 export default new Interval({
+	plannedTime: Date.now(),
 	isInform: true,
 	type: "getNewConversations",
 	source: getNewConversations,
 	cron: "*/5 * * * *",
 	onDone: (log) => {
 		if (log.response !== 0) {
-			InternalUtils.logger.send({
-				message: `Добавил ${log.response} новых бесед`,
-				type: "info",
+			VK.group.getAPI().messages.send({
+				random_id: getRandomId(),
+				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
+				message: `Добавил ${log.response} ${utils.string.declOfNum(
+					log.response as number,
+					["новую беседу", "новые беседы", "новых бесед"],
+				)}`,
 			});
 		}
 	},

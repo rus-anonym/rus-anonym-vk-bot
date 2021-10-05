@@ -76,6 +76,7 @@ export interface IConfigGroupLogsConversations {
 	userTrack: number;
 	captcha: number;
 	api: number;
+	conversationsTrack: number;
 }
 
 export interface IConfigGroupReposts {

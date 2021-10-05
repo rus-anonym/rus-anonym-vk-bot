@@ -58,6 +58,7 @@ const config: IConfig = {
 					userTrack: 0,
 					captcha: 0,
 					api: 0,
+					conversationsTrack: 0,
 				}, // Conversation identifiers, for the group bot
 			},
 			conversations: [], // Array of chatIDs of group conversations

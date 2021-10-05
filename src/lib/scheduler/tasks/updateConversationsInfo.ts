@@ -1,6 +1,6 @@
 import { Interval } from "simple-scheduler-task";
+import { getRandomId } from "vk-io";
 
-import InternalUtils from "../../utils/core";
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 
@@ -38,11 +38,12 @@ export default new Interval({
 	source: updateConversationsInfo,
 	cron: "0 12 * * *",
 	onDone: (log) => {
-		InternalUtils.logger.send({
+		VK.group.getAPI().messages.send({
+			random_id: getRandomId(),
+			chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
 			message: `Данные о беседах обновлены
 Обновлено: ${(log.response as any).update}
 Удалено: ${(log.response as any).delete}`,
-			type: "info",
 		});
 	},
 });
