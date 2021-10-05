@@ -25,7 +25,7 @@ async function getNewConversations(): Promise<number> {
 		}
 		for (const link of links) {
 			try {
-				const dbInfo = await DB.main.models.vkConversation.find({
+				const dbInfo = await DB.main.models.vkConversation.findOne({
 					link: "https://" + link,
 				});
 				if (!dbInfo) {
