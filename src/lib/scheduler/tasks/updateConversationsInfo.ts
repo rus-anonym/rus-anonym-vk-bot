@@ -19,6 +19,7 @@ async function updateConversationsInfo(): Promise<{
 				.messages.getChatPreview({
 					link: conversation.link,
 				});
+			conversation.title = conversationInfo.preview.title;
 			conversation.members = conversationInfo.preview.members;
 			conversation.updateDate = new Date();
 			conversation.markModified("members");
@@ -36,7 +37,7 @@ export default new Interval({
 	isInform: true,
 	type: "updateConversationsInfo",
 	source: updateConversationsInfo,
-	cron: "0 12 * * *",
+	cron: "0 */12 * * *",
 	onDone: (log) => {
 		VK.group.getAPI().messages.send({
 			random_id: getRandomId(),

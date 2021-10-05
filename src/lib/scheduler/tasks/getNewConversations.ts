@@ -29,7 +29,6 @@ async function getNewConversations(): Promise<string[]> {
 				const dbInfo = await DB.main.models.vkConversation.findOne({
 					link: "https://" + link,
 				});
-				console.log(dbInfo);
 				if (!dbInfo) {
 					const conversationInfo = await VK.fakes
 						.getUserFakeAPI()
@@ -38,6 +37,7 @@ async function getNewConversations(): Promise<string[]> {
 						});
 					await DB.main.models.vkConversation.insertMany({
 						link: "https://" + link,
+						title: conversationInfo.preview.title,
 						ownerId: conversationInfo.preview.admin_id,
 						members: conversationInfo.preview.members,
 						updateDate: new Date(),
@@ -61,7 +61,7 @@ export default new Interval({
 	source: getNewConversations,
 	cron: "*/5 * * * *",
 	onDone: (log) => {
-		if (log.response !== 0) {
+		if ((log.response as string[]).length !== 0) {
 			VK.group.getAPI().messages.send({
 				random_id: getRandomId(),
 				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
