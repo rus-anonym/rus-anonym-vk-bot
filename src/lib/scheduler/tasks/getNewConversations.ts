@@ -1,6 +1,7 @@
 import { Interval } from "simple-scheduler-task";
+import utils from "rus-anonym-utils";
+import { getRandomId } from "vk-io";
 
-import InternalUtils from "../../utils/core";
 import VK from "../../VK/core";
 import DB from "../../DB/core";
 
@@ -61,9 +62,13 @@ export default new Interval({
 	cron: "*/5 * * * *",
 	onDone: (log) => {
 		if (log.response !== 0) {
-			InternalUtils.logger.send({
-				message: `Добавил ${log.response} новых бесед`,
-				type: "info",
+			VK.group.getAPI().messages.send({
+				random_id: getRandomId(),
+				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
+				message: `Добавил ${log.response} ${utils.string.declOfNum(
+					log.response as number,
+					["новую беседу", "новые беседы", "новых бесед"],
+				)}`,
 			});
 		}
 	},
