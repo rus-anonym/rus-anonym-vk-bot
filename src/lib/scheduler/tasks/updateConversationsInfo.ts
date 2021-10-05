@@ -36,7 +36,7 @@ export default new Interval({
 	isInform: true,
 	type: "updateConversationsInfo",
 	source: updateConversationsInfo,
-	cron: "0 12 * * *",
+	cron: "0 */12 * * *",
 	onDone: (log) => {
 		VK.group.getAPI().messages.send({
 			random_id: getRandomId(),
