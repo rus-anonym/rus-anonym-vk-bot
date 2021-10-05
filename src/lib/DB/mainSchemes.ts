@@ -1,6 +1,6 @@
 import { createSchema, Type } from "ts-mongoose";
 
-const aliasScheme = createSchema(
+const textAlias = createSchema(
 	{
 		trigger: Type.string({ required: true }),
 		text: Type.string(),
@@ -26,7 +26,7 @@ const config = createSchema(
 		slaveAccessList: Type.array({ required: true }).of(
 			Type.number({ required: true }),
 		),
-		textAliases: Type.array({ required: true }).of(aliasScheme),
+		textAliases: Type.array({ required: true }).of(textAlias),
 		friendsList: Type.array({ required: true }).of(Type.number()),
 	},
 	{
@@ -46,4 +46,15 @@ const reserveGroup = createSchema(
 	},
 );
 
-export default { reserveGroup, config, aliasScheme };
+const conversation = createSchema(
+	{
+		link: Type.string({ required: true, unique: true }),
+		ownerId: Type.number({ required: true }),
+		members: Type.array({ required: true }).of(Type.number({ required: true })),
+		updateDate: Type.date({ required: true }),
+		regDate: Type.date({ required: true }),
+	},
+	{ versionKey: false },
+);
+
+export default { reserveGroup, config, textAlias, conversation };
