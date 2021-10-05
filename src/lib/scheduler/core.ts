@@ -13,6 +13,8 @@ import sendApiStatus from "./tasks/sendApiStatus";
 import updateReserveGroupsList from "./tasks/updateReserveGroupsList";
 import setSteps from "./tasks/setSteps";
 import getNewConversations from "./tasks/getNewConversations";
+import updateConversationsInfo from "./tasks/updateConversationsInfo";
+
 
 scheduler.events.on("error", (error) => {
 	InternalUtils.logger.send({
@@ -35,4 +37,5 @@ export default {
 	updateReserveGroupsList,
 	setSteps,
 	getNewConversations,
+	updateConversationsInfo,
 };

@@ -54,7 +54,7 @@ async function getNewConversations(): Promise<number> {
 
 export default new Interval({
 	isInform: true,
-	type: "getBirthdays",
+	type: "getNewConversations",
 	source: getNewConversations,
 	cron: "*/5 * * * *",
 	onDone: (log) => {
