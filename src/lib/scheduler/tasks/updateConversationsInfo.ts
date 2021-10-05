@@ -40,8 +40,8 @@ export default new Interval({
 	onDone: (log) => {
 		InternalUtils.logger.send({
 			message: `Данные о беседах обновлены
-Обновлено: ${log.response.update}
-Удалено: ${log.response.delete}`,
+Обновлено: ${(log.response as any).update}
+Удалено: ${(log.response as any).delete}`,
 			type: "info",
 		});
 	},
