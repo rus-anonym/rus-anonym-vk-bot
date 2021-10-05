@@ -29,7 +29,6 @@ async function getNewConversations(): Promise<string[]> {
 				const dbInfo = await DB.main.models.vkConversation.findOne({
 					link: "https://" + link,
 				});
-				console.log(dbInfo);
 				if (!dbInfo) {
 					const conversationInfo = await VK.fakes
 						.getUserFakeAPI()
@@ -38,6 +37,7 @@ async function getNewConversations(): Promise<string[]> {
 						});
 					await DB.main.models.vkConversation.insertMany({
 						link: "https://" + link,
+						title: conversationInfo.preview.title,
 						ownerId: conversationInfo.preview.admin_id,
 						members: conversationInfo.preview.members,
 						updateDate: new Date(),

@@ -19,6 +19,7 @@ async function updateConversationsInfo(): Promise<{
 				.messages.getChatPreview({
 					link: conversation.link,
 				});
+			conversation.title = conversationInfo.preview.title;
 			conversation.members = conversationInfo.preview.members;
 			conversation.updateDate = new Date();
 			conversation.markModified("members");
