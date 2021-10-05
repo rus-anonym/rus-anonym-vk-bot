@@ -2,9 +2,9 @@ import moment from "moment";
 import utils from "rus-anonym-utils";
 import { Keyboard } from "vk-io";
 
-import InternalUtils from "../../../utils/core";
+import InternalUtils from "../../../../utils/core";
 
-import { GroupCommand } from "../../../utils/lib/commands/core";
+import { GroupCommand } from "../../../../utils/lib/commands/core";
 
 const generateMainText = (): string => {
 	const memoryData = process.memoryUsage();

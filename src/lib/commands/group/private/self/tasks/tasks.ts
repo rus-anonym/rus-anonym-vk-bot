@@ -1,9 +1,9 @@
 import moment from "moment";
 import utils from "rus-anonym-utils";
 
-import { GroupCommand } from "../../../../utils/lib/commands/core";
+import { GroupCommand } from "../../../../../utils/lib/commands/core";
 
-import tasks from "../../../../scheduler/core";
+import tasks from "../../../../../scheduler/core";
 
 import { TSchedulerTaskStatus } from "simple-scheduler-task/dist/cjs/types/tasks";
 

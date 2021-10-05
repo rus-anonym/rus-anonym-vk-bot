@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import DB from "../../../../DB/core";
-import { GroupCommand } from "../../../../utils/lib/commands/core";
+import DB from "../../../../../DB/core";
+import { GroupCommand } from "../../../../../utils/lib/commands/core";
 
 new GroupCommand({
 	isSelf: true,
