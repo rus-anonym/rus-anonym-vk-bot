@@ -61,7 +61,7 @@ export default new Interval({
 	source: getNewConversations,
 	cron: "*/5 * * * *",
 	onDone: (log) => {
-		if (log.response !== 0) {
+		if ((log.response as string[]).length !== 0) {
 			VK.group.getAPI().messages.send({
 				random_id: getRandomId(),
 				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
