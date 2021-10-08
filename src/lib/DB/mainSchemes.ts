@@ -26,6 +26,9 @@ const config = createSchema(
 		slaveAccessList: Type.array({ required: true }).of(
 			Type.number({ required: true }),
 		),
+		botPrivateAccessList: Type.array({ required: true }).of(
+			Type.number({ required: true }),
+		),
 		textAliases: Type.array({ required: true }).of(textAlias),
 		friendsList: Type.array({ required: true }).of(Type.number()),
 	},

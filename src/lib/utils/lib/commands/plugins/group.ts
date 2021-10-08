@@ -16,10 +16,21 @@ export default class UtilsGroupCommands extends UtilsCommands {
 		this.list.push(command);
 	}
 
-	public findCommand(input: string, isSelf = false): GroupCommand | undefined {
+	public findCommand({
+		input,
+		isSelf = false,
+		isPrivate = false,
+	}: {
+		input: string;
+		isSelf: boolean;
+		isPrivate?: boolean;
+	}): GroupCommand | undefined {
 		const command = this.list.find((x) => x.check(input));
 		if (command) {
 			if (command.isSelf && isSelf === false) {
+				return;
+			}
+			if (command.isPrivate && isPrivate === false) {
 				return;
 			}
 			return command;
