@@ -15,6 +15,12 @@ new GroupCommand({
 						cmd: "!беседы рандом",
 					},
 				})
+				.textButton({
+					label: "Беседы",
+					payload: {
+						cmd: "!беседы",
+					},
+				})
 				.inline(),
 		});
 	},

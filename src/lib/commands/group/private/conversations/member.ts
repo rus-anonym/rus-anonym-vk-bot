@@ -4,6 +4,7 @@ import InternalUtils from "../../../../utils/core";
 
 new GroupCommand({
 	regexp: /(?:^!беседы участник)(?:\s(.*))?$/i,
+    isPrivate: true,
 	process: async function (message) {
 		let userID;
 		try {
