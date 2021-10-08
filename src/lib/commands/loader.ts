@@ -84,6 +84,10 @@ import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
 import "./group/graphics/demotivator";
 
+import "./group/private/conversations/info";
+import "./group/private/conversations/member";
+import "./group/private/conversations/random";
+
 import "./group/private/self/main";
 import "./group/private/self/tasks/tasks";
 
