@@ -27,18 +27,23 @@ async function groupMessageNew(
 			return;
 		}
 
-		let selectedCommand = InternalUtils.groupCommands.findCommand(
+		let selectedCommand = InternalUtils.groupCommands.findCommand({
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			context.text!,
-			context.senderId === DB.config.VK.user.master.id,
-		);
+			input: context.text!,
+			isSelf: context.senderId === DB.config.VK.user.master.id,
+			isPrivate: DB.main.config.data.botPrivateAccessList.includes(
+				context.senderId,
+			),
+		});
 
 		if (!selectedCommand && context.hasMessagePayload) {
-			selectedCommand = InternalUtils.groupCommands.findCommand(
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				context.messagePayload.cmd || "null",
-				context.senderId === DB.config.VK.user.master.id,
-			);
+			selectedCommand = InternalUtils.groupCommands.findCommand({
+				input: context.messagePayload.cmd || "null",
+				isSelf: context.senderId === DB.config.VK.user.master.id,
+				isPrivate: DB.main.config.data.botPrivateAccessList.includes(
+					context.senderId,
+				),
+			});
 		}
 
 		if (selectedCommand) {

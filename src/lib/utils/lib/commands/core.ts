@@ -116,5 +116,5 @@ export class SlaveCommand extends Command {
 export abstract class UtilsCommands {
 	abstract list: unknown[];
 	abstract addCommand(command: unknown): void;
-	abstract findCommand(input: string): unknown;
+	abstract findCommand(params: unknown): unknown;
 }
