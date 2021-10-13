@@ -88,6 +88,9 @@ async function groupMessageNew(
 					message: `Error on execute command\nError: ${err.toString()}`,
 					type: "error",
 				});
+				context.state.sendMessage(
+					`При выполнении команды произошла ошибка :(\nСообщите об ошибке @id${DB.config.VK.user.master.id} (разработчику)`,
+				);
 			});
 			return;
 		} else {
