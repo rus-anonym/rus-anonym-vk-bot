@@ -55,6 +55,7 @@ async function groupMessageNew(
 			) as RegExpExecArray;
 			context.state.user = await InternalUtils.group.getUserData(
 				context.senderId,
+				DB.config.VK.group.id,
 			);
 			context.state.sendMessage = async (text, params) => {
 				if (typeof text !== "string" && text.message !== undefined) {
