@@ -205,6 +205,14 @@ class SubGroupVK extends Worker {
 			"message_new",
 			subGroupMiddlewares.createSubGroupMessageNewHandler(this),
 		);
+		this.main.updates.on(
+			"user_block",
+			subGroupMiddlewares.createSubGroupUserBlockHandler(this),
+		);
+		this.main.updates.on(
+			"user_unblock",
+			subGroupMiddlewares.createSubGroupUserUnblockHandler(this),
+		);
 	}
 
 	public getAPI(): API {
