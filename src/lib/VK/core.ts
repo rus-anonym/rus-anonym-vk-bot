@@ -1,3 +1,4 @@
+import { IConfigSubGroup } from "./../../DB/IConfig";
 import { VK, CallbackService, API, WallPostContext, getRandomId } from "vk-io";
 import utils from "rus-anonym-utils";
 
@@ -14,6 +15,7 @@ import questionManagers from "./plugins/questionManager";
 import masterMiddlewares from "./middlewares/master";
 import slaveMiddlewares from "./middlewares/slave";
 import mainGroupMiddlewares from "./middlewares/group";
+import subGroupMiddlewares from "./middlewares/subGroup";
 
 const userCallbackService = new CallbackService();
 userCallbackService.onCaptcha(captchaHandler);
@@ -99,7 +101,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 	public botpod = new BotPodVK();
 	public vkMe = new VKMe();
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -107,7 +109,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -174,13 +176,42 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		});
 	}
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
+		return new VK({
+			token: utils.array.random(this.additional),
+		});
+	}
+}
+
+class SubGroupVK extends Worker {
+	public main;
+	public additional;
+
+	constructor(config: IConfigSubGroup) {
+		super();
+		this.main = new VK({
+			token: config.tokens.main,
+		});
+		this.additional = config.tokens.additional;
+		this.main.updates.on(
+			"message_new",
+			subGroupMiddlewares.createSubGroupMessageNewHandler(this),
+		);
+	}
+
+	public getAPI(): API {
+		return new API({
+			token: utils.array.random(this.additional),
+		});
+	}
+
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 		});
@@ -203,7 +234,7 @@ class SlaveVK extends Worker {
 		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
 	}
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -211,7 +242,7 @@ class SlaveVK extends Worker {
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -224,6 +255,9 @@ class CoreVK {
 	public master = new MasterVK();
 	public slave = new SlaveVK();
 	public group = new GroupVK();
+	public subGroups = DB.config.VK.subGroups.map(
+		(config) => new SubGroupVK(config),
+	);
 	public fakes = new FakesAlpha();
 }
 
@@ -260,3 +294,5 @@ for (const group of DB.config.VK.groupReposts.tokens) {
 }
 
 export default vk;
+
+export { Worker, MasterVK, SlaveVK, GroupVK, SubGroupVK };
