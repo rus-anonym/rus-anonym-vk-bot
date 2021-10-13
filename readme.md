@@ -45,3 +45,4 @@ node ./dist/main.js
 | :----------------------------------------------: |
 | [@k-orolevsk-y](https://github.com/k-orolevsk-y) |
 |    [@filatovpr](https://github.com/filatovpr)    |
+|   [@kravetsone](https://github.com/kravetsone)   |
