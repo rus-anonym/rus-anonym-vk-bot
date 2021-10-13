@@ -13,7 +13,7 @@ import questionManagers from "./plugins/questionManager";
 
 import masterMiddlewares from "./middlewares/master";
 import slaveMiddlewares from "./middlewares/slave";
-import groupMiddlewares from "./middlewares/group";
+import mainGroupMiddlewares from "./middlewares/group";
 
 const userCallbackService = new CallbackService();
 userCallbackService.onCaptcha(captchaHandler);
@@ -141,13 +141,13 @@ class GroupVK extends Worker {
 		this.main.updates.on("wall_reply", plug);
 		this.main.updates.on("message_edit", plug);
 		this.main.updates.on("video_comment", plug);
-		this.main.updates.on("message_new", groupMiddlewares.messageNew);
-		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
-		this.main.updates.on("user_block", groupMiddlewares.userBlock);
-		this.main.updates.on("user_unblock", groupMiddlewares.userUnblock);
+		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
+		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
+		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
+		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
 		this.main.updates.on(
 			"group_officers_edit",
-			groupMiddlewares.groupOfficersEdit,
+			mainGroupMiddlewares.groupOfficersEdit,
 		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({

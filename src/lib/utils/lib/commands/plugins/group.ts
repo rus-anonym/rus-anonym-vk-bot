@@ -20,10 +20,12 @@ export default class UtilsGroupCommands extends UtilsCommands {
 		input,
 		isSelf = false,
 		isPrivate = false,
+		isMain = true,
 	}: {
 		input: string;
 		isSelf: boolean;
 		isPrivate?: boolean;
+		isMain?: boolean;
 	}): GroupCommand | undefined {
 		const command = this.list.find((x) => x.check(input));
 		if (command) {
@@ -33,20 +35,26 @@ export default class UtilsGroupCommands extends UtilsCommands {
 			if (command.isPrivate && isPrivate === false) {
 				return;
 			}
+			if (command.isMain && isMain === false) {
+				return;
+			}
 			return command;
 		}
 		return;
 	}
 
-	public async getUserId(message: MessageContext): Promise<number> {
+	public async getUserId(
+		message: MessageContext,
+		resource?: string,
+	): Promise<number> {
 		if (message.forwards[0]) {
 			return message.forwards[0].senderId;
 		} else if (message.replyMessage) {
 			return message.replyMessage.senderId;
-		} else if (message.state.args[1]) {
+		} else if (resource) {
 			try {
 				const linkData = await resolveResource({
-					resource: message.state.args[1],
+					resource,
 					api: VK.group.getAPI(),
 				});
 				return linkData.id;
