@@ -46,3 +46,4 @@ node ./dist/main.js
 | [@k-orolevsk-y](https://github.com/k-orolevsk-y) |
 |    [@filatovpr](https://github.com/filatovpr)    |
 |   [@kravetsone](https://github.com/kravetsone)   |
+|     [@virus667](https://github.com/virus667)     |
