@@ -34,6 +34,7 @@ async function groupMessageNew(
 			isPrivate: DB.main.config.data.botPrivateAccessList.includes(
 				context.senderId,
 			),
+			isMain: true,
 		});
 
 		if (!selectedCommand && context.hasMessagePayload) {
@@ -43,6 +44,7 @@ async function groupMessageNew(
 				isPrivate: DB.main.config.data.botPrivateAccessList.includes(
 					context.senderId,
 				),
+				isMain: true,
 			});
 		}
 

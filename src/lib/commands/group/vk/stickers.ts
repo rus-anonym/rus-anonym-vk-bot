@@ -10,7 +10,10 @@ new GroupCommand({
 		await message.loadMessagePayload();
 		let userID;
 		try {
-			userID = await InternalUtils.groupCommands.getUserId(message);
+			userID = await InternalUtils.groupCommands.getUserId(
+				message,
+				message.state.args[1],
+			);
 		} catch (error) {
 			return await message.state.sendMessage({
 				message: error.message,
