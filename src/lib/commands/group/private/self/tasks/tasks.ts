@@ -23,6 +23,7 @@ const validStatus = (type: TSchedulerTaskStatus): string => {
 };
 
 new GroupCommand({
+	isMain: true,
 	isSelf: true,
 	regexp: /(?:^!tasks)$/i,
 	process: async function (message) {

@@ -4,6 +4,7 @@ import DB from "../../../../../DB/core";
 import { GroupCommand } from "../../../../../utils/lib/commands/core";
 
 new GroupCommand({
+	isMain: true,
 	isSelf: true,
 	regexp: /(?:^init verify)$/i,
 	process: async function (message) {
