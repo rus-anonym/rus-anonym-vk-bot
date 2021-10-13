@@ -190,11 +190,13 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 }
 
 class SubGroupVK extends Worker {
+	public id: number;
 	public main;
 	public additional;
 
 	constructor(config: IConfigSubGroup) {
 		super();
+		this.id = config.id;
 		this.main = new VK({
 			token: config.tokens.main,
 		});
