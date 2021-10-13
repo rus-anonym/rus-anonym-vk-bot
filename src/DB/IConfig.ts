@@ -2,6 +2,7 @@ export interface IConfigVK {
 	user: IConfigUser;
 	userFakes: IConfigUserFake[];
 	group: IConfigGroup;
+	subGroups: IConfigSubGroup[];
 	groupReposts: IConfigGroupReposts;
 }
 
@@ -55,6 +56,11 @@ export interface IConfigGroup {
 	tokens: IGroupTokens;
 	logs: IConfigGroupLogs;
 	conversations: number[];
+}
+
+export interface IConfigSubGroup {
+	id: number;
+	tokens: IGroupTokens;
 }
 
 export interface IGroupTokens {

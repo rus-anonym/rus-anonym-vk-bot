@@ -40,7 +40,7 @@ const config: IConfig = {
 				password: "", // User Password
 				tokens: [], // Array with tokens from a fake user (VK Android)
 			},
-		], // Array with fake users
+		], // Array with fake users (minimum 1)
 		group: {
 			id: 0, // Group ID
 			tokens: {
@@ -63,6 +63,7 @@ const config: IConfig = {
 			},
 			conversations: [], // Array of chatIDs of group conversations
 		}, // Group
+		subGroups: [], // Array of subgroups
 		groupReposts: {
 			tokens: [], // Array of group tokens for repost
 			chats: [], // Peer ID of chats for repost from slave account
