@@ -36,3 +36,12 @@ To start a project, use
 ```bash
 node ./dist/main.js
 ```
+
+### Special thanks for the help in developing
+
+###
+
+|                       User                       |
+| :----------------------------------------------: |
+| [@k-orolevsk-y](https://github.com/k-orolevsk-y) |
+|    [@filatovpr](https://github.com/filatovpr)    |
