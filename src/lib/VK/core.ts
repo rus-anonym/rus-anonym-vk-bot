@@ -1,3 +1,4 @@
+import { IConfigSubGroup } from "./../../DB/IConfig";
 import { VK, CallbackService, API, WallPostContext, getRandomId } from "vk-io";
 import utils from "rus-anonym-utils";
 
@@ -13,7 +14,8 @@ import questionManagers from "./plugins/questionManager";
 
 import masterMiddlewares from "./middlewares/master";
 import slaveMiddlewares from "./middlewares/slave";
-import groupMiddlewares from "./middlewares/group";
+import mainGroupMiddlewares from "./middlewares/group";
+import subGroupMiddlewares from "./middlewares/subGroup";
 
 const userCallbackService = new CallbackService();
 userCallbackService.onCaptcha(captchaHandler);
@@ -99,7 +101,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 	public botpod = new BotPodVK();
 	public vkMe = new VKMe();
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -107,7 +109,7 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -141,13 +143,13 @@ class GroupVK extends Worker {
 		this.main.updates.on("wall_reply", plug);
 		this.main.updates.on("message_edit", plug);
 		this.main.updates.on("video_comment", plug);
-		this.main.updates.on("message_new", groupMiddlewares.messageNew);
-		this.main.updates.on("wall_post_new", groupMiddlewares.wallPostNew);
-		this.main.updates.on("user_block", groupMiddlewares.userBlock);
-		this.main.updates.on("user_unblock", groupMiddlewares.userUnblock);
+		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
+		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
+		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
+		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
 		this.main.updates.on(
 			"group_officers_edit",
-			groupMiddlewares.groupOfficersEdit,
+			mainGroupMiddlewares.groupOfficersEdit,
 		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
@@ -174,13 +176,52 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 		});
 	}
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
+		return new VK({
+			token: utils.array.random(this.additional),
+		});
+	}
+}
+
+class SubGroupVK extends Worker {
+	public id: number;
+	public main;
+	public additional;
+
+	constructor(config: IConfigSubGroup) {
+		super();
+		this.id = config.id;
+		this.main = new VK({
+			token: config.tokens.main,
+		});
+		this.additional = config.tokens.additional;
+		this.main.updates.on(
+			"message_new",
+			subGroupMiddlewares.createSubGroupMessageNewHandler(this),
+		);
+		this.main.updates.on(
+			"user_block",
+			subGroupMiddlewares.createSubGroupUserBlockHandler(this),
+		);
+		this.main.updates.on(
+			"user_unblock",
+			subGroupMiddlewares.createSubGroupUserUnblockHandler(this),
+		);
+	}
+
+	public getAPI(): API {
+		return new API({
+			token: utils.array.random(this.additional),
+		});
+	}
+
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 		});
@@ -203,7 +244,7 @@ class SlaveVK extends Worker {
 		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
 	}
 
-	public getAPI() {
+	public getAPI(): API {
 		return new API({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -211,7 +252,7 @@ class SlaveVK extends Worker {
 		});
 	}
 
-	public getVK() {
+	public getVK(): VK {
 		return new VK({
 			token: utils.array.random(this.additional),
 			callbackService: userCallbackService,
@@ -224,6 +265,9 @@ class CoreVK {
 	public master = new MasterVK();
 	public slave = new SlaveVK();
 	public group = new GroupVK();
+	public subGroups = DB.config.VK.subGroups.map(
+		(config) => new SubGroupVK(config),
+	);
 	public fakes = new FakesAlpha();
 }
 
@@ -260,3 +304,5 @@ for (const group of DB.config.VK.groupReposts.tokens) {
 }
 
 export default vk;
+
+export { Worker, MasterVK, SlaveVK, GroupVK, SubGroupVK };

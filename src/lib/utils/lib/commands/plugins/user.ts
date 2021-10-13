@@ -24,15 +24,18 @@ export default class UtilsUserCommands extends UtilsCommands {
 		return this.list.find((x) => x.check(input));
 	}
 
-	public async getUserId(message: MessageContext): Promise<number> {
+	public async getUserId(
+		message: MessageContext,
+		resource?: string,
+	): Promise<number> {
 		if (message.forwards[0]) {
 			return message.forwards[0].senderId;
 		} else if (message.replyMessage) {
 			return message.replyMessage.senderId;
-		} else if (message.state.args[1]) {
+		} else if (resource) {
 			try {
 				const linkData = await resolveResource({
-					resource: message.state.args[1],
+					resource,
 					api: VK.group.getAPI(),
 				});
 				if (linkData.type === "group") {

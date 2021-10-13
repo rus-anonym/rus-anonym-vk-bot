@@ -34,6 +34,7 @@ async function groupMessageNew(
 			isPrivate: DB.main.config.data.botPrivateAccessList.includes(
 				context.senderId,
 			),
+			isMain: true,
 		});
 
 		if (!selectedCommand && context.hasMessagePayload) {
@@ -43,6 +44,7 @@ async function groupMessageNew(
 				isPrivate: DB.main.config.data.botPrivateAccessList.includes(
 					context.senderId,
 				),
+				isMain: true,
 			});
 		}
 
@@ -53,6 +55,7 @@ async function groupMessageNew(
 			) as RegExpExecArray;
 			context.state.user = await InternalUtils.group.getUserData(
 				context.senderId,
+				DB.config.VK.group.id,
 			);
 			context.state.sendMessage = async (text, params) => {
 				if (typeof text !== "string" && text.message !== undefined) {
@@ -86,6 +89,9 @@ async function groupMessageNew(
 					message: `Error on execute command\nError: ${err.toString()}`,
 					type: "error",
 				});
+				context.state.sendMessage(
+					`При выполнении команды произошла ошибка :(\nСообщите об ошибке @id${DB.config.VK.user.master.id} (разработчику)`,
+				);
 			});
 			return;
 		} else {

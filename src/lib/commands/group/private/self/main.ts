@@ -21,6 +21,7 @@ V8 External Memory: ${InternalUtils.commands.bytesToSize(memoryData.external)}
 };
 
 new GroupCommand({
+	isMain: true,
 	isSelf: true,
 	regexp: /(?:^main)$/i,
 	process: async function (message) {

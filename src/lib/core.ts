@@ -38,6 +38,15 @@ DB.group.connection.once("open", () => {
 			)}`,
 		});
 	});
+	VK.subGroups.map((subGroup) =>
+		subGroup.main.updates.start().then(() => {
+			InternalUtils.logger.send({
+				message: `@club${subGroup.id} polling start at ${moment().format(
+					"HH:mm:ss.SSS | DD.MM.YYYY",
+				)}`,
+			});
+		}),
+	);
 });
 
 process.on("warning", async (warning) => {

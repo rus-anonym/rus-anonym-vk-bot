@@ -7,7 +7,10 @@ new GroupCommand({
 		regexp: /^(?:\/tester)(?:\s(.*))?$/i, process: async function (message) {
 			let userID;
 			try {
-				userID = await InternalUtils.groupCommands.getUserId(message);
+				userID = await InternalUtils.groupCommands.getUserId(
+					message,
+					message.state.args[1],
+				);
 			} catch (error) {
 				return await message.state.sendMessage({
 					message: error.message,

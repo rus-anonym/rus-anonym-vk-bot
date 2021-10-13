@@ -19,7 +19,10 @@ new UserCommand({
 			} else {
 				let userID;
 				try {
-					userID = await InternalUtils.userCommands.getUserId(message);
+					userID = await InternalUtils.userCommands.getUserId(
+						message,
+						message.state.args[1],
+					);
 				} catch (error) {
 					return await message.editMessage({
 						message: error.message,

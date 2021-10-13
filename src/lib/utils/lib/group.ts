@@ -7,6 +7,7 @@ import DB from "../../DB/core";
 export default class UtilsGroup {
 	public async getUserData(
 		id: number,
+		groupId: number,
 	): Promise<ExtractDoc<typeof DB.group.schemes.user>> {
 		const userData = await DB.group.models.user.findOne({
 			id,
@@ -20,6 +21,8 @@ export default class UtilsGroup {
 				id,
 				nickname: `User #${id}`,
 				regDate: new Date(),
+				isMailingAllowed: true,
+				regGroupId: groupId,
 			});
 			await newUserData.save();
 			VK.group.getAPI().messages.send({

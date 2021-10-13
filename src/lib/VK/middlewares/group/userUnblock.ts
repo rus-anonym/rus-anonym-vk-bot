@@ -3,7 +3,7 @@ import { GroupUserContext, getRandomId } from "vk-io";
 
 import VK from "../../../VK/core";
 
-async function userBlock(event: GroupUserContext): Promise<void> {
+async function userUnblock(event: GroupUserContext): Promise<void> {
 	if (event.isExpired) {
 		const [userData] = await VK.group.getAPI().users.get({
 			user_ids: [event.userId.toString()],
@@ -43,4 +43,4 @@ async function userBlock(event: GroupUserContext): Promise<void> {
 	}
 }
 
-export default userBlock;
+export default userUnblock;

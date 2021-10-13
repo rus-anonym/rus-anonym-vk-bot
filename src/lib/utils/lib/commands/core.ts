@@ -58,6 +58,7 @@ export class UserCommand extends Command {
 }
 
 export class GroupCommand extends Command {
+	public isMain: boolean;
 	public isSelf: boolean;
 	public isPrivate: boolean;
 
@@ -71,17 +72,20 @@ export class GroupCommand extends Command {
 		process,
 		isSelf = false,
 		isPrivate = false,
+		isMain = false,
 	}: {
 		regexp: RegExp;
 		process: (message: GroupModernMessageContext, vk: VK) => Promise<unknown>;
 		isSelf?: boolean;
 		isPrivate?: boolean;
+		isMain?: boolean;
 		type?: "callback" | "regexp";
 		callbackTrigger?: string;
 	}) {
 		super(regexp);
 		this.isSelf = isSelf;
 		this.isPrivate = isPrivate;
+		this.isMain = isMain;
 		this.process = process;
 		InternalUtils.groupCommands.addCommand(this);
 	}

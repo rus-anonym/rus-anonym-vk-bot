@@ -13,7 +13,10 @@ new GroupCommand({
 
 		let userID: number;
 		try {
-			userID = await InternalUtils.userCommands.getUserId(message);
+			userID = await InternalUtils.userCommands.getUserId(
+				message,
+				message.state.args[1],
+			);
 		} catch (error) {
 			return await message.editMessage({
 				message: error.message,
@@ -49,7 +52,10 @@ new GroupCommand({
 
 		let userID: number;
 		try {
-			userID = await InternalUtils.userCommands.getUserId(message);
+			userID = await InternalUtils.userCommands.getUserId(
+				message,
+				message.state.args[1],
+			);
 		} catch (error) {
 			return await message.editMessage({
 				message: error.message,

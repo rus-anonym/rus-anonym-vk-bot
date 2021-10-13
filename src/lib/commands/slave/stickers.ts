@@ -10,7 +10,10 @@ new SlaveCommand({
 		await message.loadMessagePayload();
 		let userID;
 		try {
-			userID = await InternalUtils.userCommands.getUserId(message);
+			userID = await InternalUtils.userCommands.getUserId(
+				message,
+				message.state.args[1],
+			);
 		} catch (error) {
 			return await message.reply({
 				message: error.message,

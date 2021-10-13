@@ -9,7 +9,10 @@ import { UsersUserFull } from "vk-io/lib/api/schemas/objects";
 const getUsersData = async (
 	message: MessageContext,
 ): Promise<{ sender: UsersUserFull; target: UsersUserFull }> => {
-	const userID = await InternalUtils.userCommands.getUserId(message);
+	const userID = await InternalUtils.userCommands.getUserId(
+		message,
+		message.state.args[1],
+	);
 
 	const [senderInfo, targetInfo] = await VK.group.getAPI().users.get({
 		user_ids: [DB.config.VK.user.master.id.toString(), userID.toString()],
