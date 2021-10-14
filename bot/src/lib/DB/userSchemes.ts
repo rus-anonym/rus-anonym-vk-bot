@@ -1,6 +1,6 @@
 import { createSchema, Type } from "ts-mongoose";
 
-const entityTypes = ["user", "chat", "group"];
+const entityTypes = ["user", "chat", "group"] as const;
 
 const user = createSchema(
 	{
@@ -30,32 +30,12 @@ const user = createSchema(
 			isTrack: Type.boolean({ required: true }),
 			lastUpdate: Type.date({ required: true }),
 		}),
-		messages: Type.array({ required: true }).of(
-			Type.number({ required: true }),
-		),
-		personalMessages: Type.array({ required: true }).of(
-			Type.number({ required: true }),
-		),
 		updateDate: Type.date({ required: true }),
 		regDate: Type.date({ required: true }),
 	},
 	{
 		versionKey: false,
 		minimize: false,
-	},
-);
-
-const chat = createSchema(
-	{
-		id: Type.number({ required: true, unique: true }),
-		messages: Type.array({ required: true }).of(
-			Type.number({ required: true }),
-		),
-		updateDate: Type.date({ required: true }),
-		regDate: Type.date({ required: true }),
-	},
-	{
-		versionKey: false,
 	},
 );
 
@@ -100,4 +80,4 @@ const message = createSchema(
 	},
 );
 
-export default { user, chat, message };
+export default { user, message };

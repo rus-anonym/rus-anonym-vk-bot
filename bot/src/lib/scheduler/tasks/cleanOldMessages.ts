@@ -18,13 +18,9 @@ async function cleanOldMessages(): Promise<string> {
 			.distinct("id")
 	).length;
 
-	const upToDateMessages = (await DB.user.models.message
-		.find({
-			created: {
-				$gt: minimalDate,
-			},
-		})
-		.distinct("id")) as number[];
+	const upToDateMessages = await DB.user.models.message.count({
+		created: { $gt: minimalDate },
+	});
 
 	await DB.user.models.message.deleteMany({
 		created: {
@@ -32,30 +28,11 @@ async function cleanOldMessages(): Promise<string> {
 		},
 	});
 
-	await DB.user.models.user.updateMany({
-		$pull: {
-			messages: {
-				$nin: upToDateMessages,
-			},
-			personalMessages: {
-				$nin: upToDateMessages,
-			},
-		},
-	});
-
-	await DB.user.models.chat.updateMany({
-		$pull: {
-			messages: {
-				$nin: upToDateMessages,
-			},
-		},
-	});
-
 	return `Удалено ${oldMessagesCount} ${utils.string.declOfNum(
 		oldMessagesCount,
 		["старое сообщение", "старых сообщения", "старых сообщений"],
 	)}
-Актуальных сообщений: ${upToDateMessages.length}
+Актуальных сообщений: ${upToDateMessages}
 `;
 }
 
