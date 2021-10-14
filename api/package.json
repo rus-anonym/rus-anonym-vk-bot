@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc --project tsconfig.json",
+		"build:silent": "tsc-silent -p tsconfig.json --suppress 2307@/src/lib/DB/core.ts",
 		"lint": "eslint ./src"
 	},
 	"dependencies": {
