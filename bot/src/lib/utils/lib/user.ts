@@ -208,10 +208,7 @@ export default class UtilsUser {
 		const deletedMessageText =
 			deletedMessageData.data[deletedMessageData.data.length - 1].text;
 
-		const logsChatId =
-			deletedMessageData.peerType === "chat"
-				? DB.config.VK.group.logs.conversations.conversations
-				: DB.config.VK.group.logs.conversations.messages;
+		const logsChatId = DB.config.VK.group.logs.conversations.messages;
 
 		const uploadedAttachments = await this.uploadAttachments(
 			deletedMessageData.data[deletedMessageData.data.length - 1].attachments,
@@ -400,39 +397,6 @@ export default class UtilsUser {
 			}
 			default: {
 				break;
-			}
-		}
-
-		if (!message.isGroup) {
-			const fixedSenderId = message.isOutbox
-				? DB.config.VK.user.master.id
-				: message.senderId;
-			const userData = await this.getUserData(fixedSenderId);
-			if (message.isChat === false) {
-				userData.personalMessages.push(message.id);
-			} else {
-				userData.messages.push(message.id);
-			}
-			userData.updateDate = new Date();
-			await userData.save();
-		}
-
-		if (message.isChat && message.chatId) {
-			const chatData = await DB.user.models.chat.findOne({
-				id: message.chatId,
-			});
-			if (!chatData) {
-				const newChatData = new DB.user.models.chat({
-					id: message.chatId,
-					messages: [message.id],
-					updateDate: new Date(),
-					regDate: new Date(),
-				});
-				await newChatData.save();
-			} else {
-				chatData.messages.push(message.id);
-				chatData.updateDate = new Date();
-				await chatData.save();
 			}
 		}
 	}

@@ -28,11 +28,6 @@ new UserCommand({
 				userData.info.surname
 			}):
 ID: ${userData.id}
-Сообщений: ${userData.messages.length}
-Сообщений в ЛС: ${userData.personalMessages.length}
-Сообщений в беседах: ${
-				userData.messages.length - userData.personalMessages.length
-			}
 Зарегистрирован в ВК: ${moment(
 				await utils.vk.user.getUserRegDate(userData.id),
 			).format("DD.MM.YYYY, HH:mm:ss")}

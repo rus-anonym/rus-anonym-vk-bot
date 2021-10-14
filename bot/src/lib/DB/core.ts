@@ -53,14 +53,6 @@ class UserDB extends DB {
 			undefined,
 			this.connection,
 		),
-		chat: typedModel(
-			"chat",
-			userSchemes.chat,
-			"chats",
-			undefined,
-			undefined,
-			this.connection,
-		),
 	};
 
 	public schemes = userSchemes;
