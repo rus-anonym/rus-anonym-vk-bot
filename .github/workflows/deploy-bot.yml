@@ -49,7 +49,7 @@ jobs:
           script: |
             cd /Work/RusAnonymBot/bot
             pm2 stop ./dist/main.js > /dev/null
-            pm2 start ./dist/main.js --name="RusAnonymBot [VK]" > /dev/null
+            pm2 start ./dist/main.js --name="RusAnonymBot [Bot]" > /dev/null
 
       - name: Final
         run: echo "Succesfully deployed"
