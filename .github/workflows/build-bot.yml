@@ -18,3 +18,9 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm run build:silent
+
+      - name: Build API
+        working-directory: ./api
+        run: |
+          npm install --legacy-peer-deps
+          npm run build:silent
