@@ -24,10 +24,15 @@ const plug = () => null;
 
 abstract class Worker {
 	abstract main: VK;
-	abstract additional: string[];
+	abstract additional: VK[];
 
-	abstract getVK(): VK;
-	abstract getAPI(): API;
+	public getVK(): VK {
+		return utils.array.random(this.additional);
+	}
+
+	public getAPI(): API {
+		return this.getVK().api;
+	}
 }
 
 class MasterVK extends Worker {
@@ -39,7 +44,11 @@ class MasterVK extends Worker {
 
 	public additional = DB.config.VK.user.master.tokens.additional.map(
 		(token) => {
-			return token;
+			return new VK({
+				token,
+				callbackService: userCallbackService,
+				...DB.constants.vk.master.defaultParams,
+			});
 		},
 	);
 
@@ -100,22 +109,6 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 
 	public botpod = new BotPodVK();
 	public vkMe = new VKMe();
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.master.defaultParams,
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.master.defaultParams,
-		});
-	}
 }
 
 class GroupVK extends Worker {
@@ -124,7 +117,7 @@ class GroupVK extends Worker {
 	});
 
 	public additional = DB.config.VK.group.tokens.additional.map((token) => {
-		return token;
+		return new VK({ token });
 	});
 
 	constructor() {
@@ -175,18 +168,6 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 			});
 		});
 	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-		});
-	}
 }
 
 class SubGroupVK extends Worker {
@@ -200,7 +181,9 @@ class SubGroupVK extends Worker {
 		this.main = new VK({
 			token: config.tokens.main,
 		});
-		this.additional = config.tokens.additional;
+		this.additional = config.tokens.additional.map(
+			(token) => new VK({ token }),
+		);
 		this.main.updates.on(
 			"message_new",
 			subGroupMiddlewares.createSubGroupMessageNewHandler(this),
@@ -214,18 +197,6 @@ class SubGroupVK extends Worker {
 			subGroupMiddlewares.createSubGroupUserUnblockHandler(this),
 		);
 	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-		});
-	}
 }
 
 class SlaveVK extends Worker {
@@ -236,28 +207,16 @@ class SlaveVK extends Worker {
 	});
 
 	public additional = DB.config.VK.user.slave.tokens.additional.map((token) => {
-		return token;
+		return new VK({
+			token,
+			callbackService: userCallbackService,
+			...DB.constants.vk.slave.defaultParams,
+		});
 	});
 
 	constructor() {
 		super();
 		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
-	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.slave.defaultParams,
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.slave.defaultParams,
-		});
 	}
 }
 
