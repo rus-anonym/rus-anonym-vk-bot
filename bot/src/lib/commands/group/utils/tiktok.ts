@@ -1,4 +1,5 @@
-import axios from "axios";
+import puppeteer from "puppeteer";
+import cheerio from "cheerio";
 import { Keyboard } from "vk-io";
 
 import { GroupCommand } from "../../../utils/lib/commands/core";
@@ -13,29 +14,29 @@ new GroupCommand({
 		});
 
 		try {
-			const response = await (
-				await axios({
-					url: "https://godownloader.com/api/tiktok-no-watermark-free",
-					params: {
-						url: context.state.args[1],
-						key: "godownloader.com",
-					},
-				})
-			).data;
-
-			if (!response.video_no_watermark) {
+			const browser = await puppeteer.launch();
+			const page = await browser.newPage();
+			await page.goto("https://musicaldown.com/");
+			await page.type("#link_url", context.state.args[1]);
+			await page.click("#submit-form > div > div:nth-child(2) > button");
+			await page.waitForTimeout(5000);
+			const bodyHandler = await page.$("body");
+			const html = await page.evaluate((body) => body.innerHTML, bodyHandler);
+			await bodyHandler!.dispose();
+			const $ = cheerio.load(html);
+			const directLink = $(
+				"body > div.welcome.section > div > div:nth-child(2) > div.col.s12.l8 > a:nth-child(8)",
+			).attr("href");
+			await browser.close();
+			if (!directLink) {
 				throw new Error(`Непредвиденная ошибка, повторите запрос.`);
 			}
+
 			const builder = Keyboard.builder();
 
 			builder.urlButton({
 				label: `Скачать видео`,
-				url: response.video_no_watermark,
-			});
-			builder.row();
-			builder.urlButton({
-				label: `Скачать звук`,
-				url: response.music_url,
+				url: directLink,
 			});
 
 			builder.inline();
@@ -54,10 +55,10 @@ new GroupCommand({
 
 			const attachment = await VK.slave.main.upload.video({
 				source: {
-					value: response.video_no_watermark,
+					value: directLink,
 				},
 				group_id: DB.config.VK.group.id,
-				name: response.aweme_id,
+				name: "TikTok Video",
 				is_private: 1,
 				compression: 0,
 				repeat: 1,
