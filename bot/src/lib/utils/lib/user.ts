@@ -448,8 +448,6 @@ export default class UtilsUser {
 					isTrack: false,
 					lastUpdate: new Date(),
 				},
-				messages: [],
-				personalMessages: [],
 				updateDate: new Date(),
 				regDate: new Date(),
 			});
