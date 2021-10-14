@@ -3,7 +3,13 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
-	"dependencies": {},
+	"scripts": {
+		"build": "tsc --project tsconfig.json",
+		"lint": "eslint ./src"
+	},
+	"dependencies": {
+		"fastify": "^3.22.0"
+	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^4.30.0",
 		"@typescript-eslint/parser": "^4.30.0",
