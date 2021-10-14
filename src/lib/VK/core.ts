@@ -58,6 +58,14 @@ class MasterVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
+		this.main.updates.on(
+			"message_new",
+			authorizationManager.middleware.bind(authorizationManager),
+		);
+		this.main.updates.on("message_new", masterMiddlewares.messageNew);
+		this.main.updates.on("message_edit", masterMiddlewares.messageEdit);
+		this.main.updates.on("message_flags", masterMiddlewares.messageFlags);
+
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		//@ts-ignore
 		this.main.updates.on("chat_screenshot", plug);
@@ -74,14 +82,7 @@ class MasterVK extends Worker {
 		this.main.updates.on("messages_read", plug);
 		this.main.updates.on("typing", plug);
 		this.main.updates.on("dialog_flags", plug);
-		this.main.updates.on(
-			"message_new",
-			authorizationManager.middleware.bind(authorizationManager),
-		);
-		this.main.updates.on("message_new", masterMiddlewares.messageNew);
-		this.main.updates.on("message_edit", masterMiddlewares.messageEdit);
-		this.main.updates.on("message_flags", masterMiddlewares.messageFlags);
-		this.main.updates.on("friend_activity", masterMiddlewares.friendActivity);
+		this.main.updates.on("friend_activity", plug);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие пользователя:
@@ -123,6 +124,14 @@ class GroupVK extends Worker {
 	constructor() {
 		super();
 		this.main.updates.use(questionManagers.groupQuestionManager.middleware);
+		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
+		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
+		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
+		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
+		this.main.updates.on(
+			"group_officers_edit",
+			mainGroupMiddlewares.groupOfficersEdit,
+		);
 		this.main.updates.on("photo_comment", plug);
 		this.main.updates.on("group_join", plug);
 		this.main.updates.on("group_leave", plug);
@@ -136,14 +145,6 @@ class GroupVK extends Worker {
 		this.main.updates.on("wall_reply", plug);
 		this.main.updates.on("message_edit", plug);
 		this.main.updates.on("video_comment", plug);
-		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
-		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
-		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
-		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
-		this.main.updates.on(
-			"group_officers_edit",
-			mainGroupMiddlewares.groupOfficersEdit,
-		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие группы:

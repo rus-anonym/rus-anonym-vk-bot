@@ -10,7 +10,6 @@ type Log =
 	| "conversation"
 	| "rest"
 	| "error"
-	| "friend_activity"
 	| "info"
 	| "user_track"
 	| "captcha";
@@ -51,10 +50,6 @@ export default class UtilsLogger {
 			case "captcha":
 				selectedChat = DB.config.VK.group.logs.conversations.captcha;
 				prefix = "ℹ";
-				break;
-			case "friend_activity":
-				selectedChat = DB.config.VK.group.logs.conversations.friends_activity;
-				prefix = "⚠";
 				break;
 			case "error":
 				selectedChat = DB.config.VK.group.logs.conversations.errors;

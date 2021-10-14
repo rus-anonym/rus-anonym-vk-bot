@@ -9,10 +9,6 @@ const user = createSchema(
 			name: Type.string({ required: true }),
 			surname: Type.string({ required: true }),
 			gender: Type.number({ required: true }),
-			last_seen: Type.object().of({
-				date: Type.date({ required: true }),
-				isOnline: Type.boolean({ required: true }),
-			}),
 			extends: Type.object({ required: true }).of({
 				name_nom: Type.string({ required: true }),
 				name_gen: Type.string({ required: true }),
