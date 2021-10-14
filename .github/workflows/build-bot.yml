@@ -15,5 +15,6 @@ jobs:
 
       - name: Build bot
         working-directory: ./bot
-        run: npm install --legacy-peer-deps
-        run: npm run build:silent
+        run: |
+          npm install --legacy-peer-deps
+          npm run build:silent
