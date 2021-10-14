@@ -27,7 +27,7 @@ new UserCommand({
 			message: `@id${userData.id} (${userData.info.name} ${
 				userData.info.surname
 			}):
-Статус: ${userData.info.extends.status}
+ID: ${userData.id}
 Сообщений: ${userData.messages.length}
 Сообщений в ЛС: ${userData.personalMessages.length}
 Сообщений в беседах: ${
@@ -42,9 +42,7 @@ new UserCommand({
 Зарегистрирован в БД: ${moment(userData.regDate).format("DD.MM.YYYY, HH:mm:ss")}
 Последнее изменение данных в БД: ${moment(userData.updateDate).format(
 				"DD.MM.YYYY, HH:mm:ss",
-			)}Упоминания пользователя: https://vk.com/feed?obj=${
-				userData.id
-			}&q=&section=mentions`,
+			)}`,
 		});
 	},
 });
