@@ -1,0 +1,7 @@
+**/src/DB/config.ts
+node_modules
+dist
+test*
+yarn-error.log
+yarn.lock
+package-lock.json
