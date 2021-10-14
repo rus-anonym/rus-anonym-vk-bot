@@ -53,7 +53,6 @@ const config: IConfig = {
 					conversations: 0,
 					rest: 0,
 					errors: 0,
-					friends_activity: 0,
 					info: 0,
 					userTrack: 0,
 					captcha: 0,

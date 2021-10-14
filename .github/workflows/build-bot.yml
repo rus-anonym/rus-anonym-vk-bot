@@ -12,5 +12,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - run: npm install --legacy-peer-deps
-      - run: npm run build:silent
+
+      - name: Build bot
+        working-directory: ./bot
+        run: |
+          npm install --legacy-peer-deps
+          npm run build:silent

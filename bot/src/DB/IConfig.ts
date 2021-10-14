@@ -77,7 +77,6 @@ export interface IConfigGroupLogsConversations {
 	conversations: number;
 	rest: number;
 	errors: number;
-	friends_activity: number;
 	info: number;
 	userTrack: number;
 	captcha: number;

@@ -1,8 +1,10 @@
-name: Deploy to server
+name: Deploy bot to server
 
 on:
   push:
     branches: [master]
+    paths:
+      - "bot/**"
 
 jobs:
   deploy:
@@ -17,7 +19,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           script_stop: true
           script: |
-            cd /Work/Bots/UserBot
+            cd /Work/RusAnonymBot
             git fetch --all
             git checkout master
             git reset --hard origin/master
@@ -31,7 +33,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           script_stop: true
           script: |
-            cd /Work/Bots/UserBot
+            cd /Work/RusAnonymBot/bot
             rm -rf ./node_modules/
             rm -rf ./dist/
             npm install --legacy-peer-deps
@@ -45,9 +47,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           script_stop: true
           script: |
-            cd /Work/Bots/UserBot
+            cd /Work/RusAnonymBot/bot
             pm2 stop ./dist/main.js > /dev/null
-            pm2 start ./dist/main.js --name="UserBot" > /dev/null
+            pm2 start ./dist/main.js --name="RusAnonymBot [VK]" > /dev/null
 
       - name: Final
         run: echo "Succesfully deployed"

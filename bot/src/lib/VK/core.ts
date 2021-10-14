@@ -24,10 +24,15 @@ const plug = () => null;
 
 abstract class Worker {
 	abstract main: VK;
-	abstract additional: string[];
+	abstract additional: VK[];
 
-	abstract getVK(): VK;
-	abstract getAPI(): API;
+	public getVK(): VK {
+		return utils.array.random(this.additional);
+	}
+
+	public getAPI(): API {
+		return this.getVK().api;
+	}
 }
 
 class MasterVK extends Worker {
@@ -39,7 +44,11 @@ class MasterVK extends Worker {
 
 	public additional = DB.config.VK.user.master.tokens.additional.map(
 		(token) => {
-			return token;
+			return new VK({
+				token,
+				callbackService: userCallbackService,
+				...DB.constants.vk.master.defaultParams,
+			});
 		},
 	);
 
@@ -49,6 +58,14 @@ class MasterVK extends Worker {
 		// 	console.log(event);
 		// 	next();
 		// });
+		this.main.updates.on(
+			"message_new",
+			authorizationManager.middleware.bind(authorizationManager),
+		);
+		this.main.updates.on("message_new", masterMiddlewares.messageNew);
+		this.main.updates.on("message_edit", masterMiddlewares.messageEdit);
+		this.main.updates.on("message_flags", masterMiddlewares.messageFlags);
+
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		//@ts-ignore
 		this.main.updates.on("chat_screenshot", plug);
@@ -65,14 +82,7 @@ class MasterVK extends Worker {
 		this.main.updates.on("messages_read", plug);
 		this.main.updates.on("typing", plug);
 		this.main.updates.on("dialog_flags", plug);
-		this.main.updates.on(
-			"message_new",
-			authorizationManager.middleware.bind(authorizationManager),
-		);
-		this.main.updates.on("message_new", masterMiddlewares.messageNew);
-		this.main.updates.on("message_edit", masterMiddlewares.messageEdit);
-		this.main.updates.on("message_flags", masterMiddlewares.messageFlags);
-		this.main.updates.on("friend_activity", masterMiddlewares.friendActivity);
+		this.main.updates.on("friend_activity", plug);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие пользователя:
@@ -100,22 +110,6 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 
 	public botpod = new BotPodVK();
 	public vkMe = new VKMe();
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.master.defaultParams,
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.master.defaultParams,
-		});
-	}
 }
 
 class GroupVK extends Worker {
@@ -124,12 +118,20 @@ class GroupVK extends Worker {
 	});
 
 	public additional = DB.config.VK.group.tokens.additional.map((token) => {
-		return token;
+		return new VK({ token });
 	});
 
 	constructor() {
 		super();
 		this.main.updates.use(questionManagers.groupQuestionManager.middleware);
+		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
+		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
+		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
+		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
+		this.main.updates.on(
+			"group_officers_edit",
+			mainGroupMiddlewares.groupOfficersEdit,
+		);
 		this.main.updates.on("photo_comment", plug);
 		this.main.updates.on("group_join", plug);
 		this.main.updates.on("group_leave", plug);
@@ -143,14 +145,6 @@ class GroupVK extends Worker {
 		this.main.updates.on("wall_reply", plug);
 		this.main.updates.on("message_edit", plug);
 		this.main.updates.on("video_comment", plug);
-		this.main.updates.on("message_new", mainGroupMiddlewares.messageNew);
-		this.main.updates.on("wall_post_new", mainGroupMiddlewares.wallPostNew);
-		this.main.updates.on("user_block", mainGroupMiddlewares.userBlock);
-		this.main.updates.on("user_unblock", mainGroupMiddlewares.userUnblock);
-		this.main.updates.on(
-			"group_officers_edit",
-			mainGroupMiddlewares.groupOfficersEdit,
-		);
 		this.main.updates.use(async (event) => {
 			InternalUtils.logger.send({
 				message: `Необработанное событие группы:
@@ -175,18 +169,6 @@ SubTypes: ${JSON.stringify(event.subTypes)}`,
 			});
 		});
 	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-		});
-	}
 }
 
 class SubGroupVK extends Worker {
@@ -200,7 +182,9 @@ class SubGroupVK extends Worker {
 		this.main = new VK({
 			token: config.tokens.main,
 		});
-		this.additional = config.tokens.additional;
+		this.additional = config.tokens.additional.map(
+			(token) => new VK({ token }),
+		);
 		this.main.updates.on(
 			"message_new",
 			subGroupMiddlewares.createSubGroupMessageNewHandler(this),
@@ -214,18 +198,6 @@ class SubGroupVK extends Worker {
 			subGroupMiddlewares.createSubGroupUserUnblockHandler(this),
 		);
 	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-		});
-	}
 }
 
 class SlaveVK extends Worker {
@@ -236,28 +208,16 @@ class SlaveVK extends Worker {
 	});
 
 	public additional = DB.config.VK.user.slave.tokens.additional.map((token) => {
-		return token;
+		return new VK({
+			token,
+			callbackService: userCallbackService,
+			...DB.constants.vk.slave.defaultParams,
+		});
 	});
 
 	constructor() {
 		super();
 		this.main.updates.on("message_new", slaveMiddlewares.messageNew);
-	}
-
-	public getAPI(): API {
-		return new API({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.slave.defaultParams,
-		});
-	}
-
-	public getVK(): VK {
-		return new VK({
-			token: utils.array.random(this.additional),
-			callbackService: userCallbackService,
-			...DB.constants.vk.slave.defaultParams,
-		});
 	}
 }
 
