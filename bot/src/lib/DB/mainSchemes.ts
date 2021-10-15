@@ -51,6 +51,7 @@ const reserveGroup = createSchema(
 
 const conversation = createSchema(
 	{
+		source: Type.string({ required: true }),
 		title: Type.string({ required: true }),
 		link: Type.string({ required: true, unique: true }),
 		ownerId: Type.number({ required: true }),
