@@ -36,7 +36,7 @@ async function getNewConversations(): Promise<string[]> {
 							link,
 						});
 					await DB.main.models.vkConversation.insertMany({
-						source: "parsing",
+						source: "newsfeed.search",
 						link: "https://" + link,
 						title: conversationInfo.preview.title,
 						ownerId: conversationInfo.preview.admin_id,
