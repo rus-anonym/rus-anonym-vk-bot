@@ -44,6 +44,7 @@ import "./master/vk/conversations/deleteMessages";
 import "./master/vk/conversations/kick";
 import "./master/vk/conversations/invite";
 import "./master/vk/conversations/messageInfo";
+import "./master/vk/conversations/getUserConversations";
 
 import "./master/graphics/invert";
 import "./master/graphics/sepia";
