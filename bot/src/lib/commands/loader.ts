@@ -72,6 +72,7 @@ import "./group/utils/balaboba";
 import "./group/utils/tiktok";
 import "./group/utils/getCat";
 import "./group/utils/httpStatus";
+import "./group/utils/mailing";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";
