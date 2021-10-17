@@ -2,6 +2,7 @@ import utils from "rus-anonym-utils";
 
 import { UserCommand } from "../../../utils/lib/commands/core";
 import DB from "../../../DB/core";
+import InternalUtils from "../../../utils/core";
 
 const asyncFunctionConstructor = Object.getPrototypeOf(async function () {
 	//
@@ -12,7 +13,7 @@ const asyncEval = async (code: string, params: Record<string, unknown>) => {
 		code = "return " + code;
 	}
 
-	code = `const { DB, api, tmp, message, utils } = _params;\n` + code;
+	code = `const { ${Object.keys(params).join(", ")} } = _params;\n` + code;
 
 	return await asyncFunctionConstructor(`_params`, code).call(this, params);
 };
@@ -30,6 +31,7 @@ new UserCommand({
 				{
 					DB,
 					utils,
+					internalUtils: InternalUtils,
 					message,
 					api: vk.api,
 					tmp: DB.temp.user.master.eval,
