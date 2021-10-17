@@ -2,6 +2,7 @@ import { WallPostContext, getRandomId } from "vk-io";
 
 import VK from "../../../VK/core";
 import DB from "../../../DB/core";
+import InternalUtils from "../../../utils/core";
 
 async function groupWallPostNew(event: WallPostContext): Promise<void> {
 	await VK.group.getAPI().messages.send({
@@ -27,6 +28,10 @@ async function groupWallPostNew(event: WallPostContext): Promise<void> {
 			type: "post",
 		});
 	}
+
+	await InternalUtils.group.mailing({
+		attachment: event.wall.toString(),
+	});
 
 	return;
 }
