@@ -40,6 +40,8 @@ function createSubGroupMessageNewHandler(
 				isMain: false,
 			});
 
+			let isPayloadCommand = false;
+
 			if (!selectedCommand && context.hasMessagePayload) {
 				selectedCommand = InternalUtils.groupCommands.findCommand({
 					input: context.messagePayload.cmd || "null",
@@ -49,13 +51,21 @@ function createSubGroupMessageNewHandler(
 					),
 					isMain: false,
 				});
+
+				isPayloadCommand = true;
 			}
 
 			if (selectedCommand) {
 				// const TempVK = VK.getVK();
-				context.state.args = selectedCommand.regexp.exec(
-					context.text,
-				) as RegExpExecArray;
+				if (isPayloadCommand) {
+					context.state.args = selectedCommand.regexp.exec(
+						context.messagePayload.cmd,
+					) as RegExpExecArray;
+				} else {
+					context.state.args = selectedCommand.regexp.exec(
+						context.text,
+					) as RegExpExecArray;
+				}
 				context.state.user = await InternalUtils.group.getUserData(
 					context.senderId,
 					subGroup.id,
