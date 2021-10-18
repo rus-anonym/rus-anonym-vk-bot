@@ -44,6 +44,7 @@ import "./master/vk/conversations/deleteMessages";
 import "./master/vk/conversations/kick";
 import "./master/vk/conversations/invite";
 import "./master/vk/conversations/messageInfo";
+import "./master/vk/conversations/getUserConversations";
 
 import "./master/graphics/invert";
 import "./master/graphics/sepia";
@@ -71,6 +72,7 @@ import "./group/utils/balaboba";
 import "./group/utils/tiktok";
 import "./group/utils/getCat";
 import "./group/utils/httpStatus";
+import "./group/utils/mailing";
 
 import "./group/vk/stickers";
 import "./group/vk/apiStatus";

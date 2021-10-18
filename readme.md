@@ -45,3 +45,5 @@ node ./dist/main.js
 |    [@filatovpr](https://github.com/filatovpr)    |
 |   [@kravetsone](https://github.com/kravetsone)   |
 |     [@virus667](https://github.com/virus667)     |
+|     [@tlopster](https://github.com/tlopster)     |
+|     [@DimonDAF](https://github.com/DimonDAF)     |

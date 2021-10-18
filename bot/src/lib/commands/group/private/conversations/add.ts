@@ -26,6 +26,7 @@ new GroupCommand({
 				});
 
 			await DB.main.models.vkConversation.insertMany({
+				source: "https://vk.com/id" + message.senderId,
 				link: "https://" + link,
 				title: conversationInfo.preview.title,
 				ownerId: conversationInfo.preview.admin_id,

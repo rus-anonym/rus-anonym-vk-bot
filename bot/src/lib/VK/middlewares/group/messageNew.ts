@@ -37,6 +37,8 @@ async function groupMessageNew(
 			isMain: true,
 		});
 
+		let isPayloadCommand = false;
+
 		if (!selectedCommand && context.hasMessagePayload) {
 			selectedCommand = InternalUtils.groupCommands.findCommand({
 				input: context.messagePayload.cmd || "null",
@@ -46,13 +48,21 @@ async function groupMessageNew(
 				),
 				isMain: true,
 			});
+			isPayloadCommand = true;
 		}
 
 		if (selectedCommand) {
 			const TempVK = VK.group.getVK();
-			context.state.args = selectedCommand.regexp.exec(
-				context.text,
-			) as RegExpExecArray;
+			if (isPayloadCommand) {
+				context.state.args = selectedCommand.regexp.exec(
+					context.messagePayload.cmd,
+				) as RegExpExecArray;
+			} else {
+				context.state.args = selectedCommand.regexp.exec(
+					context.text,
+				) as RegExpExecArray;
+			}
+
 			context.state.user = await InternalUtils.group.getUserData(
 				context.senderId,
 				DB.config.VK.group.id,
