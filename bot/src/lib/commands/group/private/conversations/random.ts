@@ -6,12 +6,18 @@ import DB from "../../../../DB/core";
 
 new GroupCommand({
 	regexp: /(?:^!беседы рандом)$/i,
-	isPrivate: true,
 	process: async function (message) {
 		const [randomConversation] = await DB.main.models.vkConversation.aggregate([
 			{
 				$sample: { size: 1 },
 			},
+			...(DB.main.config.data.botPrivateAccessList.includes(message.senderId)
+				? []
+				: [
+						{
+							$match: { source: "newsfeed.search" },
+						},
+				  ]),
 		]);
 		if (!randomConversation) {
 			return message.state.sendMessage(`Непредвиденная ошибка`);
