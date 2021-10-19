@@ -8,9 +8,6 @@ new GroupCommand({
 	regexp: /(?:^!беседы рандом)$/i,
 	process: async function (message) {
 		const [randomConversation] = await DB.main.models.vkConversation.aggregate([
-			{
-				$sample: { size: 1 },
-			},
 			...(DB.main.config.data.botPrivateAccessList.includes(message.senderId)
 				? []
 				: [
@@ -18,6 +15,9 @@ new GroupCommand({
 							$match: { source: "newsfeed.search" },
 						},
 				  ]),
+			{
+				$sample: { size: 1 },
+			},
 		]);
 		if (!randomConversation) {
 			return message.state.sendMessage(`Непредвиденная ошибка`);
