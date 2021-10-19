@@ -7,7 +7,10 @@ new GroupCommand({
 	regexp: /(?:^!беседы)$/i,
 	process: async function (message) {
 		return await message.state.sendMessage({
-			message: `Количество бесед в БД: ${await DB.main.models.vkConversation.countDocuments()}`,
+			message: `Количество бесед в БД: ${await DB.main.models.vkConversation.countDocuments()}
+Количество общедоступных бесед: ${await DB.main.models.vkConversation.countDocuments(
+				{ source: "newsfeed.search" },
+			)}`,
 			keyboard: Keyboard.builder()
 				.textButton({
 					label: "Рандомная беседа",

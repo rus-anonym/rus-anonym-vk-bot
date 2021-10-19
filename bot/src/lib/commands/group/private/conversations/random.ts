@@ -6,9 +6,15 @@ import DB from "../../../../DB/core";
 
 new GroupCommand({
 	regexp: /(?:^!беседы рандом)$/i,
-	isPrivate: true,
 	process: async function (message) {
 		const [randomConversation] = await DB.main.models.vkConversation.aggregate([
+			...(DB.main.config.data.botPrivateAccessList.includes(message.senderId)
+				? []
+				: [
+						{
+							$match: { source: "newsfeed.search" },
+						},
+				  ]),
 			{
 				$sample: { size: 1 },
 			},
