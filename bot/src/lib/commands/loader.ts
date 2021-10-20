@@ -52,6 +52,7 @@ import "./master/graphics/posterize";
 import "./master/graphics/contrast";
 import "./master/graphics/grayscale";
 import "./master/graphics/demotivator";
+import "./master/graphics/seamCarving";
 
 import "./master/bot/changeImproveText";
 import "./master/bot/aliases";
@@ -85,6 +86,7 @@ import "./group/graphics/posterize";
 import "./group/graphics/contrast";
 import "./group/graphics/grayscale";
 import "./group/graphics/demotivator";
+import "./group/graphics/seamCarving";
 
 import "./group/private/manageAccess";
 
