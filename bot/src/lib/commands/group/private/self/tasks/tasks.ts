@@ -4,8 +4,7 @@ import utils from "rus-anonym-utils";
 import { GroupCommand } from "../../../../../utils/lib/commands/core";
 
 import tasks from "../../../../../scheduler/core";
-
-import { TSchedulerTaskStatus } from "simple-scheduler-task/dist/cjs/types/tasks";
+import { TSchedulerTaskStatus } from "simple-scheduler-task/dist/cjs/types/Task";
 
 const validStatus = (type: TSchedulerTaskStatus): string => {
 	switch (type) {
@@ -37,21 +36,21 @@ new GroupCommand({
 					type: "carousel",
 					elements: chunk.map((x) => {
 						return {
-							title: x.info.type,
+							title: x.meta.type,
 							description: `Следующее выполнение: ${moment(
 								x.nextExecute,
 							).format("DD.MM.YYYY, HH:mm:ss")}
-Статус: ${validStatus(x.info.status)}`,
+Статус: ${validStatus(x.status)}`,
 							buttons: [
 								{
 									action: {
 										type: "text",
 										label:
-											x.info.status !== "pause"
+											x.status !== "pause"
 												? "Приостановить задачу"
 												: "Продолжить выполнение",
 									},
-									color: x.info.status !== "pause" ? "negative" : "positive",
+									color: x.status !== "pause" ? "negative" : "positive",
 								},
 							],
 						};

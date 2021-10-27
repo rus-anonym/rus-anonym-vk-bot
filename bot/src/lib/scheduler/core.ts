@@ -6,7 +6,7 @@ import updateUserData from "./tasks/updateUsersData";
 import cleanOldMessages from "./tasks/cleanOldMessages";
 import getBirthdays from "./tasks/getBirthdays";
 import updateOnlinePrivacySettings from "./tasks/updateOnlinePrivacySettings";
-import deleteSameAudios from "./tasks/deleteSameAudios";
+import deleteSameAudios from "./tasks/manageAudios";
 import deleteSameDocuments from "./tasks/deleteSameDocuments";
 import sendHappyBirthdayGreetings from "./tasks/sendHappyBirthdayGreetings";
 import sendApiStatus from "./tasks/sendApiStatus";
@@ -15,12 +15,11 @@ import setSteps from "./tasks/setSteps";
 import getNewConversations from "./tasks/getNewConversations";
 import updateConversationsInfo from "./tasks/updateConversationsInfo";
 
-
-scheduler.events.on("error", (error) => {
+scheduler.events.on("error", (error, meta) => {
 	InternalUtils.logger.send({
 		message: `Ошибка при выполнении запланированной задачи:
-Тип: ${error.task.type}
-Error: ${error.error.toString()}`,
+Тип: ${meta.type}
+Error: ${error.toString()}`,
 		type: "error",
 	});
 });

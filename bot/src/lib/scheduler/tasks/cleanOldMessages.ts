@@ -41,10 +41,9 @@ export default new Interval({
 	source: cleanOldMessages,
 	type: "cleanOldMessages",
 	cron: "0 0 * * *",
-	plannedTime: Date.now(),
-	onDone: (log) => {
+	onDone: (log, meta) => {
 		InternalUtils.logger.send({
-			message: `${log.response} за ${log.executionTime}ms`,
+			message: `${log} за ${meta.executionTime}ms`,
 			type: "info",
 		});
 	},

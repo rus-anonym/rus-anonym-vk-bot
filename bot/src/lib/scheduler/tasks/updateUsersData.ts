@@ -65,12 +65,11 @@ export default new Interval({
 	isInform: true,
 	type: "updateUsersData",
 	source: updateUsersData,
-	plannedTime: Date.now(),
 	cron: "*/30 * * * *",
-	onDone: (log) => {
-		if (log.response) {
+	onDone: (log, meta) => {
+		if (log) {
 			InternalUtils.logger.send({
-				message: `${log.response} за ${log.executionTime}`,
+				message: `${log} за ${meta.executionTime}`,
 				type: "info",
 			});
 		}

@@ -6,8 +6,8 @@ import DB from "../../DB/core";
 import VK from "../../VK/core";
 import InternalUtils from "../../utils/core";
 
-async function deleteSameAudios() {
-	const audioIterator = createCollectIterator<{
+async function manageAudios() {
+	const masterAudioIterator = createCollectIterator<{
 		id: number;
 		date: number;
 		title: string;
@@ -22,7 +22,7 @@ async function deleteSameAudios() {
 		countPerRequest: 5000,
 	});
 
-	const userAudios: {
+	const masterAudios: {
 		id: number;
 		title: string;
 		artist: string;
@@ -30,9 +30,9 @@ async function deleteSameAudios() {
 		url: string;
 	}[] = [];
 
-	for await (const chunk of audioIterator) {
+	for await (const chunk of masterAudioIterator) {
 		for (const audio of chunk.items) {
-			userAudios.push({
+			masterAudios.push({
 				id: audio.id,
 				title: audio.title,
 				artist: audio.artist,
@@ -42,11 +42,11 @@ async function deleteSameAudios() {
 		}
 	}
 
-	const userAudiosUrls = userAudios.map((x) => x.url);
-	const userAudiosUrlsWithoutDuplicates = [...new Set(userAudiosUrls)];
+	const masterAudiosUrls = masterAudios.map((x) => x.url);
+	const masterAudiosUrlsWithoutDuplicates = [...new Set(masterAudiosUrls)];
 
-	let duplicates = [...userAudiosUrls];
-	userAudiosUrlsWithoutDuplicates.forEach((item) => {
+	let duplicates = [...masterAudiosUrls];
+	masterAudiosUrlsWithoutDuplicates.forEach((item) => {
 		const i = duplicates.indexOf(item);
 		duplicates = duplicates
 			.slice(0, i)
@@ -59,7 +59,7 @@ async function deleteSameAudios() {
 	)} дубликатов:\n`;
 
 	for (const duplicate of [...new Set(duplicates)]) {
-		const audios = userAudios.filter((x) => x.url === duplicate);
+		const audios = masterAudios.filter((x) => x.url === duplicate);
 		audios.sort((a, b) => {
 			if (a.date > b.date) {
 				return 1;
@@ -86,15 +86,14 @@ async function deleteSameAudios() {
 
 export default new Interval({
 	isInform: true,
-	source: deleteSameAudios,
-	type: "deleteSameAudios",
+	source: manageAudios,
+	type: "manageAudios",
 	cron: "0 0 * * *",
-	plannedTime: Date.now(),
-	onDone: (log) => {
-		if (log.response) {
+	onDone: (log, meta) => {
+		if (log) {
 			InternalUtils.logger.send({
-				message: `deleteSameAudios:
-${log.response} за ${log.executionTime}ms`,
+				message: `manageAudios:
+${log} за ${meta.executionTime}ms`,
 				type: "info",
 			});
 		}

@@ -82,11 +82,11 @@ export default new Interval({
 	source: deleteSameDocuments,
 	type: "deleteSameDocuments",
 	cron: "0 0 * * *",
-	onDone: (log) => {
-		if (log.response) {
+	onDone: (log, meta) => {
+		if (log) {
 			InternalUtils.logger.send({
 				message: `deleteSameDocuments:
-${log.response} за ${log.executionTime}ms`,
+${log} за ${meta.executionTime}ms`,
 				type: "info",
 			});
 		}

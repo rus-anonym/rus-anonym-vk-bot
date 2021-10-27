@@ -3,7 +3,7 @@ import utils from "rus-anonym-utils";
 import { GroupCommand } from "../../../utils/lib/commands/core";
 
 new GroupCommand({
-	regexp: /(?:^апи|api)$/i,
+	regexp: /^(?:апи|api)$/i,
 	process: async function (message) {
 		const VK_API_STATUS = await utils.vk.api.status();
 

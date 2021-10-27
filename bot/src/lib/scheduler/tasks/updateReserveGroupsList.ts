@@ -93,6 +93,5 @@ export default new Interval({
 	isInform: true,
 	type: "updateReserveGroupsList",
 	source: updateReserveGroupsList,
-	plannedTime: Date.now(),
 	cron: "*/5 * * * *",
 });

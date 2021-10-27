@@ -56,26 +56,21 @@ async function getNewConversations(): Promise<string[]> {
 }
 
 export default new Interval({
-	plannedTime: Date.now(),
 	isInform: true,
 	type: "getNewConversations",
 	source: getNewConversations,
 	cron: "*/5 * * * *",
 	onDone: (log) => {
-		if ((log.response as string[]).length !== 0) {
+		if (log.length !== 0) {
 			VK.group.getAPI().messages.send({
 				random_id: getRandomId(),
 				chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
-				message: `Добавил ${
-					(log.response as string[]).length
-				} ${utils.string.declOfNum((log.response as string[]).length, [
+				message: `Добавил ${log.length} ${utils.string.declOfNum(log.length, [
 					"новую беседу",
 					"новые беседы",
 					"новых бесед",
 				])}
-${(log.response as string[])
-	.map((item, index) => `${index + 1}. ${item}`)
-	.join("\n")}`,
+${log.map((item, index) => `${index + 1}. ${item}`).join("\n")}`,
 			});
 		}
 	},
