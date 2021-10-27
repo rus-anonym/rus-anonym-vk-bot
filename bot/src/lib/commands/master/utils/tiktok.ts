@@ -1,31 +1,26 @@
-import puppeteer from "puppeteer";
-import cheerio from "cheerio";
+import axios from "axios";
 
 import { UserCommand } from "../../../utils/lib/commands/core";
 
 new UserCommand({
 	regexp: /(?:^!tiktok|!тикток)(\s(.*))$/i,
 	process: async function (context, vk) {
-		const browser = await puppeteer.launch();
-		const page = await browser.newPage();
-		await page.goto("https://musicaldown.com/");
-		await page.type("#link_url", context.state.args[1]);
-		await page.click("#submit-form > div > div:nth-child(2) > button");
-		await page.waitForTimeout(5000);
-		const bodyHandler = await page.$("body");
-		const html = await page.evaluate((body) => body.innerHTML, bodyHandler);
-		await bodyHandler!.dispose();
-		const $ = cheerio.load(html);
-		const directLink = $(
-			"body > div.welcome.section > div > div:nth-child(2) > div.col.s12.l8 > a:nth-child(8)",
-		).attr("href");
-		await browser.close();
-		if (!directLink) {
+		const response = await (
+			await axios({
+				url: "https://godownloader.com/api/tiktok-no-watermark-free",
+				params: {
+					url: context.state.args[1],
+					key: "godownloader.com",
+				},
+			})
+		).data;
+
+		if (!response.video_no_watermark) {
 			throw new Error(`Непредвиденная ошибка, повторите запрос.`);
 		}
 
 		const message = `TikTok video:
-Video URL: ${directLink}`;
+Video URL: ${response.video_no_watermark}`;
 
 		const userResponse = await context.reply({
 			message,
@@ -34,7 +29,7 @@ Video URL: ${directLink}`;
 
 		const attachment = await vk.upload.video({
 			source: {
-				value: directLink,
+				value: response.video_no_watermark,
 			},
 			name: "TikTok Video",
 			is_private: 1,
@@ -54,27 +49,23 @@ Video URL: ${directLink}`;
 new UserCommand({
 	regexp: /^(https:\/\/(vm|www).tiktok.com\/(?:.*))/,
 	process: async function (context, vk) {
-		const browser = await puppeteer.launch();
-		const page = await browser.newPage();
-		await page.goto("https://musicaldown.com/");
-		await page.type("#link_url", context.state.args[1]);
-		await page.click("#submit-form > div > div:nth-child(2) > button");
-		await page.waitForTimeout(5000);
-		const bodyHandler = await page.$("body");
-		const html = await page.evaluate((body) => body.innerHTML, bodyHandler);
-		await bodyHandler!.dispose();
-		const $ = cheerio.load(html);
-		const directLink = $(
-			"body > div.welcome.section > div > div:nth-child(2) > div.col.s12.l8 > a:nth-child(8)",
-		).attr("href");
-		await browser.close();
-		if (!directLink) {
+		const response = await (
+			await axios({
+				url: "https://godownloader.com/api/tiktok-no-watermark-free",
+				params: {
+					url: context.state.args[1],
+					key: "godownloader.com",
+				},
+			})
+		).data;
+
+		if (!response.video_no_watermark) {
 			throw new Error(`Непредвиденная ошибка, повторите запрос.`);
 		}
 
 		const attachment = await vk.upload.video({
 			source: {
-				value: directLink,
+				value: response.video_no_watermark,
 			},
 			name: "TikTok Video",
 			is_private: 1,
