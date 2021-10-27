@@ -80,10 +80,9 @@ export default new Interval({
 	type: "updateOnlinePrivacySettings",
 	source: updateOnlinePrivacySettings,
 	cron: "*/30 * * * *",
-	plannedTime: Date.now(),
-	onDone: (log) => {
-		if (log.response) {
-			InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
+	onDone: (message) => {
+		if (message) {
+			InternalUtils.logger.send({ message, type: "info" });
 		}
 	},
 });

@@ -61,15 +61,14 @@ export default new Interval({
 	type: "updateConversationsInfo",
 	source: updateConversationsInfo,
 	cron: "*/5 * * * *",
-	plannedTime: Date.now(),
 	onDone: (log) => {
 		VK.group.getAPI().messages.send({
 			random_id: getRandomId(),
 			chat_id: DB.config.VK.group.logs.conversations.conversationsTrack,
 			message: `Данные о беседах обновлены
-Обновлено: ${(log.response as any).update}
-Удалено: ${(log.response as any).delete}
-Устаревших: ${(log.response as any).outdated}`,
+Обновлено: ${log.update}
+Удалено: ${log.delete}
+Устаревших: ${log.outdated}`,
 		});
 	},
 });

@@ -85,7 +85,9 @@ export default new Interval({
 	type: "sendHappyBirthdayGreetings",
 	source: sendHappyBirthdayGreetings,
 	cron: "50 23 * * *",
-	onDone: (log) => {
-		InternalUtils.logger.send({ message: `${log.response}`, type: "info" });
+	onDone: (message) => {
+		if (message) {
+			InternalUtils.logger.send({ message, type: "info" });
+		}
 	},
 });

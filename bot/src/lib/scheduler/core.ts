@@ -15,12 +15,11 @@ import setSteps from "./tasks/setSteps";
 import getNewConversations from "./tasks/getNewConversations";
 import updateConversationsInfo from "./tasks/updateConversationsInfo";
 
-
-scheduler.events.on("error", (error) => {
+scheduler.events.on("error", (error, meta) => {
 	InternalUtils.logger.send({
 		message: `Ошибка при выполнении запланированной задачи:
-Тип: ${error.task.type}
-Error: ${error.error.toString()}`,
+Тип: ${meta.type}
+Error: ${error.toString()}`,
 		type: "error",
 	});
 });

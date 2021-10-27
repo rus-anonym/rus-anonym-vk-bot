@@ -24,7 +24,7 @@
 		"puppeteer": "^10.4.0",
 		"rucaptcha-io": "^1.0.1",
 		"rus-anonym-utils": "^2.6.1",
-		"simple-scheduler-task": "^4.0.0",
+		"simple-scheduler-task": "^5.0.0",
 		"ts-mongoose": "^0.0.24",
 		"vk-io": "^4.4.0",
 		"vk-io-question": "^3.1.1"

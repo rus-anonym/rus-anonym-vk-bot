@@ -89,12 +89,11 @@ export default new Interval({
 	source: deleteSameAudios,
 	type: "deleteSameAudios",
 	cron: "0 0 * * *",
-	plannedTime: Date.now(),
-	onDone: (log) => {
-		if (log.response) {
+	onDone: (log, meta) => {
+		if (log) {
 			InternalUtils.logger.send({
 				message: `deleteSameAudios:
-${log.response} за ${log.executionTime}ms`,
+${log} за ${meta.executionTime}ms`,
 				type: "info",
 			});
 		}

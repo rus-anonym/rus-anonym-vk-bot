@@ -67,6 +67,5 @@ export default new Interval({
 	isInform: true,
 	type: "sendApiStatus",
 	source: sendApiStatus,
-	plannedTime: Date.now(),
 	cron: "* * * * *",
 });
